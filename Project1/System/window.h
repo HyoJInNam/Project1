@@ -3,21 +3,19 @@
 
 class WINDOW
 {
-	static WINDOW* instance;
-
-	HWND hWnd;
-	WNDCLASSEX wc;
-	RECT wr;			// calculate the size of the client area
-
 public:
+	WINDOW(HINSTANCE hInstance, int nCmdShow);
 	~WINDOW();
 
-	static WINDOW* getInstance();
-	BOOL InitInstance(HINSTANCE, LPCWSTR, int);
+	BOOL InitInstance(LPCWSTR, UINT, UINT);
+	BOOL Run();
+	void Shutdown();
 
 private:
-	WINDOW();
-	BOOL SetClientArea(int, int, int, int);
-
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+private:
+	WNDDesc wnd;
+	HINSTANCE instance;
+	int wndCmdShow;
 };

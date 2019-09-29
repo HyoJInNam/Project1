@@ -8,17 +8,59 @@
     <Filter Include="System">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\input">
+      <UniqueIdentifier>{51abdff2-88bc-4fce-ac02-04437c4859d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\render">
+      <UniqueIdentifier>{ef84e358-9a52-4196-a409-de8bd1d23fd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="System\window.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="System\d3dclass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\System.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\graphics.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="System\window.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="System\d3dclass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\graphics.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\singleton.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\render.h">
+      <Filter>System</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project1.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
