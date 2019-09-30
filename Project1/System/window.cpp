@@ -7,20 +7,14 @@
 WINDOW::WINDOW(HINSTANCE hInstance, int nCmdShow)
 	: instance(hInstance)
 	, wndCmdShow(nCmdShow)
-{}
-
-WINDOW::~WINDOW()
 {
-	DestroyWindow(wnd.Handle);
-	wnd.Handle = NULL;
 }
 
-BOOL WINDOW::InitInstance(LPCWSTR title, UINT screenWidth, UINT screenHeight)
+WINDOW::~WINDOW() {}
+
+BOOL WINDOW::InitInstance(LPCWSTR title)
 {
 	if (!title) title = L"Project1";
-	if (!screenWidth) screenWidth = 800;
-	if (!screenHeight) screenHeight = 600;
-
 	WNDCLASSEX wc;
 	{
 		ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -36,33 +30,22 @@ BOOL WINDOW::InitInstance(LPCWSTR title, UINT screenWidth, UINT screenHeight)
 	}
 	RegisterClassEx(&wc);
 
-
-	wnd.Handle = CreateWindowEx(NULL,
+	HWND Handle = CreateWindowEx(NULL,
 		title,					  // name of the window class
 		title,				      // title of the window
 		WS_OVERLAPPEDWINDOW,      // window style
 		CW_USEDEFAULT,			  // x-position of the window
 		CW_USEDEFAULT,			  // y-position of the window
-		screenWidth,			  // width of the window
-		screenHeight,			  // height of the window
+		CW_USEDEFAULT,			  // width of the window
+		CW_USEDEFAULT,			  // height of the window
 		NULL,					  // we have no parent window, NULL
 		NULL,					  // we aren't using menus, NULL
 		instance,			      // application handle
 		NULL);					  // used with multiple windows, NULL
 
-	assert(wnd.Handle != NULL);
-
-
-	wnd.vsync = true;
-	wnd.fullscreen = false;
-	wnd.screenWidth = screenWidth;
-	wnd.screenHeight = screenHeight;
-	wnd.screenNear = 0.1f;
-	wnd.screenDepth = 1000.0f;
-
-	D3D::GetInstance()->SetWnDDesc(wnd);
-
-	ShowWindow(wnd.Handle, wndCmdShow);
+	assert(Handle != NULL);
+	WNDDesc::GetInstance()->setHwnd(Handle);
+	ShowWindow(Handle, wndCmdShow);
 	ShowCursor(true);
 
 	return true;
@@ -106,7 +89,7 @@ LRESULT CALLBACK WINDOW::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		{
 			UINT Width = (UINT)LOWORD(lParam);
 			UINT Height = (UINT)HIWORD(lParam);
-			D3D::GetInstance()->ResizeScene(Width, Height);
+			WNDDesc::GetInstance()->ResizeScene(Width, Height);
 			break;
 		}
 
@@ -120,4 +103,5 @@ LRESULT CALLBACK WINDOW::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }

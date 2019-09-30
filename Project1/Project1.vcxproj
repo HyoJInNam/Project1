@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSDK_LibraryPath_x86);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -86,6 +86,9 @@
       <PrecompiledHeader />
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -133,8 +136,12 @@
     <ClCompile Include="System\d3dclass.cpp" />
     <ClCompile Include="System\graphics.cpp" />
     <ClCompile Include="System\input.cpp" />
+    <ClCompile Include="System\render\camera.cpp" />
+    <ClCompile Include="System\render\colorshaderclass.cpp" />
+    <ClCompile Include="System\render\model.cpp" />
     <ClCompile Include="System\System.cpp" />
     <ClCompile Include="System\window.cpp" />
+    <ClCompile Include="System\wndDescription.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -142,10 +149,14 @@
     <ClInclude Include="System\d3dclass.h" />
     <ClInclude Include="System\graphics.h" />
     <ClInclude Include="System\input.h" />
-    <ClInclude Include="System\render.h" />
+    <ClInclude Include="System\render\camera.h" />
+    <ClInclude Include="System\render\colorshaderclass.h" />
+    <ClInclude Include="System\render\model.h" />
+    <ClInclude Include="System\render\renafx.h" />
     <ClInclude Include="System\singleton.h" />
     <ClInclude Include="System\System.h" />
     <ClInclude Include="System\window.h" />
+    <ClInclude Include="System\wndDescription.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project1.rc" />

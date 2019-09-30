@@ -7,7 +7,7 @@
 
 SYSTEM::SYSTEM()
 {
-	D3D::GetInstance()->Initialize();
+	INPUTS::GetInstance()->Initialize();
 	GRAPHICS::GetInstance()->Initialize();
 }
 
@@ -38,4 +38,5 @@ BOOL SYSTEM::Frame()
 void SYSTEM::Shutdown()
 {
 	GRAPHICS::GetInstance()->Shutdown();
+	INPUTS::GetInstance()->Shutdown();
 }

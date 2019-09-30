@@ -1,7 +1,6 @@
 #include "../stdafx.h"
 #include "d3dclass.h"
 
-
 D3D::D3D()
 	: numerator(0), denominator(1)
 {
@@ -24,6 +23,7 @@ D3D::~D3D()
 void D3D::SetGpuInfo()
 {
 	HRESULT result;
+	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	IDXGIFactory* factory = nullptr;
 	IDXGIAdapter* adapter = nullptr;
@@ -54,11 +54,11 @@ void D3D::SetGpuInfo()
 
 	// Now go through all the display modes and find the one that matches the screen width and height.
 	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
-	for (int i = 0; i < numModes; i++)
+	for (unsigned int i = 0; i < numModes; i++)
 	{
-		if (displayModeList[i].Width == (unsigned int)wndDesc.screenWidth)
+		if (displayModeList[i].Width == (unsigned int)wndd.screenWidth)
 		{
-			if (displayModeList[i].Height == (unsigned int)wndDesc.screenHeight)
+			if (displayModeList[i].Height == (unsigned int)wndd.screenHeight)
 			{
 				numerator = displayModeList[i].RefreshRate.Numerator;
 				denominator = displayModeList[i].RefreshRate.Denominator;
@@ -88,6 +88,8 @@ void D3D::SetGpuInfo()
 void D3D::CreateSwapChain()
 {
 	HRESULT result;
+	WNDDesc wndd = *WNDDesc::GetInstance();
+
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -96,14 +98,14 @@ void D3D::CreateSwapChain()
 	swapChainDesc.BufferCount = 1;
 
 	// Set the width and height of the back buffer.
-	swapChainDesc.BufferDesc.Width = wndDesc.screenWidth;
-	swapChainDesc.BufferDesc.Height = wndDesc.screenHeight;
+	swapChainDesc.BufferDesc.Width = wndd.screenWidth;
+	swapChainDesc.BufferDesc.Height = wndd.screenHeight;
 
 	// Set regular 32-bit surface for the back buffer.
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	// Set the refresh rate of the back buffer.
-	if (wndDesc.vsync)
+	if (wndd.vsync)
 	{
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = numerator;
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = denominator;
@@ -118,14 +120,14 @@ void D3D::CreateSwapChain()
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	// Set the handle for the window to render to.
-	swapChainDesc.OutputWindow = wndDesc.Handle;
+	swapChainDesc.OutputWindow = wndd.Handle;
 
 	// Turn multisampling off.
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 
 	// Set to full screen or windowed mode.
-	swapChainDesc.Windowed = (wndDesc.fullscreen) ? false : true;
+	swapChainDesc.Windowed = (wndd.fullscreen) ? false : true;
 
 	// Set the scan line ordering and scaling to unspecified.
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -150,8 +152,8 @@ void D3D::CreateSwapChain()
 }
 void D3D::CreateBackBuffer()
 {
-
 	HRESULT result;
+	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* backBufferPtr;
@@ -170,8 +172,8 @@ void D3D::CreateBackBuffer()
 	{
 		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
-		depthBufferDesc.Width = wndDesc.screenWidth;
-		depthBufferDesc.Height = wndDesc.screenHeight;
+		depthBufferDesc.Width = wndd.screenWidth;
+		depthBufferDesc.Height = wndd.screenHeight;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
 		depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -263,8 +265,8 @@ void D3D::CreateBackBuffer()
 
 	D3D11_VIEWPORT viewport;
 	{
-		viewport.Width = (FLOAT)wndDesc.screenWidth;
-		viewport.Height = (FLOAT)wndDesc.screenHeight;
+		viewport.Width = (FLOAT)wndd.screenWidth;
+		viewport.Height = (FLOAT)wndd.screenHeight;
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
 		viewport.TopLeftX = 0.0f;
@@ -279,17 +281,17 @@ void D3D::CreateBackBuffer()
 
 	// Setup the projection matrix.
 	fieldOfView = (float)D3DX_PI / 4.0f;
-	screenAspect = (FLOAT)wndDesc.screenWidth / (FLOAT)wndDesc.screenHeight;
+	screenAspect = (FLOAT)wndd.screenWidth / (FLOAT)wndd.screenHeight;
 
 
 	// Create the projection matrix for 3D rendering.
-	D3DXMatrixPerspectiveFovLH(&matrixs.projection, fieldOfView, screenAspect, wndDesc.screenNear, wndDesc.screenDepth);
+	D3DXMatrixPerspectiveFovLH(&matrixs.projection, fieldOfView, screenAspect, wndd.screenNear, wndd.screenDepth);
 
 	// Initialize the world matrix to the identity matrix.
 	D3DXMatrixIdentity(&matrixs.world);
 
 	// Create an orthographic projection matrix for 2D rendering.
-	D3DXMatrixOrthoLH(&matrixs.ortho, (FLOAT)wndDesc.screenWidth, (FLOAT)wndDesc.screenHeight, wndDesc.screenNear, wndDesc.screenDepth);
+	D3DXMatrixOrthoLH(&matrixs.ortho, (FLOAT)wndd.screenWidth, (FLOAT)wndd.screenHeight, wndd.screenNear, wndd.screenDepth);
 
 }
 void D3D::DeleteBackBuffer()
@@ -309,24 +311,11 @@ void D3D::BeginScene(D3DXCOLOR color)
 
 	return;
 }
-void D3D::ResizeScene(UINT width, UINT height)
-{
-	if (width < 800 || height < 600) return;
 
-	wndDesc.screenWidth = width;
-	wndDesc.screenHeight = height;
-
-	//DeleteBackBuffer();
-	//{
-	//	HRESULT hr = swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
-	//	assert(SUCCEEDED(hr));
-	//}
-	//CreateBackBuffer(width, height);
-}
 void D3D::EndScene()
 {
-	// Present the back buffer to the screen since rendering is complete.
-	swapChain->Present(wndDesc.vsync == true ? 1 : 0, 0);
+	WNDDesc wndd = *WNDDesc::GetInstance();
+	swapChain->Present(wndd.vsync == TRUE ? 1 : 0, 0);
 
 	return;
 }

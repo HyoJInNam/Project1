@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "System/window.h"
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -7,7 +8,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	WINDOW* wnd = new WINDOW(hInstance, nCmdShow);
 	ERR_INSTANCE(wnd);
 
-	wnd->InitInstance(L"dirextX", 800, 600);
+	wnd->InitInstance(L"dirextX");
 	WPARAM wParam = wnd->Run();
 
 	wnd->Shutdown();

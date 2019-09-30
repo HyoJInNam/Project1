@@ -32,6 +32,18 @@
     <ClCompile Include="System\graphics.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="System\render\camera.cpp">
+      <Filter>System\render</Filter>
+    </ClCompile>
+    <ClCompile Include="System\render\model.cpp">
+      <Filter>System\render</Filter>
+    </ClCompile>
+    <ClCompile Include="System\wndDescription.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\render\colorshaderclass.cpp">
+      <Filter>System\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -54,8 +66,20 @@
     <ClInclude Include="System\singleton.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\render.h">
+    <ClInclude Include="System\render\renafx.h">
+      <Filter>System\render</Filter>
+    </ClInclude>
+    <ClInclude Include="System\render\camera.h">
+      <Filter>System\render</Filter>
+    </ClInclude>
+    <ClInclude Include="System\render\model.h">
+      <Filter>System\render</Filter>
+    </ClInclude>
+    <ClInclude Include="System\wndDescription.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\render\colorshaderclass.h">
+      <Filter>System\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

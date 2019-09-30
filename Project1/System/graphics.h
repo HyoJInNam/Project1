@@ -1,5 +1,9 @@
 #pragma once
 
+class CAMERA;
+class MODEL;
+class COLORSHADER;
+
 class GRAPHICS : public SINGLETON <GRAPHICS>
 {
 public:
@@ -12,8 +16,9 @@ public:
 
 private:
 	BOOL Render();
-
-
-	//CAMERA * mainCamera;
+	
+	CAMERA * mainCamera;
+	MODEL * cube;
+	COLORSHADER * colorShader;
 };
 

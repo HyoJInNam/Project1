@@ -1,15 +1,23 @@
 #pragma once
 
+
+
+typedef struct GEOMETRY_MATRIX
+{
+	D3DXMATRIX projection;
+	D3DXMATRIX world;
+	D3DXMATRIX view;
+	D3DXMATRIX ortho;
+
+}GEOM_MATRIX, GEOMMatrix, MARTIX;
+
+
 class D3D: public SINGLETON <D3D>
 {
 public:
 	D3D();
 	~D3D();
 
-	void SetWnDDesc(WNDDesc& desc) {
-		wndDesc = desc;
-		return;
-	}
 	void Initialize() {
 		CreateSwapChain();
 		CreateBackBuffer();
@@ -49,13 +57,11 @@ private:
 
 public:
 	void BeginScene(D3DXCOLOR);
-	void ResizeScene(UINT, UINT);
 	void EndScene();
 
 private:
 	unsigned int  numerator, denominator;
 
-	WNDDesc wndDesc;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 	IDXGISwapChain* swapChain;
@@ -66,7 +72,6 @@ private:
 	ID3D11Texture2D* depthStencilBuffer;
 	ID3D11DepthStencilView* depthStencilView;
 	ID3D11RenderTargetView* renderTargetView;
-
 
 	GEOMMatrix matrixs;
 };
