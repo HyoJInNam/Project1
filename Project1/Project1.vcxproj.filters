@@ -8,11 +8,8 @@
     <Filter Include="System">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\input">
-      <UniqueIdentifier>{51abdff2-88bc-4fce-ac02-04437c4859d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System\render">
-      <UniqueIdentifier>{ef84e358-9a52-4196-a409-de8bd1d23fd5}</UniqueIdentifier>
+    <Filter Include="Render">
+      <UniqueIdentifier>{dcba2189-72d1-4479-a546-c1aac7bc545c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,17 +29,17 @@
     <ClCompile Include="System\graphics.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="System\render\camera.cpp">
-      <Filter>System\render</Filter>
-    </ClCompile>
-    <ClCompile Include="System\render\model.cpp">
-      <Filter>System\render</Filter>
-    </ClCompile>
     <ClCompile Include="System\wndDescription.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="System\render\colorshaderclass.cpp">
-      <Filter>System\render</Filter>
+    <ClCompile Include="Render\camera.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\model.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\colorshaderclass.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,20 +63,20 @@
     <ClInclude Include="System\singleton.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\render\renafx.h">
-      <Filter>System\render</Filter>
-    </ClInclude>
-    <ClInclude Include="System\render\camera.h">
-      <Filter>System\render</Filter>
-    </ClInclude>
-    <ClInclude Include="System\render\model.h">
-      <Filter>System\render</Filter>
-    </ClInclude>
     <ClInclude Include="System\wndDescription.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\render\colorshaderclass.h">
-      <Filter>System\render</Filter>
+    <ClInclude Include="Render\camera.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\renafx.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\model.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\colorshaderclass.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

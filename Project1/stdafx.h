@@ -14,9 +14,11 @@ using namespace std;
 
 //==============================
 
+#include <dxgi.h>
 #include <D3D11.h>
 #include <D3DX10math.h>
 
+#pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "D3D11.lib")
 
 //==============================
@@ -26,8 +28,8 @@ using namespace std;
 #include "./System/d3dclass.h"
 
 
-#define ERR_INSTANCE(p){ if((p) == nullptr){ (p) = false; } }
-#define ERR_MESSAGE(m) { MessageBox(WNDDesc::GetInstance()->getHwnd(), m, L"Error", MB_OK);  }
+#define ERR_INSTANCE(p){ if((p) == nullptr){ return false; } }
+#define ERR_MESSAGE(m) { MessageBox(WNDDesc::GetInstance()->getHwnd(), m, L"Error", MB_OK); }
 
 
 

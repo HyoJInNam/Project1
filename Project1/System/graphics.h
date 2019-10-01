@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 class CAMERA;
 class MODEL;
 class COLORSHADER;
@@ -15,7 +17,7 @@ public:
 	void Shutdown();
 
 private:
-	BOOL Render();
+	BOOL Render(float);
 	
 	CAMERA * mainCamera;
 	MODEL * cube;

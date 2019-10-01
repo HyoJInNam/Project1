@@ -133,26 +133,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Render\camera.cpp" />
+    <ClCompile Include="Render\colorshaderclass.cpp" />
+    <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="System\d3dclass.cpp" />
     <ClCompile Include="System\graphics.cpp" />
     <ClCompile Include="System\input.cpp" />
-    <ClCompile Include="System\render\camera.cpp" />
-    <ClCompile Include="System\render\colorshaderclass.cpp" />
-    <ClCompile Include="System\render\model.cpp" />
     <ClCompile Include="System\System.cpp" />
     <ClCompile Include="System\window.cpp" />
     <ClCompile Include="System\wndDescription.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Render\camera.h" />
+    <ClInclude Include="Render\colorshaderclass.h" />
+    <ClInclude Include="Render\model.h" />
+    <ClInclude Include="Render\renafx.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\d3dclass.h" />
     <ClInclude Include="System\graphics.h" />
     <ClInclude Include="System\input.h" />
-    <ClInclude Include="System\render\camera.h" />
-    <ClInclude Include="System\render\colorshaderclass.h" />
-    <ClInclude Include="System\render\model.h" />
-    <ClInclude Include="System\render\renafx.h" />
     <ClInclude Include="System\singleton.h" />
     <ClInclude Include="System\System.h" />
     <ClInclude Include="System\window.h" />

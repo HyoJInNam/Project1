@@ -1,9 +1,7 @@
 #include "../stdafx.h"
-
-#include "render/camera.h"
-#include "render/model.h"
-#include "render/colorshaderclass.h"
-
+#include "../Render/camera.h"
+#include "../Render/model.h"
+#include "../Render/colorshaderclass.h"
 //==============================
 
 
@@ -21,14 +19,16 @@ BOOL GRAPHICS::Initialize()
 	ERR_INSTANCE(mainCamera);
 	mainCamera->SetPosition(0.0f, 0.0f, -5.0f);
 
+
 	cube = new MODEL;
 	ERR_INSTANCE(cube);
-	if (!cube->Initialize(D3D::GetInstance()->GetDevice()))
+	if (!cube->Initialize(D3D::GetInstance()->GetDevice(), const_cast<char*>("./Engine/data/cube.txt")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.");
 		return false;
 	}
 
+	// Create the color shader object.
 	colorShader = new COLORSHADER;
 	ERR_INSTANCE(colorShader);
 	if (!colorShader->Initialize(D3D::GetInstance()->GetDevice(), WNDDesc::GetInstance()->getHwnd()))
@@ -36,40 +36,61 @@ BOOL GRAPHICS::Initialize()
 		ERR_MESSAGE(L"Could not initialize the color shader object.");
 		return false;
 	}
+
+
 	return 0;
 }
 
 void GRAPHICS::Shutdown()
 {
-	SAFE_DELETE(colorShader);
 	SAFE_DELETE(cube);
 	SAFE_DELETE(mainCamera);
+	SAFE_DELETE(colorShader);
 }
 
 
 BOOL GRAPHICS::Frame()
 {
-	return Render();
+	bool result;
+	static float rotation = 0.0f;
+
+
+	// Update the rotation variable each frame.
+	rotation += (float)D3DX_PI * 0.01f;
+	if (rotation > 360.0f)
+	{
+		rotation -= 360.0f;
+	}
+
+	// Render the graphics scene.
+	result = Render(rotation);
+	if (!result)
+	{
+		return false;
+	}
+	return true;
 }
 
-BOOL GRAPHICS::Render()
+BOOL GRAPHICS::Render(float rotation)
 {
-	D3D::GetInstance()->BeginScene(D3DXCOLOR(225.0f, 225.0f, 225.0f, 1.0f));
+	D3D* d3d = D3D::GetInstance();
+	d3d->BeginScene(D3DXCOLOR(0, 0, 0, 1.0f));
 
 	mainCamera->Render();
 	D3DXMATRIX world, view, projection;
-	D3D::GetInstance()->GetWorldMatrix(world);
+	d3d->GetWorldMatrix(world);
 	mainCamera->GetViewMatrix(view);
-	D3D::GetInstance()->GetProjectionMatrix(projection);
+	d3d->GetProjectionMatrix(projection);
 
-	cube->Render(D3D::GetInstance()->GetDeviceContext());
-	
-	if (!colorShader->Render(D3D::GetInstance()->GetDeviceContext(),
-		cube->GetIndexCount(), world, view, projection))
+	D3DXMatrixRotationY(&world, rotation);
+
+	cube->Render(d3d->GetDeviceContext());
+
+	if (!colorShader->Render(d3d->GetDeviceContext(), cube->GetIndexCount(), world, view, projection))
 	{
 		return false;
 	}
 
-	D3D::GetInstance()->EndScene();
+	d3d->EndScene();
 	return true;
 }

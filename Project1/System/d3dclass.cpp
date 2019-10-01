@@ -157,6 +157,7 @@ void D3D::CreateBackBuffer()
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* backBufferPtr;
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	{
 		result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
 		assert(SUCCEEDED(result));
@@ -165,11 +166,7 @@ void D3D::CreateBackBuffer()
 		assert(SUCCEEDED(result));
 
 		SAFE_RELEASE(backBufferPtr);
-	}
 
-
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	{
 		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 		depthBufferDesc.Width = wndd.screenWidth;
@@ -192,6 +189,7 @@ void D3D::CreateBackBuffer()
 	
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ID3D11DepthStencilState* m_depthStencilState;
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	{
 		ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
@@ -222,11 +220,7 @@ void D3D::CreateBackBuffer()
 
 		// Set the depth stencil state.
 		deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
-	}
 
-	
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	{
 		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
 		depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
