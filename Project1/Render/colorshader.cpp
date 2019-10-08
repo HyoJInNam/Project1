@@ -31,9 +31,10 @@ void COLORSHADER::Shutdown()
 }
 
 
-bool COLORSHADER::Render(int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+bool COLORSHADER::Render(int indexCount, RNDMATRIXS matrixs)
 {
-	ISFAIL(SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix));
+	render = matrixs;
+	ISFAIL(SetShaderParameters());
 	RenderShader(indexCount);
 
 	return true;
@@ -153,7 +154,7 @@ void COLORSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMes
 }
 
 
-bool COLORSHADER::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+bool COLORSHADER::SetShaderParameters()
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -162,9 +163,9 @@ bool COLORSHADER::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMat
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	D3DXMatrixTranspose(&render.world, &render.world);
+	D3DXMatrixTranspose(&render.view, &render.view);
+	D3DXMatrixTranspose(&render.projection, &render.projection);
 
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -174,9 +175,9 @@ bool COLORSHADER::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMat
 	{
 		dataPtr = (MatrixBufferType*)mappedResource.pData;
 
-		dataPtr->world = worldMatrix;
-		dataPtr->view = viewMatrix;
-		dataPtr->projection = projectionMatrix;
+		dataPtr->world = render.world;
+		dataPtr->view = render.view;
+		dataPtr->projection = render.projection;
 
 		deviceContext->Unmap(matrixBuffer, 0);
 

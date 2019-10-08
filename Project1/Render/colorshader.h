@@ -17,20 +17,21 @@ public:
 
 	bool Initialize();
 	void Shutdown();
-	bool Render(int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX);
+	bool Render(int, RNDMATRIXS );
 
 private:
 	bool InitializeShader(WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
 
-	bool SetShaderParameters(D3DXMATRIX, D3DXMATRIX, D3DXMATRIX);
+	bool SetShaderParameters( );
 	void RenderShader(int);
 
 private:
 	HWND hwnd;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
+	RNDMATRIXS  render;
 
 	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader* pixelShader;

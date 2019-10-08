@@ -44,6 +44,9 @@
     <ClCompile Include="System\renderTransformation.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="Render\loadObjectsFile.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -83,6 +86,12 @@
     </ClInclude>
     <ClInclude Include="System\renderTransformation.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\loadObjectsFile.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\objectDescription.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

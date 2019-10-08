@@ -11,8 +11,8 @@
 GRAPHICS::GRAPHICS()
 {
 	D3D::GetInstance()->Initialize();
-	render = new RENDER_T;
-	render->Initialize();
+	transformation = new RENDER_T;
+	transformation->Initialize();
 }
 GRAPHICS::~GRAPHICS() {}
 BOOL GRAPHICS::Initialize()
@@ -47,7 +47,7 @@ void GRAPHICS::Shutdown()
 	SAFE_DELETE(colorShader);
 	SAFE_DELETE(cube);
 	SAFE_DELETE(mainCamera);
-	SAFE_DELETE(render);
+	SAFE_DELETE(transformation);
 }
 
 
@@ -71,16 +71,16 @@ BOOL GRAPHICS::Render(float rotation)
 	d3d->BeginScene(D3DXCOLOR(0, 0, 0, 1.0f));
 
 	mainCamera->Render();
-	D3DXMATRIX world, view, projection;
-	render->GetWorldMatrix(world);
-	mainCamera->GetViewMatrix(view);
-	render->GetProjectionMatrix(projection);
+	RNDMATRIXS render;
+	transformation->GetWorldMatrix(render.world);
+	mainCamera->GetViewMatrix(render.view);
+	transformation->GetProjectionMatrix(render.projection);
 
-	D3DXMatrixRotationY(&world, rotation);
+	D3DXMatrixRotationY(&render.world, rotation);
 
 	cube->Render();
 
-	if (!colorShader->Render(cube->GetIndexCount(), world, view, projection))
+	if (!colorShader->Render(cube->GetIndexCount(), render))
 	{
 		return false;
 	}

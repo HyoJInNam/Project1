@@ -1,14 +1,14 @@
 #pragma once
 
 
-typedef struct RENDER_PIPELINE_MATRIX
+typedef struct RENDER_PIPELINE_MATRIXS
 {
 	D3DXMATRIX projection;
 	D3DXMATRIX world;
 	D3DXMATRIX view;
 	D3DXMATRIX ortho;
 
-}RNDMatrix, RNDMATRIX;
+}RNDMATRIXS;
 
 
 
@@ -44,7 +44,7 @@ private:
 	FLOAT screenNear, screenDepth;
 
 protected:
-	RNDMatrix matrix;
+	RNDMATRIXS matrix;
 
 }RENDER_T;
 

@@ -21,3 +21,6 @@
 #pragma comment(lib, "d3d9.lib")
 
 //==============================
+
+#include "./objectDescription.h"
+#include "./loadObjectsFile.h"

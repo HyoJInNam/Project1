@@ -20,7 +20,7 @@ private:
 	BOOL Render(float);
 
 private:
-	RENDER_T* render;
+	RENDER_T* transformation;
 
 	CAMERA * mainCamera;
 	MODEL * cube;

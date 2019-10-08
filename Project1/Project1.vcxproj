@@ -135,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\camera.cpp" />
     <ClCompile Include="Render\colorshader.cpp" />
+    <ClCompile Include="Render\loadObjectsFile.cpp" />
     <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="System\d3dclass.cpp" />
     <ClCompile Include="System\graphics.cpp" />
@@ -147,7 +148,9 @@
   <ItemGroup>
     <ClInclude Include="Render\camera.h" />
     <ClInclude Include="Render\colorshader.h" />
+    <ClInclude Include="Render\loadObjectsFile.h" />
     <ClInclude Include="Render\model.h" />
+    <ClInclude Include="Render\objectDescription.h" />
     <ClInclude Include="Render\renafx.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
