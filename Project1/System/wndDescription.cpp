@@ -12,7 +12,7 @@ WNDDesc::WNDDesc()
 
 WNDDesc::~WNDDesc() {}
 
-void WNDDesc::getSceneSize(UINT& _width , UINT& _height)
+void WNDDesc::getSceneSize(UINT& _width, UINT& _height)
 {
 	_width = sceneWidth;
 	_height = sceneHeight;
@@ -23,6 +23,7 @@ void WNDDesc::getSceneDepth(FLOAT& _near, FLOAT& _depth)
 	_near = sceneNear;
 	_depth = sceneDepth;
 }
+
 
 void WNDDesc::ResizeScene(UINT width, UINT height)
 {

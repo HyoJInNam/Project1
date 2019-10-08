@@ -19,7 +19,9 @@ public:
 private:
 	BOOL Render(float);
 
-	//R_TRANSFORMATION* cameraRender;
+private:
+	RENDER_T* render;
+
 	CAMERA * mainCamera;
 	MODEL * cube;
 	COLORSHADER * colorShader;

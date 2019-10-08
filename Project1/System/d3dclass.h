@@ -1,12 +1,16 @@
 #pragma once
 
+
 class D3D: public SINGLETON <D3D>
 {
 public:
 	D3D();
 	~D3D();
 
-	void Initialize();
+	void Initialize() {
+		CreateSwapChain();
+		CreateBackBuffer();
+	}
 
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }
@@ -20,11 +24,8 @@ public:
 
 private:
 	void SetGpuInfo();
-
 	void CreateSwapChain();
 	void CreateBackBuffer();
-	void CreateStencil();
-	void CreateRasterizer();
 	void DeleteBackBuffer();
 
 public:
@@ -34,7 +35,6 @@ public:
 private:
 	unsigned int  numerator, denominator;
 
-	WNDDesc wndd;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 	IDXGISwapChain* swapChain;

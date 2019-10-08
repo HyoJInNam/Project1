@@ -11,14 +11,13 @@ typedef struct RENDER_PIPELINE_MATRIX
 }RNDMatrix, RNDMATRIX;
 
 
+
 typedef class RENDERTRANSFORMATION
 {
-
 public:
 	RENDERTRANSFORMATION();
-	RENDERTRANSFORMATION(const RENDERTRANSFORMATION&) {};
 	~RENDERTRANSFORMATION();
-
+	
 	void Initialize();
 
 	void GetProjectionMatrix(D3DXMATRIX& projectionMatrix)
@@ -47,5 +46,5 @@ private:
 protected:
 	RNDMatrix matrix;
 
-}R_TRANSFORMATION;
+}RENDER_T;
 

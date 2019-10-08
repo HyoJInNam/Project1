@@ -1,6 +1,5 @@
 #include "../stdafx.h"
-#include "rendertransformation.h"
-
+#include "renderTransformation.h"
 
 
 RENDERTRANSFORMATION::RENDERTRANSFORMATION()
@@ -15,8 +14,8 @@ RENDERTRANSFORMATION::RENDERTRANSFORMATION()
 	wnd->getSceneDepth(screenNear, screenDepth);
 }
 
-
 RENDERTRANSFORMATION::~RENDERTRANSFORMATION() {}
+
 
 void RENDERTRANSFORMATION::Initialize()
 {

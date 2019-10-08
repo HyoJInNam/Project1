@@ -2,6 +2,14 @@
 
 class COLORSHADER
 {
+private:
+	struct MatrixBufferType
+	{
+		D3DXMATRIX world;
+		D3DXMATRIX view;
+		D3DXMATRIX projection;
+	};
+
 public:
 	COLORSHADER();
 	COLORSHADER(const COLORSHADER&);
@@ -9,21 +17,21 @@ public:
 
 	bool Initialize();
 	void Shutdown();
-	bool Render(int, RNDMatrix);
+	bool Render(int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX);
 
 private:
 	bool InitializeShader(WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
 
-	bool SetShaderParameters(RNDMatrix );
+	bool SetShaderParameters(D3DXMATRIX, D3DXMATRIX, D3DXMATRIX);
 	void RenderShader(int);
 
 private:
 	HWND hwnd;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
-	
+
 	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader* pixelShader;
 	ID3D11InputLayout* layout;

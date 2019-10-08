@@ -20,23 +20,22 @@ COLORSHADER::~COLORSHADER() {}
 
 bool COLORSHADER::Initialize()
 {
-	return InitializeShader(const_cast<WCHAR*>(L"./Engine/color.vs"), const_cast<WCHAR*>(L"./Engine/color.ps"));
+	return InitializeShader(const_cast<WCHAR*>(L"./data/color.vs"), const_cast<WCHAR*>(L"./data/color.ps"));
 }
 
 
 void COLORSHADER::Shutdown()
 {
-	// Shutdown the vertex and pixel shaders as well as the related objects.
 	ShutdownShader();
-
 	return;
 }
 
 
-bool COLORSHADER::Render(int indexCount, RNDMatrix matrix)
+bool COLORSHADER::Render(int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 {
-	ISFAIL(SetShaderParameters(matrix));
+	ISFAIL(SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix));
 	RenderShader(indexCount);
+
 	return true;
 }
 
@@ -56,7 +55,6 @@ bool COLORSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	result = D3DCompileFromFile(vsFilename, NULL, NULL,	"ColorVertexShader", "vs_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
 	ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
-
 
 
     // Compile the pixel shader code.
@@ -97,15 +95,14 @@ bool COLORSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	// Create the vertex input layout.
 	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), 
 									   vertexShaderBuffer->GetBufferSize(), &layout);
-
 	ISFAILED(result);
-
+	
 	SAFE_RELEASE(vertexShaderBuffer);
 	SAFE_RELEASE(pixelShaderBuffer);
 
     // Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
     matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(RNDMatrix);
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
     matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     matrixBufferDesc.MiscFlags = 0;
@@ -135,8 +132,8 @@ void COLORSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMes
 	unsigned long bufferSize, i;
 	ofstream fout;
 
-	// Pop a message up on the screen to notify the user to check the text file for compile errors.
 
+	// Get a pointer to the error message text buffer.
 	compileErrors = (char*)(errorMessage->GetBufferPointer());
 	bufferSize = errorMessage->GetBufferSize();
 	fout.open("shader-error.txt");
@@ -148,41 +145,44 @@ void COLORSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMes
 
 	fout.close();
 
+
 	SAFE_RELEASE(errorMessage);
-	ERR_MESSAGE(L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename);
-	
+	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+
 	return;
 }
 
 
-bool COLORSHADER::SetShaderParameters(RNDMatrix matrix)
+bool COLORSHADER::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 {
-	//HRESULT result;
+	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
+	MatrixBufferType* dataPtr;
+	unsigned int bufferNumber;
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&matrix.world, &matrix.world);
-	D3DXMatrixTranspose(&matrix.view, &matrix.view);
-	D3DXMatrixTranspose(&matrix.projection, &matrix.projection);
+	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
+	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
-	ISFAILED(deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	ISFAILED(result);
 
 	// Get a pointer to the data in the constant buffer.
 	{
-		RNDMatrix* dataPtr = (RNDMatrix*)mappedResource.pData;
+		dataPtr = (MatrixBufferType*)mappedResource.pData;
 
-		dataPtr->world = matrix.world;
-		dataPtr->view = matrix.view;
-		dataPtr->projection = matrix.projection;
+		dataPtr->world = worldMatrix;
+		dataPtr->view = viewMatrix;
+		dataPtr->projection = projectionMatrix;
 
 		deviceContext->Unmap(matrixBuffer, 0);
 
-		unsigned bufferNumber = 0;
+		bufferNumber = 0;
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
 	}
-
 	return true;
 }
 
