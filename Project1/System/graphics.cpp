@@ -1,7 +1,8 @@
 #include "../stdafx.h"
+
 #include "../Render/camera.h"
 #include "../Render/model.h"
-#include "../Render/colorshaderclass.h"
+#include "../Render/colorshader.h"
 //==============================
 
 
@@ -15,25 +16,28 @@ GRAPHICS::GRAPHICS()
 GRAPHICS::~GRAPHICS() {}
 BOOL GRAPHICS::Initialize()
 {
+	//cameraRender = new R_TRANSFORMATION;
+	//ISINSTANCE(cameraRender);
+	//cameraRender->Initialize(); 
+
 	mainCamera = new CAMERA;
-	ERR_INSTANCE(mainCamera);
+	ISINSTANCE(mainCamera);
 	mainCamera->SetPosition(0.0f, 0.0f, -5.0f);
 
 
 	cube = new MODEL;
-	ERR_INSTANCE(cube);
-	if (!cube->Initialize(D3D::GetInstance()->GetDevice(), const_cast<char*>("./Engine/data/cube.txt")))
+	ISINSTANCE(cube);
+	if (!cube->Initialize(const_cast<char*>("./Engine/data/cube.txt")))
 	{
-		ERR_MESSAGE(L"Could not initialize the model object.");
+		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
-	// Create the color shader object.
 	colorShader = new COLORSHADER;
-	ERR_INSTANCE(colorShader);
-	if (!colorShader->Initialize(D3D::GetInstance()->GetDevice(), WNDDesc::GetInstance()->getHwnd()))
+	ISINSTANCE(colorShader);
+	if (!colorShader->Initialize())
 	{
-		ERR_MESSAGE(L"Could not initialize the color shader object.");
+		ERR_MESSAGE(L"Could not initialize the color shader object.", L"ERROR");
 		return false;
 	}
 
@@ -43,9 +47,10 @@ BOOL GRAPHICS::Initialize()
 
 void GRAPHICS::Shutdown()
 {
+	SAFE_DELETE(colorShader);
 	SAFE_DELETE(cube);
 	SAFE_DELETE(mainCamera);
-	SAFE_DELETE(colorShader);
+	//SAFE_DELETE(cameraRender);
 }
 
 
@@ -64,10 +69,7 @@ BOOL GRAPHICS::Frame()
 
 	// Render the graphics scene.
 	result = Render(rotation);
-	if (!result)
-	{
-		return false;
-	}
+	ISFAIL(result);
 	return true;
 }
 
@@ -75,18 +77,23 @@ BOOL GRAPHICS::Render(float rotation)
 {
 	D3D* d3d = D3D::GetInstance();
 	d3d->BeginScene(D3DXCOLOR(0, 0, 0, 1.0f));
-
+	
 	mainCamera->Render();
-	D3DXMATRIX world, view, projection;
-	d3d->GetWorldMatrix(world);
-	mainCamera->GetViewMatrix(view);
-	d3d->GetProjectionMatrix(projection);
 
-	D3DXMatrixRotationY(&world, rotation);
+	RNDMatrix cameraMatrix;
+	//cameraRender->GetWorldMatrix(cameraMatrix.world);
+	//mainCamera->GetViewMatrix(cameraMatrix.view);
+	//cameraRender->GetProjectionMatrix(cameraMatrix.projection);
 
-	cube->Render(d3d->GetDeviceContext());
+	mainCamera->GetWorldMatrix(cameraMatrix.world);
+	mainCamera->GetViewMatrix(cameraMatrix.view);
+	mainCamera->GetProjectionMatrix(cameraMatrix.projection);
 
-	if (!colorShader->Render(d3d->GetDeviceContext(), cube->GetIndexCount(), world, view, projection))
+	//D3DXMatrixRotationY(&cameraMatrix.world, rotation);
+
+	cube->Render();
+
+	if (!colorShader->Render(cube->GetIndexCount(), cameraMatrix))
 	{
 		return false;
 	}

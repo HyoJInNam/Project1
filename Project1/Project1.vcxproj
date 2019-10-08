@@ -134,18 +134,19 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\camera.cpp" />
-    <ClCompile Include="Render\colorshaderclass.cpp" />
+    <ClCompile Include="Render\colorshader.cpp" />
     <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="System\d3dclass.cpp" />
     <ClCompile Include="System\graphics.cpp" />
     <ClCompile Include="System\input.cpp" />
+    <ClCompile Include="System\renderTransformation.cpp" />
     <ClCompile Include="System\System.cpp" />
     <ClCompile Include="System\window.cpp" />
     <ClCompile Include="System\wndDescription.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Render\camera.h" />
-    <ClInclude Include="Render\colorshaderclass.h" />
+    <ClInclude Include="Render\colorshader.h" />
     <ClInclude Include="Render\model.h" />
     <ClInclude Include="Render\renafx.h" />
     <ClInclude Include="resource.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="System\d3dclass.h" />
     <ClInclude Include="System\graphics.h" />
     <ClInclude Include="System\input.h" />
+    <ClInclude Include="System\renderTransformation.h" />
     <ClInclude Include="System\singleton.h" />
     <ClInclude Include="System\System.h" />
     <ClInclude Include="System\window.h" />

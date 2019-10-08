@@ -25,11 +25,15 @@ using namespace std;
 
 #include "./System/singleton.h"
 #include "./System/wndDescription.h"
+#include "./System/renderTransformation.h"
 #include "./System/d3dclass.h"
 
+#define ERR_MESSAGE(m1, m2)			{ MessageBox(WNDDesc::GetInstance()->getHwnd(), m1, m2, MB_OK); }
 
-#define ERR_INSTANCE(p){ if((p) == nullptr){ return false; } }
-#define ERR_MESSAGE(m) { MessageBox(WNDDesc::GetInstance()->getHwnd(), m, L"Error", MB_OK); }
+#define ISINSTANCE(p)				{ if(p == nullptr) { return false; } }
+#define ISFAIL(r)					{ if(r == false)   { return false; } }
+#define ISFAILED(r)					{ if(FAILED(r))    { return false; } }
+#define ISFAILEDFILE(r, f, m1, m2)  {	if (FAILED(r)) { if (m1) { this->OutputErrorMessage(f, m1); } else { ERR_MESSAGE(f, m2); } return false;	}}
 
 
 

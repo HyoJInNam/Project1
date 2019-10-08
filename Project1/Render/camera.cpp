@@ -7,17 +7,12 @@ CAMERA::CAMERA()
 	: position(0.0f, 0.0f, 0.0f)
 	, rotation(0.0f, 0.0f, 0.0f)
 {
+	//cameraRender = new R_TRANSFORMATION;
+	//cameraRender->Initialize();
 }
 
-
-CAMERA::~CAMERA()
-{
-}
-
-void CAMERA::Initialize()
-{
-	
-}
+CAMERA::CAMERA(const CAMERA& other) {}
+CAMERA::~CAMERA() {}
 
 void CAMERA::Render()
 {
@@ -57,13 +52,12 @@ void CAMERA::Render()
 	lookAt = position + lookAt;
 
 	// Finally create the view matrix from the three updated vectors.
-	D3DXMatrixLookAtLH(&viewMatrix, &position, &lookAt, &up);
-
+	D3DXMatrixLookAtLH(&matrix.view, &position, &lookAt, &up);
 }
 
 void CAMERA::GetViewMatrix(D3DXMATRIX & viewMatrix)
 {
-	viewMatrix = this->viewMatrix;
+	viewMatrix = matrix.view;
 	return;
 }
 

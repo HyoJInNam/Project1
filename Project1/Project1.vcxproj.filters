@@ -38,8 +38,11 @@
     <ClCompile Include="Render\model.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\colorshaderclass.cpp">
+    <ClCompile Include="Render\colorshader.cpp">
       <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="System\renderTransformation.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,8 +78,11 @@
     <ClInclude Include="Render\model.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\colorshaderclass.h">
+    <ClInclude Include="Render\colorshader.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="System\renderTransformation.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

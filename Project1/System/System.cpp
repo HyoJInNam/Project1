@@ -26,10 +26,7 @@ BOOL SYSTEM::Frame()
 	bool result;
 
 	result = GRAPHICS::GetInstance()->Frame();
-	if (!result)
-	{
-		return false;
-	}
+	ISFAIL(result);
 
 
 	return true;

@@ -24,23 +24,25 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(ID3D11Device*, char*);
+	bool Initialize(char*);
 	void Shutdown();
-	void Render(ID3D11DeviceContext*);
+	void Render();
 
-	int GetIndexCount() { return m_indexCount; }
-	ID3D11ShaderResourceView* GetTexture();
+	int GetIndexCount() { return indexCount; }
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers();
 	void ShutdownBuffers();
-	void RenderBuffers(ID3D11DeviceContext*);
+	void RenderBuffers();
 	
 	bool LoadModel(char*);
 	void ReleaseModel();
 
 private:
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
+
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
-	ModelType* m_model;
+	int vertexCount, indexCount;
+	ModelType* model;
 };
 

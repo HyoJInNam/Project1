@@ -1,27 +1,12 @@
 #pragma once
 
-
-
-typedef struct GEOMETRY_MATRIX
-{
-	D3DXMATRIX projection;
-	D3DXMATRIX world;
-	D3DXMATRIX view;
-	D3DXMATRIX ortho;
-
-}GEOM_MATRIX, GEOMMatrix, MARTIX;
-
-
 class D3D: public SINGLETON <D3D>
 {
 public:
 	D3D();
 	~D3D();
 
-	void Initialize() {
-		CreateSwapChain();
-		CreateBackBuffer();
-	}
+	void Initialize();
 
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }
@@ -33,26 +18,13 @@ public:
 		return;
 	}
 
-	void GetProjectionMatrix(D3DXMATRIX& projectionMatrix)
-	{
-		projectionMatrix = matrixs.projection;
-		return;
-	}
-	void GetWorldMatrix(D3DXMATRIX& worldMatrix)
-	{
-		worldMatrix = matrixs.world;
-		return;
-	}
-	void GetOrthoMatrix(D3DXMATRIX& orthoMatrix)
-	{
-		orthoMatrix = matrixs.ortho;
-		return;
-	}
-
 private:
 	void SetGpuInfo();
+
 	void CreateSwapChain();
 	void CreateBackBuffer();
+	void CreateStencil();
+	void CreateRasterizer();
 	void DeleteBackBuffer();
 
 public:
@@ -62,6 +34,7 @@ public:
 private:
 	unsigned int  numerator, denominator;
 
+	WNDDesc wndd;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 	IDXGISwapChain* swapChain;
@@ -73,5 +46,4 @@ private:
 	ID3D11DepthStencilView* depthStencilView;
 	ID3D11RenderTargetView* renderTargetView;
 
-	GEOMMatrix matrixs;
 };
