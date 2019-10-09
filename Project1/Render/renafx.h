@@ -25,7 +25,7 @@
 //==============================
 
 #include "./objectDescription.h"
+
 #include "./loadObjectsFile.h"
 #include "./colorshader.h"
-#include "./textureclass.h"
-#include "./textureshaderclass.h"
+#include "./textureshader.h"

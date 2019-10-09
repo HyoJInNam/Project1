@@ -47,10 +47,7 @@
     <ClCompile Include="Render\loadObjectsFile.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\textureclass.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\textureshaderclass.cpp">
+    <ClCompile Include="Render\textureshader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,10 +96,7 @@
     <ClInclude Include="Render\objectDescription.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\textureclass.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\textureshaderclass.h">
+    <ClInclude Include="Render\textureshader.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>

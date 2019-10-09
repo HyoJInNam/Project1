@@ -2,8 +2,16 @@
 
 class LOADOBJECTSFILE;
 class COLORSHADER;
-class TEXTURE;
 class TEXTURESHADER;
+
+
+struct TRANSFORM
+{
+	D3DXVECTOR3 position;
+	D3DXVECTOR3 rotation;
+	D3DXVECTOR3 scale;
+};
+
 
 class MODEL
 {
@@ -26,7 +34,16 @@ private:
 
 	LOADOBJECTSFILE* file;
 	COLORSHADER * colorShader;
-	TEXTURE* texture;
 	TEXTURESHADER* textureShader;
+
+
+//==============================
+
+private:
+	TRANSFORM transform;
+
+public:
+	bool IsRotation(D3DXMATRIX&, RotationDirection, float);
+	bool IsOrbit(D3DXMATRIX&, D3DXVECTOR3, float);
 };
 

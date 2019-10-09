@@ -4,8 +4,8 @@
 
 
 MODEL::MODEL()
-	: colorShader(nullptr)
-	, texture(nullptr), textureShader(nullptr)
+	: colorShader(nullptr), textureShader(nullptr)
+	, transform{ D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f) , D3DXVECTOR3(0.0f, 0.0f, 0.0f) }
 {
 	hwnd = WNDDesc::GetInstance()->getHwnd();
 	device = D3D::GetInstance()->GetDevice();
@@ -36,16 +36,9 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 		}
 	}
 
-	texture = new TEXTURE(device);
-	ISINSTANCE(texture);
-	if (!texture->Initialize(textureFilename))
-	{
-		ERR_MESSAGE(L"Could not initialize the texture object.", L"ERROR");
-	}
-
 	textureShader = new TEXTURESHADER(hwnd, device, deviceContext);
 	ISINSTANCE(textureShader);
-	if (!textureShader->Initialize())
+	if (!textureShader->Initialize(textureFilename))
 	{
 		ERR_MESSAGE(L"Could not initialize the texture shader object.", L"ERROR");
 	}
@@ -57,13 +50,12 @@ bool MODEL::Render(RNDMATRIXS renderMatrix)
 	if(colorShader != nullptr)
 		ISFAIL(colorShader->Render(file->GetIndexCount(), renderMatrix));
 	
-	ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix, texture->GetTexture()));
+	ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
 	return true;
 }
 void MODEL::Shutdown()
 {
 	SAFE_DELETE(textureShader);
-	SAFE_DELETE(texture);
 	SAFE_DELETE(colorShader);
 	file->ShutdownBuffers();
 	return;
@@ -78,5 +70,37 @@ bool MODEL::Load(char* modelFilename)
 	if (temp.CompareNoCase(_T(".txt")) == 0) { ISFAIL(file->LoadTextFile(modelFilename)); }
 	
 	ISFAIL(file->InitializeBuffers());
+	return true;
+}
+
+
+//=====================================================
+
+bool MODEL::IsRotation(D3DXMATRIX& matrix, RotationDirection dir, float rotation)
+{
+	switch (dir) {
+	case X:
+		D3DXMatrixRotationX(&matrix, rotation);
+		return true;
+	case Y:
+		D3DXMatrixRotationY(&matrix, rotation);
+		return true;
+	case Z:
+		D3DXMatrixRotationZ(&matrix, rotation);
+		return true;
+	}
+
+	return false;
+}
+
+bool MODEL::IsOrbit(D3DXMATRIX& matrix, D3DXVECTOR3 dis, float speed)
+{
+	D3DXMATRIX R, T;
+
+	D3DXMatrixTranslation(&T, dis.x, dis.y, dis.z);
+	IsRotation(matrix, Y, speed);
+
+	matrix = T * R;
+
 	return true;
 }

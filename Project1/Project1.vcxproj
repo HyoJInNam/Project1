@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader />
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>stdafx.h; renafx.h;</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d9.lib;d3dx9d.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -137,8 +137,7 @@
     <ClCompile Include="Render\colorshader.cpp" />
     <ClCompile Include="Render\loadObjectsFile.cpp" />
     <ClCompile Include="Render\model.cpp" />
-    <ClCompile Include="Render\textureclass.cpp" />
-    <ClCompile Include="Render\textureshaderclass.cpp" />
+    <ClCompile Include="Render\textureshader.cpp" />
     <ClCompile Include="System\d3dclass.cpp" />
     <ClCompile Include="System\graphics.cpp" />
     <ClCompile Include="System\input.cpp" />
@@ -154,8 +153,7 @@
     <ClInclude Include="Render\model.h" />
     <ClInclude Include="Render\objectDescription.h" />
     <ClInclude Include="Render\renafx.h" />
-    <ClInclude Include="Render\textureclass.h" />
-    <ClInclude Include="Render\textureshaderclass.h" />
+    <ClInclude Include="Render\textureshader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\d3dclass.h" />

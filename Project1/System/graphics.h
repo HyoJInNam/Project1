@@ -1,10 +1,11 @@
 #pragma once
 
-
-
 class CAMERA;
 class MODEL;
 class COLORSHADER;
+
+#define MODELCOUNT 2
+
 
 class GRAPHICS : public SINGLETON <GRAPHICS>
 {
@@ -17,12 +18,13 @@ public:
 	void Shutdown();
 
 private:
-	BOOL Render(float);
+	BOOL Render(RNDMATRIXS&, float);
 
 private:
 	RENDER_T* transformation;
 
 	CAMERA * mainCamera;
-	MODEL * cube;
+	MODEL* sphere;
+	MODEL* moon;
 };
 

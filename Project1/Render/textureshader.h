@@ -15,17 +15,22 @@ public:
 	TEXTURESHADER(const TEXTURESHADER&);
 	~TEXTURESHADER();
 
-	bool Initialize();
+	bool Initialize(WCHAR*);
 	void Shutdown();
-	bool Render(int, RNDMATRIXS, ID3D11ShaderResourceView*);
+	bool Render(int, RNDMATRIXS);
+
+
+	ID3D11ShaderResourceView* GetTexture() { return texture; }
+
 
 private:
 	bool InitializeShader(WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
 
-	bool SetShaderParameters(ID3D11ShaderResourceView*);
+	bool SetShaderParameters();
 	void RenderShader(int);
+
 
 private:
 	HWND hwnd;
@@ -38,4 +43,6 @@ private:
 	ID3D11InputLayout* layout;
 	ID3D11Buffer* matrixBuffer;
 	ID3D11SamplerState* m_sampleState;
+	
+	ID3D11ShaderResourceView* texture;
 };

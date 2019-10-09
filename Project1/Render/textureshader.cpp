@@ -1,5 +1,5 @@
 #include "renafx.h"
-#include "textureshaderclass.h"
+#include "textureshader.h"
 
 TEXTURESHADER::TEXTURESHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: vertexShader(nullptr), pixelShader(nullptr)
@@ -16,28 +16,26 @@ TEXTURESHADER::TEXTURESHADER(const TEXTURESHADER& other) {}
 TEXTURESHADER::~TEXTURESHADER() {}
 
 
-bool TEXTURESHADER::Initialize()
+bool TEXTURESHADER::Initialize(WCHAR* filename)
 {
-	return InitializeShader(const_cast<WCHAR*>(L"./data/texture.vs"), const_cast<WCHAR*>(L"./data/texture.ps"));
+	HRESULT result;
+
+	result = D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL);
+	ISFAILED(result);
+
+	result = InitializeShader(const_cast<WCHAR*>(L"./data/texture.vs"), const_cast<WCHAR*>(L"./data/texture.ps"));
+	ISFAILED(result);
+
+	return true;
 }
 
 
 void TEXTURESHADER::Shutdown()
 {
 	ShutdownShader();
+	SAFE_RELEASE(texture);
 	return;
 }
-
-
-bool TEXTURESHADER::Render(int indexCount, RNDMATRIXS matrixs, ID3D11ShaderResourceView* texture)
-{
-	render = matrixs;
-	ISFAIL(SetShaderParameters(texture));
-	RenderShader(indexCount);
-
-	return true;
-}
-
 
 bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
@@ -49,23 +47,23 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 
 	// Compile the vertex shader code.
-	result = D3DCompileFromFile(vsFilename, NULL, NULL,	"TextureVertexShader", "vs_5_0",
+	result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
 	ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
 
 
-    // Compile the pixel shader code.
+	// Compile the pixel shader code.
 	result = D3DCompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0"
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
 	ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
 
 
-    // Create the vertex shader from the buffer.
-    result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
+	// Create the vertex shader from the buffer.
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
 	ISFAILED(result);
 
-    // Create the pixel shader from the buffer.
-    result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
+	// Create the pixel shader from the buffer.
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
 	ISFAILED(result);
 
 	// Create the vertex input layout description.
@@ -90,15 +88,15 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	unsigned int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), 
-									   vertexShaderBuffer->GetBufferSize(), &layout);
+	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(), &layout);
 	ISFAILED(result);
-	
+
 	SAFE_RELEASE(vertexShaderBuffer);
 	SAFE_RELEASE(pixelShaderBuffer);
 
 
-	D3D11_BUFFER_DESC matrixBufferDesc; 
+	D3D11_BUFFER_DESC matrixBufferDesc;
 	{
 		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
@@ -106,7 +104,7 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		matrixBufferDesc.MiscFlags = 0;
 		matrixBufferDesc.StructureByteStride = 0;
-		
+
 		result = device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 		ISFAILED(result);
 	}
@@ -133,8 +131,14 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	}
 	return true;
 }
+bool TEXTURESHADER::Render(int indexCount, RNDMATRIXS matrixs)
+{
+	render = matrixs;
+	ISFAIL(SetShaderParameters());
+	RenderShader(indexCount);
 
-
+	return true;
+}
 void TEXTURESHADER::ShutdownShader()
 {
 	SAFE_RELEASE(m_sampleState);
@@ -173,7 +177,7 @@ void TEXTURESHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorM
 }
 
 
-bool TEXTURESHADER::SetShaderParameters(ID3D11ShaderResourceView* texture)
+bool TEXTURESHADER::SetShaderParameters()
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -206,8 +210,6 @@ bool TEXTURESHADER::SetShaderParameters(ID3D11ShaderResourceView* texture)
 	}
 	return true;
 }
-
-
 void TEXTURESHADER::RenderShader(int indexCount)
 {
 	deviceContext->IASetInputLayout(layout);
