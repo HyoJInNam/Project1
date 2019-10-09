@@ -1,25 +1,33 @@
 #pragma once
 
-class MODEL;
-
 class LOADOBJECTSFILE
 {
-	friend class MODEL;
-private:
-	LOADOBJECTSFILE(); 
+
+public:
+	LOADOBJECTSFILE(ID3D11Device*, ID3D11DeviceContext*);
 	LOADOBJECTSFILE(const LOADOBJECTSFILE&);
 	~LOADOBJECTSFILE();
 
-public:
-	bool LoadModel(char*);
+	bool InitializeBuffers();
+	void RenderBuffers();
+	void ShutdownBuffers();
+
+	bool LoadTextFile(char*);
+	bool LoadObjFile(char*);
 	void ReleaseModel();
 
-	bool LoadObject(char* filename);
+	int GetIndexCount() { return indexCount; }
+
+private:
 	bool ReadFileCounts(char*, int&, int&, int&, int&);
 	bool LoadDataStructures(char*, int, int, int, int);
 
 private:
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
+
 	ModelType* object;
-	int m_vertexCount, m_indexCount;
+	ID3D11Buffer* vertexBuffer, * indexBuffer;
+	int vertexCount, indexCount;
 };
 

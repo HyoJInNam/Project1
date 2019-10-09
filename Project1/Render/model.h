@@ -1,7 +1,9 @@
 #pragma once
 
-//class TextureClass;
 class LOADOBJECTSFILE;
+class COLORSHADER;
+class TEXTURE;
+class TEXTURESHADER;
 
 class MODEL
 {
@@ -10,29 +12,21 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char*);
+	bool Initialize(char*, WCHAR*);
 	void Shutdown();
-	void Render();
-
+	bool Render(RNDMATRIXS );
+	
+private:
+	bool Load(char*);
 
 private:
-	bool InitializeBuffers();
-	void RenderBuffers();
-	void ShutdownBuffers();
-
-
-private:
+	HWND hwnd;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 
-	LOADOBJECTSFILE* loadFile;
-
-	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
-
-public:
-
-	int GetIndexCount();
-
-	//ID3D11ShaderResourceView* GetTexture();
+	LOADOBJECTSFILE* file;
+	COLORSHADER * colorShader;
+	TEXTURE* texture;
+	TEXTURESHADER* textureShader;
 };
 

@@ -33,7 +33,7 @@ using namespace std;
 #define ISINSTANCE(p)				{ if(p == nullptr) { return false; } }
 #define ISFAIL(r)					{ if(r == false)   { return false; } }
 #define ISFAILED(r)					{ if(FAILED(r))    { return false; } }
-#define ISFAILEDFILE(r, f, m1, m2)  {	if (FAILED(r)) { if (m1) { this->OutputErrorMessage(f, m1); } else { ERR_MESSAGE(f, m2); } return false;	}}
+#define ISFAILEDFILE(r, f, m1, m2)  { if (FAILED(r)) { if (m1) { this->OutputErrorMessage(f, m1); } else { ERR_MESSAGE(f, m2); } return false;	}}
 
 
 

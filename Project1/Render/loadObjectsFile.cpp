@@ -1,9 +1,12 @@
-#include "./renafx.h"
+#include "renafx.h"
 #include "loadObjectsFile.h"
 
-LOADOBJECTSFILE::LOADOBJECTSFILE()
-	:m_vertexCount(0), m_indexCount(0)
+LOADOBJECTSFILE::LOADOBJECTSFILE(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+	:vertexBuffer(nullptr), indexBuffer(nullptr)
+	,vertexCount(0), indexCount(0)
 {
+	this->device = device;
+	this->deviceContext = deviceContext;
 }
 
 LOADOBJECTSFILE::LOADOBJECTSFILE(const LOADOBJECTSFILE&) {}
@@ -13,14 +16,100 @@ LOADOBJECTSFILE::~LOADOBJECTSFILE()
 	ReleaseModel();
 }
 
-bool LOADOBJECTSFILE::LoadModel(char* filename)
+bool LOADOBJECTSFILE::InitializeBuffers()
+{
+	VertexType* vertices;
+	unsigned long* indices;
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	HRESULT result;
+	int i;
+
+
+	// Create the vertex array.
+	vertices = new VertexType[vertexCount];
+	ISINSTANCE(vertices);
+
+	// Create the index array.
+	indices = new unsigned long[indexCount];
+	ISINSTANCE(indices);
+
+	// Load the vertex array and index array with data.
+	for (i = 0; i < vertexCount; i++)
+	{
+		vertices[i].position = D3DXVECTOR3(object[i].x, object[i].y, object[i].z);
+		vertices[i].texture = D3DXVECTOR2(object[i].tu, object[i].tv);
+		vertices[i].normal = D3DXVECTOR3(object[i].nx, object[i].ny, object[i].nz);
+
+		indices[i] = i;
+	}
+
+	// Set up the description of the vertex buffer.
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(VertexType) * vertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	// Give the subresource structure a pointer to the vertex data.
+	vertexData.pSysMem = vertices;
+
+	// Now finally create the vertex buffer.
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+	ISFAILED(result);
+
+	// Set up the description of the index buffer.
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+
+	// Give the subresource structure a pointer to the index data.
+	indexData.pSysMem = indices;
+
+	// Create the index buffer.
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+	ISFAILED(result);
+
+	SAFE_DELETE_ARRAY(vertices);
+	SAFE_DELETE_ARRAY(indices);
+
+	return true;
+}
+void LOADOBJECTSFILE::ShutdownBuffers()
+{
+	SAFE_RELEASE(indexBuffer);
+	SAFE_RELEASE(vertexBuffer);
+	return;
+}
+void LOADOBJECTSFILE::RenderBuffers()
+{
+	unsigned int stride;
+	unsigned int offset;
+
+
+	stride = sizeof(VertexType);
+	offset = 0;
+
+	deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+	deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	return;
+}
+
+
+bool LOADOBJECTSFILE::LoadTextFile(char* filename)
 {
 	ifstream fin;
 	char input;
 
 
 	fin.open(filename);
-	if (fin.fail()) { ISFAIL(LoadObject(filename)); }
+	if (fin.fail()) { ISFAIL(LoadObjFile(filename)); }
 
 	fin.get(input);
 	while (input != ':')
@@ -28,12 +117,12 @@ bool LOADOBJECTSFILE::LoadModel(char* filename)
 		fin.get(input);
 	}
 
-	fin >> m_vertexCount;
+	fin >> vertexCount;
 
 	// Set the number of indices to be the same as the vertex count.
-	m_indexCount = m_vertexCount;
+	indexCount = vertexCount;
 
-	object = new ModelType[m_vertexCount];
+	object = new ModelType[vertexCount];
 	ISINSTANCE(object);
 
 	// Read up to the beginning of the data.
@@ -46,7 +135,7 @@ bool LOADOBJECTSFILE::LoadModel(char* filename)
 	fin.get(input);
 
 	// Read in the vertex data.
-	for (int i = 0; i < m_vertexCount; i++)
+	for (int i = 0; i < vertexCount; i++)
 	{
 		fin >> object[i].x >> object[i].y >> object[i].z;
 		fin >> object[i].tu >> object[i].tv;
@@ -59,23 +148,25 @@ bool LOADOBJECTSFILE::LoadModel(char* filename)
 }
 void LOADOBJECTSFILE::ReleaseModel()
 {
-	m_vertexCount = 0;
-	m_indexCount = 0;
+	vertexCount = 0;
+	indexCount = 0;
 	SAFE_DELETE_ARRAY(object);
 	return;
 }
 
-bool LOADOBJECTSFILE::LoadObject(char* filename)
+bool LOADOBJECTSFILE::LoadObjFile(char* filename)
 {
-	bool result;
 	int vertexCount, textureCount, normalCount, faceCount;
 
-	result = ReadFileCounts(filename, vertexCount, textureCount, normalCount, faceCount);
-	ISFAIL(result);
+	ISFAIL(ReadFileCounts(filename, vertexCount, textureCount, normalCount, faceCount));
+	ISFAIL(LoadDataStructures(filename, vertexCount, textureCount, normalCount, faceCount));
+	
+	CString m_temp = filename;
+	m_temp.Replace(m_temp.Right(4), _T(".txt"));
 
-	result = LoadDataStructures(filename, vertexCount, textureCount, normalCount, faceCount);
-	ISFAIL(result);
-
+	USES_CONVERSION;
+	char* modelName = W2A(m_temp);
+	LoadTextFile(modelName);
 	return true;
 
 }
@@ -83,7 +174,6 @@ bool LOADOBJECTSFILE::ReadFileCounts(char* filename, int& vertexCount, int& text
 {
 	ifstream fin;
 	char input;
-
 
 	vertexCount = 0;
 	textureCount = 0;
@@ -132,7 +222,8 @@ bool LOADOBJECTSFILE::LoadDataStructures(char* filename, int vertexCount, int te
 	VertexTypeF* vertices, * texcoords, * normals;
 	FaceType* faces;
 	ifstream fin;
-	int vertexIndex, texcoordIndex, normalIndex, faceIndex, vIndex, tIndex, nIndex;
+	int vertexIndex = 0, texcoordIndex = 0, normalIndex = 0, faceIndex = 0;
+	int vIndex, tIndex, nIndex;
 	char input = NULL, input2 = NULL;
 	ofstream fout;
 
@@ -146,11 +237,6 @@ bool LOADOBJECTSFILE::LoadDataStructures(char* filename, int vertexCount, int te
 	faces = new FaceType[faceCount];
 	ISINSTANCE(faces);
 
-	// Initialize the indexes.
-	vertexIndex = 0;
-	texcoordIndex = 0;
-	normalIndex = 0;
-	faceIndex = 0;
 
 	fin.open(filename);
 
@@ -168,26 +254,21 @@ bool LOADOBJECTSFILE::LoadDataStructures(char* filename, int vertexCount, int te
 			// Read in the vertices.
 			if (input == ' ')
 			{
-				fin >> vertices[vertexIndex].x >> vertices[vertexIndex].y >>
-					vertices[vertexIndex].z;
-				// Invert the Z vertex to change to left hand system.
+				fin >> vertices[vertexIndex].x >> vertices[vertexIndex].y >> vertices[vertexIndex].z; 
 				vertices[vertexIndex].z = vertices[vertexIndex].z * -1.0f;
 				vertexIndex++;
 			}
 			// Read in the texture uv coordinates.
 			if (input == 't')
 			{
-				fin >> texcoords[texcoordIndex].x >> texcoords[texcoordIndex].y;
-				// Invert the V texture coordinates to left hand system.
+				fin >> texcoords[texcoordIndex].x >> texcoords[texcoordIndex].y; 
 				texcoords[texcoordIndex].y = 1.0f - texcoords[texcoordIndex].y;
 				texcoordIndex++;
 			}
 			// Read in the normals.
 			if (input == 'n')
 			{
-				fin >> normals[normalIndex].x >> normals[normalIndex].y >>
-					normals[normalIndex].z;
-				// Invert the Z normal to change to left hand system.
+				fin >> normals[normalIndex].x >> normals[normalIndex].y >> normals[normalIndex].z; 
 				normals[normalIndex].z = normals[normalIndex].z * -1.0f;
 				normalIndex++;
 			}

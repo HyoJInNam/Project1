@@ -24,6 +24,5 @@ private:
 
 	CAMERA * mainCamera;
 	MODEL * cube;
-	COLORSHADER * colorShader;
 };
 
