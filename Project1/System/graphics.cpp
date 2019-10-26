@@ -79,20 +79,12 @@ BOOL GRAPHICS::Frame()
 BOOL GRAPHICS::Render(RNDMATRIXS& matrixs, float rotation)
 {
 	D3DXMATRIX S, Rx, Ry, T;
+	sphere->TransformRotation(0.0f, rotation, 0.0f);
+	sphere->Render(LOCAL, matrixs);
 
-	D3DXMatrixScaling(&S, 1.0f, 1.0f, 1.0f);
-	sphere->IsRotation(Ry, Y, rotation);
-	D3DXMatrixTranslation(&T, 0.0f, 0.0f, 0.0f);
-	matrixs.world = S * Ry * T;
-	sphere->Render(matrixs);
-
-
-	D3DXMatrixScaling(&S, 0.3f, 0.3f, 0.3f);
-	D3DXMatrixRotationX(&Rx, rotation);
-	D3DXMatrixRotationY(&Ry, rotation);
-	D3DXMatrixTranslation(&T, 3.0f, 1.0f, 0.0f);
-	matrixs.world = S * T * Rx * Ry;
-
-	moon->Render(matrixs);
+	moon->TransformScale(0.3f, 0.3f, 0.3f);
+	moon->TransformRotation(rotation, rotation, 0);
+	moon->TransformPosition(3.0f, -1.0f, 0.0f);
+	moon->Render(GLOBAL, matrixs);
 	return true;
 }
