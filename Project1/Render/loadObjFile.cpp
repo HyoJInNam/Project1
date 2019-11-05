@@ -1,5 +1,5 @@
-#include "renafx.h"
-#include "loadObjectsFile.h"
+#include "../Utility/renafx.h"
+#include "loadObjFile.h"
 
 LOADOBJECTSFILE::LOADOBJECTSFILE(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	:vertexBuffer(nullptr), indexBuffer(nullptr)

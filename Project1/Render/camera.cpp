@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+#include "../Utility/renafx.h"
 #include "camera.h"
 
 

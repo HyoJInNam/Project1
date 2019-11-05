@@ -1,4 +1,4 @@
-#include "renafx.h"
+#include "../Utility/renafx.h"
 #include "textureshader.h"
 
 TEXTURESHADER::TEXTURESHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)

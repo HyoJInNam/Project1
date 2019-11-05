@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+#include "../Utility/stdafx.h"
 #include "input.h"
 #include "graphics.h"
 #include "System.h"

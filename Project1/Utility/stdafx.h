@@ -23,10 +23,10 @@ using namespace std;
 
 //==============================
 
-#include "./System/singleton.h"
-#include "./System/wndDescription.h"
-#include "./System/renderTransformation.h"
-#include "./System/d3dclass.h"
+#include "./singleton.h"
+#include "./wndDescription.h"
+#include "./renderTransformation.h"
+#include "../System/d3dclass.h"
 
 #define ERR_MESSAGE(m1, m2)			{ MessageBox(WNDDesc::GetInstance()->getHwnd(), m1, m2, MB_OK); }
 

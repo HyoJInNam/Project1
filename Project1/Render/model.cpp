@@ -1,4 +1,9 @@
-#include "renafx.h"
+#include "../Utility/renafx.h"
+
+#include "../Render/loadObjFile.h"
+#include "../Render/colorshader.h"
+#include "../Render/textureshader.h"
+
 #include "model.h"
 
 

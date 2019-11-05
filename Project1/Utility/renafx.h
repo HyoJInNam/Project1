@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../stdafx.h"
+#include "./stdafx.h"
 
 //==============================
 
@@ -25,7 +25,3 @@
 //==============================
 
 #include "./objectDescription.h"
-
-#include "./loadObjectsFile.h"
-#include "./colorshader.h"
-#include "./textureshader.h"

@@ -11,6 +11,9 @@
     <Filter Include="Render">
       <UniqueIdentifier>{dcba2189-72d1-4479-a546-c1aac7bc545c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{da908ee7-3b37-46f8-96ca-d7b35cc08da0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -29,9 +32,6 @@
     <ClCompile Include="System\graphics.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="System\wndDescription.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="Render\camera.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -41,18 +41,20 @@
     <ClCompile Include="Render\colorshader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="System\renderTransformation.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\loadObjectsFile.cpp">
+    <ClCompile Include="Render\textureshader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\textureshader.cpp">
+    <ClCompile Include="Utility\renderTransformation.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\wndDescription.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\loadObjFile.cpp">
       <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="System\window.h">
       <Filter>System</Filter>
@@ -69,16 +71,7 @@
     <ClInclude Include="System\graphics.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\singleton.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\wndDescription.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Render\camera.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\renafx.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\model.h">
@@ -87,17 +80,32 @@
     <ClInclude Include="Render\colorshader.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="System\renderTransformation.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\loadObjectsFile.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\objectDescription.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="Render\textureshader.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\objectDescription.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\renafx.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\renderTransformation.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\singleton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\stdafx.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\wndDescription.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\loadObjFile.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="GameNode.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

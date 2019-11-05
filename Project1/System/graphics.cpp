@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+#include "../Utility/stdafx.h"
 #include "../Render/camera.h"
 #include "../Render/model.h"
 //==============================
