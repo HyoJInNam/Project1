@@ -4,6 +4,7 @@ class LOADOBJECTSFILE;
 class COLORSHADER;
 class TEXTURESHADER;
 
+enum PIVOT {LOCAL, GLOBAL};
 
 struct TRANSFORM
 {
@@ -22,7 +23,19 @@ public:
 
 	bool Initialize(char*, WCHAR*);
 	void Shutdown();
-	bool Render(RNDMATRIXS );
+
+	void TransformScale(float, float, float);
+	void TransformPosition(float, float, float);
+	void TransformRotation(float, float, float);
+
+	void TransformScale(D3DXVECTOR3);
+	void TransformPosition(D3DXVECTOR3);
+	void TransformRotation(D3DXVECTOR3);
+
+	void TransformMatrix(TRANSFORM&);
+	bool Render(PIVOT, RNDMATRIXS& );
+
+
 	
 private:
 	bool Load(char*);
@@ -40,10 +53,8 @@ private:
 //==============================
 
 private:
-	TRANSFORM transform;
+	TRANSFORM local;
 
 public:
-	bool IsRotation(D3DXMATRIX&, RotationDirection, float);
-	bool IsOrbit(D3DXMATRIX&, D3DXVECTOR3, float);
 };
 
