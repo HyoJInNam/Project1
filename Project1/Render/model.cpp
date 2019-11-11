@@ -3,6 +3,8 @@
 #include "../Render/loadObjFile.h"
 #include "../Render/colorshader.h"
 #include "../Render/textureshader.h"
+#include "../Render/lightclass.h"
+#include "../Render/lightshader.h"
 
 #include "model.h"
 
@@ -10,9 +12,11 @@
 
 MODEL::MODEL()
 	: colorShader(nullptr), textureShader(nullptr)
-	, local{  D3DXVECTOR3(0.0f, 0.0f, 0.0f)
+	, light(nullptr), lightShader(nullptr)
+	, global{  D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 			, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
-			, D3DXVECTOR3(1.0f, 1.0f, 1.0f) }
+			, D3DXVECTOR3(1.0f, 1.0f, 1.0f)
+			, D3DXVECTOR3(0.0f, 0.0f, 0.0f) }
 {
 	hwnd = WNDDesc::GetInstance()->getHwnd();
 	device = D3D::GetInstance()->GetDevice();
@@ -23,10 +27,7 @@ MODEL::MODEL()
 
 
 MODEL::MODEL(const MODEL& other) {}
-MODEL::~MODEL() 
-{
-	SAFE_DELETE(file);
-}
+MODEL::~MODEL() {}
 
 
 bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
@@ -49,77 +50,52 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 	{
 		ERR_MESSAGE(L"Could not initialize the texture shader object.", L"ERROR");
 	}
+
+
+	lightShader = new LIGHTSHADER(hwnd, device, deviceContext);
+	ISINSTANCE(lightShader);
+	if (!lightShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
+
+	light = new LIGHT;
+	ISINSTANCE(light);
+
+	light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	light->SetDirection(0.0f, 0.0f, 1.0f);
+	light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
+	light->SetSpecularPower(50.0f);
+
 	return true;
 }
 
-inline void MODEL::TransformScale(float x, float y, float z)
-{
-	local.scale.x = x;
-	local.scale.y = y;
-	local.scale.z = z;
-}
-inline void MODEL::TransformPosition(float x, float y, float z)
-{
-	local.position.x = x;
-	local.position.y = y;
-	local.position.z = z;
-}
-inline void MODEL::TransformRotation(float x, float y, float z)
-{
-	local.rotation.x = x;
-	local.rotation.y = y;
-	local.rotation.z = z;
-}
 
-inline void MODEL::TransformScale(D3DXVECTOR3 scl)
+bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
-	TransformScale(scl.x, scl.y, scl.z);
-}
-inline void MODEL::TransformPosition(D3DXVECTOR3 pos)
-{
-	TransformPosition(pos.x, pos.y, pos.z);
-}
-inline void MODEL::TransformRotation(D3DXVECTOR3 rot)
-{
-	TransformRotation(rot.x, rot.y, rot.z);
-}
-
-void MODEL::TransformMatrix(TRANSFORM& local)
-{
-	TransformScale(local.scale);
-	TransformPosition(local.position);
-	TransformRotation(local.rotation);
-}
-
-
-bool MODEL::Render(PIVOT pivot, RNDMATRIXS& renderMatrix)
-{
-		{
-		D3DXMATRIX S, Rx, Ry, Rz, T;
-		D3DXVECTOR3& pos = local.position;
-		D3DXVECTOR3& rot = local.rotation;
-		D3DXVECTOR3& scl = local.scale;
-
-		D3DXMatrixScaling(&S, scl.x, scl.y, scl.z);
-		D3DXMatrixRotationX(&Rx, rot.x);
-		D3DXMatrixRotationY(&Ry, rot.y);
-		D3DXMatrixRotationZ(&Rz, rot.z);
-		D3DXMatrixTranslation(&T, pos.x, pos.y, pos.z);
-		if (pivot == LOCAL) renderMatrix.world = S * Rx * Ry * Rz * T;
-		if (pivot == GLOBAL) renderMatrix.world = S * T * Rx * Ry * Rz;
-	}
-
 	file->RenderBuffers();
 
 	if(colorShader != nullptr)
 		ISFAIL(colorShader->Render(file->GetIndexCount(), renderMatrix));
 	
-	ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
+	//ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
 
+	if (parent) {
+		ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
+			, parent->GetPosition(), textureShader->GetTexture(), light->GetLight()));
+		return true;
+	}
+
+	ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
+		, cameraPos, textureShader->GetTexture(), light->GetLight()));
 	return true;
 }
 void MODEL::Shutdown()
 {
+	SAFE_DELETE(light);
+	SAFE_DELETE(lightShader);
 	SAFE_DELETE(textureShader);
 	SAFE_DELETE(colorShader);
 	file->ShutdownBuffers();
@@ -137,8 +113,3 @@ bool MODEL::Load(char* modelFilename)
 	ISFAIL(file->InitializeBuffers());
 	return true;
 }
-
-
-//=====================================================
-
-

@@ -22,13 +22,13 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{007B491E-E2B8-4BE9-ADF8-814B27F6F25B}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -135,6 +135,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\camera.cpp" />
     <ClCompile Include="Render\colorshader.cpp" />
+    <ClCompile Include="Render\lightclass.cpp" />
+    <ClCompile Include="Render\lightshader.cpp" />
     <ClCompile Include="Render\loadObjFile.cpp" />
     <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="Render\textureshader.cpp" />
@@ -147,9 +149,10 @@
     <ClCompile Include="Utility\wndDescription.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameNode.h" />
     <ClInclude Include="Render\camera.h" />
     <ClInclude Include="Render\colorshader.h" />
+    <ClInclude Include="Render\lightclass.h" />
+    <ClInclude Include="Render\lightshader.h" />
     <ClInclude Include="Render\loadObjFile.h" />
     <ClInclude Include="Render\model.h" />
     <ClInclude Include="Render\textureshader.h" />

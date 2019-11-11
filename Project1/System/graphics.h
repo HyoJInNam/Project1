@@ -4,7 +4,7 @@ class CAMERA;
 class MODEL;
 class COLORSHADER;
 
-#define MODELCOUNT 2
+#define MODELCOUNT 9
 
 
 class GRAPHICS : public SINGLETON <GRAPHICS>
@@ -22,9 +22,13 @@ private:
 
 private:
 	RENDER_T* transformation;
-
 	CAMERA * mainCamera;
-	MODEL* sphere;
-	MODEL* moon;
+
+	MODEL* Solar;
+	MODEL* Mercury;
+	MODEL* Venus;
+	MODEL* Earth;
+	//MODEL* moon;
+	MODEL* sphere [MODELCOUNT] ;
 };
 

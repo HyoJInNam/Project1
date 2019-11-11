@@ -53,6 +53,12 @@
     <ClCompile Include="Render\loadObjFile.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="Render\lightclass.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\lightshader.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -104,8 +110,11 @@
     <ClInclude Include="Render\loadObjFile.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="GameNode.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="Render\lightclass.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\lightshader.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
