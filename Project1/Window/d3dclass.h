@@ -32,6 +32,11 @@ public:
 	void BeginScene(D3DXCOLOR);
 	void EndScene();
 
+	void TurnZBufferOn();
+	void TurnZBufferOff();
+
+	void TurnOnAlphaBlending();
+	void TurnOffAlphaBlending();
 private:
 	unsigned int  numerator, denominator;
 
@@ -41,6 +46,11 @@ private:
 
 	int videoCardMemory;
 	WCHAR* videoCardDescription;
+
+	ID3D11DepthStencilState* m_depthStencilState;
+	ID3D11DepthStencilState* m_depthDisabledStencilState ;
+	ID3D11BlendState* m_alphaEnableBlendingState ;
+	ID3D11BlendState* m_alphaDisableBlendingState ;
 
 	ID3D11Texture2D* depthStencilBuffer;
 	ID3D11DepthStencilView* depthStencilView;

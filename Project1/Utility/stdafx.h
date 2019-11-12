@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <cassert>
 
+#include <memory.h>
 //==============================
 
 #include <atlstr.h>
@@ -16,17 +17,20 @@ using namespace std;
 
 #include <dxgi.h>
 #include <D3D11.h>
+#include <D3DX11tex.h>
 #include <D3DX10math.h>
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "D3D11.lib")
+#pragma comment(lib, "D3DX11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 //==============================
 
-#include "./singleton.h"
-#include "./wndDescription.h"
-#include "./renderTransformation.h"
-#include "../System/d3dclass.h"
+#define SAFE_RELEASE(p)		{ if(p){ (p)->Release(); (p) = NULL; } }
+#define SAFE_DELETE(p)		{ if(p){ delete (p); (p) = NULL; } }
+#define SAFE_DELETE_ARRAY(p){ if(p){ delete [] (p); (p) = NULL; } }
 
 #define ERR_MESSAGE(m1, m2)			{ MessageBox(WNDDesc::GetInstance()->getHwnd(), m1, m2, MB_OK); }
 
@@ -34,6 +38,17 @@ using namespace std;
 #define ISFAIL(r)					{ if(r == false)   { return false; } }
 #define ISFAILED(r)					{ if(FAILED(r))    { return false; } }
 #define ISFAILEDFILE(r, f, m1, m2)  { if (FAILED(r)) { if (m1) { this->OutputErrorMessage(f, m1); } else { ERR_MESSAGE(f, m2); } return false;	}}
+
+
+//==============================
+
+
+#include "../Utility/AlignedAllocationPolicy.h"
+#include "../Utility/singleton.h"
+#include "../Utility/wndDescription.h"
+#include "../Utility/renderTransformation.h"
+#include "../Window/d3dclass.h"
+
 
 //==============================
 

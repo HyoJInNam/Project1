@@ -132,42 +132,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lighting\lightclass.cpp" />
+    <ClCompile Include="lighting\lightshader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\camera.cpp" />
     <ClCompile Include="Render\colorshader.cpp" />
-    <ClCompile Include="Render\lightclass.cpp" />
-    <ClCompile Include="Render\lightshader.cpp" />
     <ClCompile Include="Render\loadObjFile.cpp" />
     <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="Render\textureshader.cpp" />
-    <ClCompile Include="System\d3dclass.cpp" />
-    <ClCompile Include="System\graphics.cpp" />
-    <ClCompile Include="System\input.cpp" />
-    <ClCompile Include="System\System.cpp" />
-    <ClCompile Include="System\window.cpp" />
+    <ClCompile Include="System\CpuClass.cpp" />
+    <ClCompile Include="System\FpsClass.cpp" />
+    <ClCompile Include="System\TimerClass.cpp" />
+    <ClCompile Include="Text\FontClass.cpp" />
+    <ClCompile Include="Text\FontShaderClass.cpp" />
+    <ClCompile Include="Text\TextClass.cpp" />
+    <ClCompile Include="Utility\DDSTextureLoader.cpp" />
     <ClCompile Include="Utility\renderTransformation.cpp" />
     <ClCompile Include="Utility\wndDescription.cpp" />
+    <ClCompile Include="Window\d3dclass.cpp" />
+    <ClCompile Include="Window\graphics.cpp" />
+    <ClCompile Include="Window\input.cpp" />
+    <ClCompile Include="Window\System.cpp" />
+    <ClCompile Include="Window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lighting\lightclass.h" />
+    <ClInclude Include="lighting\lightshader.h" />
     <ClInclude Include="Render\camera.h" />
     <ClInclude Include="Render\colorshader.h" />
-    <ClInclude Include="Render\lightclass.h" />
-    <ClInclude Include="Render\lightshader.h" />
     <ClInclude Include="Render\loadObjFile.h" />
     <ClInclude Include="Render\model.h" />
     <ClInclude Include="Render\textureshader.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="System\d3dclass.h" />
-    <ClInclude Include="System\graphics.h" />
-    <ClInclude Include="System\input.h" />
-    <ClInclude Include="System\System.h" />
-    <ClInclude Include="System\window.h" />
+    <ClInclude Include="System\CpuClass.h" />
+    <ClInclude Include="System\FpsClass.h" />
+    <ClInclude Include="System\TimerClass.h" />
+    <ClInclude Include="Text\FontClass.h" />
+    <ClInclude Include="Text\FontShaderClass.h" />
+    <ClInclude Include="Text\TextClass.h" />
+    <ClInclude Include="Utility\AlignedAllocationPolicy.h" />
+    <ClInclude Include="Utility\DDSTextureLoader.h" />
     <ClInclude Include="Utility\objectDescription.h" />
     <ClInclude Include="Utility\renafx.h" />
     <ClInclude Include="Utility\renderTransformation.h" />
     <ClInclude Include="Utility\singleton.h" />
     <ClInclude Include="Utility\stdafx.h" />
     <ClInclude Include="Utility\wndDescription.h" />
+    <ClInclude Include="Window\d3dclass.h" />
+    <ClInclude Include="Window\graphics.h" />
+    <ClInclude Include="Window\input.h" />
+    <ClInclude Include="Window\System.h" />
+    <ClInclude Include="Window\window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project1.rc" />

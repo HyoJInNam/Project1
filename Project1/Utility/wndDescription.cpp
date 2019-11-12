@@ -12,6 +12,16 @@ WNDDesc::WNDDesc()
 
 WNDDesc::~WNDDesc() {}
 
+int WNDDesc::getSceneWidth()
+{
+	return (int)sceneWidth;
+}
+
+int WNDDesc::getSceneHeight()
+{
+	return (int)sceneHeight;
+}
+
 void WNDDesc::getSceneSize(UINT& _width, UINT& _height)
 {
 	_width = sceneWidth;

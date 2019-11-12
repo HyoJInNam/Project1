@@ -1,6 +1,7 @@
 #include "../Utility/stdafx.h"
 #include "d3dclass.h"
 
+
 D3D::D3D()
 	: numerator(0), denominator(1)
 {
@@ -26,34 +27,25 @@ void D3D::SetGpuInfo()
 	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	IDXGIFactory* factory = nullptr;
-	IDXGIAdapter* adapter = nullptr;
-	IDXGIOutput*  adapterOutput = nullptr;
-
-	unsigned int numModes;
-
-	// Create a DirectX graphics interface factory.
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 	assert(SUCCEEDED(result));
 
-	// Use the factory to create an adapter for the primary graphics interface (video card).
+	IDXGIAdapter* adapter = nullptr;
 	result = factory->EnumAdapters(0, &adapter);
 	assert(SUCCEEDED(result));
 
-	// Enumerate the primary adapter output (monitor).
+	IDXGIOutput* adapterOutput = nullptr;
 	result = adapter->EnumOutputs(0, &adapterOutput);
 	assert(SUCCEEDED(result));
 
-	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
+	unsigned int numModes;
 	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
 	assert(SUCCEEDED(result));
 
-	// Create a list to hold all the possible display modes for this monitor/video card combination.
 	DXGI_MODE_DESC* displayModeList = new DXGI_MODE_DESC[numModes];
 	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList);
 	assert(SUCCEEDED(result));
 
-	// Now go through all the display modes and find the one that matches the screen width and height.
-	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
 	for (unsigned int i = 0; i < numModes; i++)
 	{
 		if (displayModeList[i].Width == (unsigned int)wndd.sceneWidth)
@@ -72,10 +64,7 @@ void D3D::SetGpuInfo()
 		result = adapter->GetDesc(&adapterDesc);
 		assert(SUCCEEDED(result));
 
-		// Store the dedicated video card memory in megabytes.
 		videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
-
-		// Convert the name of the video card to a character array and store it.
 		videoCardDescription = adapterDesc.Description;
 	}
 
@@ -94,17 +83,12 @@ void D3D::CreateSwapChain()
 
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
-	// Set to a single back buffer.
-	swapChainDesc.BufferCount = 1;
 
-	// Set the width and height of the back buffer.
+	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = wndd.sceneWidth;
 	swapChainDesc.BufferDesc.Height = wndd.sceneHeight;
-
-	// Set regular 32-bit surface for the back buffer.
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	// Set the refresh rate of the back buffer.
 	if (wndd.vsync)
 	{
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = numerator;
@@ -116,36 +100,42 @@ void D3D::CreateSwapChain()
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	}
 
-	// Set the usage of the back buffer.
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-	// Set the handle for the window to render to.
 	swapChainDesc.OutputWindow = wndd.Handle;
-
-	// Turn multisampling off.
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
-
-	// Set to full screen or windowed mode.
 	swapChainDesc.Windowed = (wndd.fullscreen) ? false : true;
-
-	// Set the scan line ordering and scaling to unspecified.
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	// Discard the back buffer contents after presenting.
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-	// Don't set the advanced flags.
 	swapChainDesc.Flags = 0;
 
-
 	D3D_FEATURE_LEVEL featureLevel;
+	{
+		UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-	// Set the feature level to DirectX 11.
-	featureLevel = D3D_FEATURE_LEVEL_11_0;
+#if defined(_DEBUG)
+		creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+		D3D_FEATURE_LEVEL featureLevels[] =
+		{
+			D3D_FEATURE_LEVEL_9_1,
+			//D3D_FEATURE_LEVEL_1_0_CORE,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_12_0,
+			D3D_FEATURE_LEVEL_12_1
+		};
 
-	// Create the swap chain, Direct3D device, and Direct3D device context.
+		D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, creationFlags, featureLevels,
+			ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &device, nullptr, &deviceContext);
+	}
+	
+
 	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
 		D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, NULL, &deviceContext);
 	assert(SUCCEEDED(result));
@@ -188,7 +178,6 @@ void D3D::CreateBackBuffer()
 
 	
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	ID3D11DepthStencilState* m_depthStencilState;
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	{
 		ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -256,10 +245,59 @@ void D3D::CreateBackBuffer()
 		deviceContext->RSSetState(m_rasterState);
 	}
 
+	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+	{
+		ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+
+		depthDisabledStencilDesc.DepthEnable = false;
+		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		depthDisabledStencilDesc.StencilEnable = true;
+		depthDisabledStencilDesc.StencilReadMask = 0xFF;
+		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		result = device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
+		assert(SUCCEEDED(result));
+	}
+
+
+	D3D11_BLEND_DESC blendStateDescription;
+	{
+		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+		result = device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
+		assert(SUCCEEDED(result));
+
+		blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+
+		result = device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
+		assert(SUCCEEDED(result));
+	}
 }
 void D3D::DeleteBackBuffer()
 {
-	SAFE_RELEASE(depthStencilView);
+	SAFE_RELEASE(m_alphaDisableBlendingState);
+	SAFE_RELEASE(m_alphaEnableBlendingState);
+	SAFE_RELEASE(m_depthDisabledStencilState);
+	SAFE_RELEASE(m_depthStencilState);
+
 	SAFE_RELEASE(depthStencilBuffer);
 	SAFE_RELEASE(renderTargetView);
 
@@ -281,5 +319,27 @@ void D3D::EndScene()
 	swapChain->Present(wndd.vsync == TRUE ? 1 : 0, 0);
 
 	return;
+}
+
+void D3D::TurnZBufferOn()
+{
+	deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
+}
+
+void D3D::TurnZBufferOff()
+{
+	deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
+}
+
+void D3D::TurnOnAlphaBlending()
+{
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+}
+
+void D3D::TurnOffAlphaBlending()
+{
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
 }
 

@@ -3,6 +3,7 @@
 class CAMERA;
 class MODEL;
 class COLORSHADER;
+class TextClass;
 
 #define MODELCOUNT 9
 
@@ -14,21 +15,21 @@ public:
 	~GRAPHICS();
 
 	BOOL Initialize();
-	BOOL Frame();
+	BOOL Frame(int fps, int cpu, float frameTime);
+	BOOL Render();
 	void Shutdown();
-
-private:
-	BOOL Render(RNDMATRIXS&, float);
 
 private:
 	RENDER_T* transformation;
 	CAMERA * mainCamera;
+	CAMERA * textCamera;
+	TextClass* m_Text;
 
+	float rotation;
 	MODEL* Solar;
 	MODEL* Mercury;
 	MODEL* Venus;
 	MODEL* Earth;
-	//MODEL* moon;
-	MODEL* sphere [MODELCOUNT] ;
+	MODEL* moon;
 };
 

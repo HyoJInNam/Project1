@@ -171,7 +171,7 @@ void TEXTURESHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorM
 
 
 	SAFE_RELEASE(errorMessage);
-	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+	ERR_MESSAGE(L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename);
 
 	return;
 }

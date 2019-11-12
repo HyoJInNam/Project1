@@ -5,33 +5,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render">
       <UniqueIdentifier>{dcba2189-72d1-4479-a546-c1aac7bc545c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{da908ee7-3b37-46f8-96ca-d7b35cc08da0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lighting">
+      <UniqueIdentifier>{63a5a447-6989-4afd-aaae-4438e9044be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{9d696727-b459-4c52-b858-1abf28caefbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{83038746-df75-4b19-afee-487b20568803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="System\window.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\d3dclass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\input.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\System.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\graphics.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="Render\camera.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -53,30 +47,51 @@
     <ClCompile Include="Render\loadObjFile.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\lightclass.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="lighting\lightclass.cpp">
+      <Filter>Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="Render\lightshader.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="lighting\lightshader.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\d3dclass.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\graphics.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\input.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\System.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="System\FpsClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\TimerClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CpuClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Text\FontClass.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text\FontShaderClass.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text\TextClass.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\DDSTextureLoader.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="System\window.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\d3dclass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\input.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\System.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\graphics.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Render\camera.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -98,9 +113,6 @@
     <ClInclude Include="Utility\renderTransformation.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\singleton.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Utility\stdafx.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -110,11 +122,53 @@
     <ClInclude Include="Render\loadObjFile.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\lightclass.h">
-      <Filter>Render</Filter>
+    <ClInclude Include="lighting\lightshader.h">
+      <Filter>Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Render\lightshader.h">
-      <Filter>Render</Filter>
+    <ClInclude Include="lighting\lightclass.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\d3dclass.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\graphics.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\input.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\System.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="System\FpsClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\TimerClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\CpuClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Text\FontClass.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Text\FontShaderClass.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Text\TextClass.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\singleton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\AlignedAllocationPolicy.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\DDSTextureLoader.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

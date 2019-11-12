@@ -9,6 +9,8 @@ public:
 	void setHwnd(HWND Handle) { this->Handle = Handle; }
 	HWND getHwnd() { return this->Handle; }
 
+	int getSceneWidth();
+	int getSceneHeight();
 	void getSceneSize(UINT&, UINT&);
 	void getSceneDepth(FLOAT&, FLOAT&);
 	void ResizeScene(UINT, UINT);

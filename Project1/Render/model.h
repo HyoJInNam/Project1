@@ -1,13 +1,5 @@
 #pragma once
 
-class LOADOBJECTSFILE;
-class COLORSHADER;
-class TEXTURESHADER;
-class LIGHT;
-class LIGHTSHADER;
-
-enum PIVOT {LOCAL, GLOBAL};
-
 struct TRANSFORM
 {
 	D3DXVECTOR3 position;
@@ -17,8 +9,15 @@ struct TRANSFORM
 };
 
 
+class LOADOBJECTSFILE;
+class COLORSHADER;
+class TEXTURESHADER;
+class LIGHT;
+class LIGHTSHADER;
+
 class MODEL
 {
+
 public:
 	MODEL();
 	MODEL(const MODEL&);

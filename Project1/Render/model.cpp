@@ -3,8 +3,8 @@
 #include "../Render/loadObjFile.h"
 #include "../Render/colorshader.h"
 #include "../Render/textureshader.h"
-#include "../Render/lightclass.h"
-#include "../Render/lightshader.h"
+#include "../Lighting/lightclass.h"
+#include "../Lighting/lightshader.h"
 
 #include "model.h"
 

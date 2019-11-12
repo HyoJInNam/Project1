@@ -48,6 +48,7 @@ BOOL WINDOW::InitInstance(LPCWSTR title)
 	ShowWindow(Handle, wndCmdShow);
 	ShowCursor(true);
 
+	SYSTEM::GetInstance()->Initialize();
 	return true;
 }
 
