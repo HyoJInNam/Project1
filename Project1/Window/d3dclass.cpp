@@ -110,35 +110,83 @@ void D3D::CreateSwapChain()
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
 
-	D3D_FEATURE_LEVEL featureLevel;
 	{
 		UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #if defined(_DEBUG)
 		creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
+		D3D_DRIVER_TYPE driverTypes[] = 
+		{
+			D3D_DRIVER_TYPE_HARDWARE,
+			D3D_DRIVER_TYPE_WARP,
+			D3D_DRIVER_TYPE_REFERENCE
+		};
+		UINT numDriverTypes = ARRAYSIZE(driverTypes);
+
 		D3D_FEATURE_LEVEL featureLevels[] =
 		{
-			D3D_FEATURE_LEVEL_9_1,
-			//D3D_FEATURE_LEVEL_1_0_CORE,
-			D3D_FEATURE_LEVEL_9_2,
-			D3D_FEATURE_LEVEL_9_3,
-			D3D_FEATURE_LEVEL_10_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_11_0,
 			D3D_FEATURE_LEVEL_11_1,
-			D3D_FEATURE_LEVEL_12_0,
-			D3D_FEATURE_LEVEL_12_1
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_1
 		};
+		D3D_FEATURE_LEVEL featureLevel;
 
-		D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, creationFlags, featureLevels,
-			ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &device, nullptr, &deviceContext);
+		for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+		{
+			D3D_DRIVER_TYPE g_driverType = driverTypes[driverTypeIndex];
+			result = D3D11CreateDeviceAndSwapChain(nullptr, g_driverType, nullptr, creationFlags, featureLevels, ARRAYSIZE(featureLevels),
+										D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, &featureLevel, &deviceContext);
+			if (result == E_INVALIDARG)
+			{
+				result = D3D11CreateDeviceAndSwapChain(nullptr, g_driverType, nullptr, creationFlags, &featureLevels[1], ARRAYSIZE(featureLevels),
+											D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, &featureLevel, &deviceContext);
+
+			}
+			assert(SUCCEEDED(result));
+		}
+		assert(SUCCEEDED(result));
 	}
-	
+}
+void D3D::CreateTextBackBuffer()
+{
+	HRESULT result;
+	WNDDesc wndd = *WNDDesc::GetInstance();
 
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
-		D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, NULL, &deviceContext);
-	assert(SUCCEEDED(result));
+	// Get the pointer to the back buffer.
+	ID3D11Texture2D* TextBackBufferPtr;
+	D3D11_TEXTURE2D_DESC depthTextBufferDesc;
+	{
+		result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&TextBackBufferPtr);
+		assert(SUCCEEDED(result));
+
+		result = device->CreateRenderTargetView(TextBackBufferPtr, NULL, &renderTargetView);
+		assert(SUCCEEDED(result));
+
+		SAFE_RELEASE(TextBackBufferPtr);
+
+		ZeroMemory(&depthTextBufferDesc, sizeof(depthTextBufferDesc));
+
+		depthTextBufferDesc.Width = wndd.sceneWidth;
+		depthTextBufferDesc.Height = wndd.sceneHeight;
+		depthTextBufferDesc.MipLevels = 1;
+		depthTextBufferDesc.ArraySize = 1;
+		depthTextBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		depthTextBufferDesc.SampleDesc.Count = 1;
+		depthTextBufferDesc.SampleDesc.Quality = 0;
+		depthTextBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		depthTextBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		depthTextBufferDesc.CPUAccessFlags = 0;
+		depthTextBufferDesc.MiscFlags = 0;
+
+		// Create the texture for the depth buffer using the filled out description.
+		result = device->CreateTexture2D(&depthTextBufferDesc, NULL, &depthStencilBuffer);
+		assert(SUCCEEDED(result));
+	}
 }
 void D3D::CreateBackBuffer()
 {
@@ -273,6 +321,8 @@ void D3D::CreateBackBuffer()
 	{
 		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
 
+		blendStateDescription.AlphaToCoverageEnable = FALSE;
+		blendStateDescription.IndependentBlendEnable = FALSE;
 		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
 		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
 		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
@@ -280,7 +330,7 @@ void D3D::CreateBackBuffer()
 		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		result = device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
 		assert(SUCCEEDED(result));

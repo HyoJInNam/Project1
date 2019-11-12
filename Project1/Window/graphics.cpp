@@ -130,9 +130,7 @@ BOOL GRAPHICS::Frame(int fps, int cpu, float frameTime)
 //	ISFAIL(m_Text->SetCpu(cpu));
 
 	//=============================================================
-
-
-
+	   
 	rotation += (float)D3DX_PI * 0.01f;
 	if (rotation > 360.0f)
 	{

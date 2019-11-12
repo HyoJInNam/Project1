@@ -12,9 +12,7 @@ FontShaderClass::~FontShaderClass() {}
 
 bool FontShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	// 정점 및 픽셀 쉐이더를 초기화합니다.
-	return InitializeShader(device, hwnd, const_cast<WCHAR*> (L"./data/font.vs")
-										, const_cast<WCHAR*>(L"./data/font.ps"));
+	return InitializeShader(device, hwnd, const_cast<WCHAR*> (L"./data/font.vs"), const_cast<WCHAR*>(L"./data/font.ps"));
 }
 
 
@@ -179,17 +177,14 @@ bool FontShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_constantBuffer);
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
-	// 쓸 수 있도록 픽셀 상수 버퍼를 잠급니다..
 	ISFAILED(deviceContext->Map(m_pixelBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
 
 	PixelBufferType* dataPtr2 = (PixelBufferType*)mappedResource.pData;
 	{
 		dataPtr2->pixelColor = pixelColor;
-
 		deviceContext->Unmap(m_pixelBuffer, 0);
 
 		bufferNumber = 0;
-
 		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_pixelBuffer);
 	}
 	return true;

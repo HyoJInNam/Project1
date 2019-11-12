@@ -45,13 +45,15 @@ bool TextClass::Initialize(D3DXMATRIX baseViewMatrix)
 	result = InitializeSentence(&m_sentence1, 16);
 	ISFAIL(result);
 
-	result = UpdateSentence(m_sentence1, const_cast<char*>("Fps: "), 20, 20, 0.0f, 1.0f, 0.0f);
+	//result = UpdateSentence(m_sentence1, const_cast<char*>("Fps: "), 20, 20, 0.0f, 1.0f, 0.0f);
+	result = UpdateSentence(m_sentence1, const_cast<char*>("FPS: "), 100, 100, 1.0f, 1.0f, 0.0f);
 	ISFAIL(result);
 
 	result = InitializeSentence(&m_sentence2, 16);
 	ISFAIL(result);
 
-	result = UpdateSentence(m_sentence2, const_cast<char*>("Cpu: "), 20, 40, 0.0f, 1.0f, 0.0f);
+	//result = UpdateSentence(m_sentence2, const_cast<char*>("Cpu: "), 20, 40, 0.0f, 1.0f, 0.0f);
+	result = UpdateSentence(m_sentence2, const_cast<char*>("Cpu: "), 100, 200, 1.0f, 1.0f, 1.0f);
 	ISFAIL(result);
 
 	return true;
@@ -78,25 +80,17 @@ bool TextClass::Render(D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix)
 
 	return true;
 }
-
-
 bool TextClass::InitializeSentence(SentenceType** sentence, int maxLength)
 {
 	// 새로운 문장 개체를 만듭니다.
 	*sentence = new SentenceType;
 	ISINSTANCE(*sentence);
 
-	// 문장 버퍼를 null로 초기화합니다.
 	(*sentence)->vertexBuffer = 0;
 	(*sentence)->indexBuffer = 0;
 
-	// 문장의 최대 길이를 설정합니다.
 	(*sentence)->maxLength = maxLength;
-
-	// 정점 배열의 정점 수를 설정합니다.
 	(*sentence)->vertexCount = 6 * maxLength;
-
-	// 인덱스 배열의 인덱스 수를 설정합니다.
 	(*sentence)->indexCount = (*sentence)->vertexCount;
 
 	// 정점 배열을 만듭니다.
@@ -161,8 +155,6 @@ bool TextClass::InitializeSentence(SentenceType** sentence, int maxLength)
 
 	return true;
 }
-
-
 bool TextClass::UpdateSentence(SentenceType* sentence, char* text, int positionX, int positionY, float red, float green, float blue)
 {
 	sentence->red = red;
@@ -178,11 +170,8 @@ bool TextClass::UpdateSentence(SentenceType* sentence, char* text, int positionX
 	ISINSTANCE(vertices);
 	memset(vertices, 0, (sizeof(TextVertexType) * sentence->vertexCount));
 
-	//float drawX = (float)(((m_screenWidth / 2) * -1) + positionX);
-	//float drawY = (float)((m_screenHeight / 2) - positionY);
-	
-	float drawX = (float)(positionX);
-	float drawY = (float)(positionY);
+	float drawX = (float)(((m_screenWidth / 2) * -1) + positionX);
+	float drawY = (float)((m_screenHeight / 2) - positionY);
 
 	m_Font->BuildVertexArray((void*)vertices, text, drawX, drawY);
 
@@ -274,8 +263,6 @@ bool TextClass::SetFps(int fps)
 	// 문장 정점 버퍼를 새 문자열 정보로 업데이트합니다.
 	return UpdateSentence(m_sentence1, fpsString, 20, 20, red, green, blue);
 }
-
-
 bool TextClass::SetCpu(int cpu)
 {
 	// cpu 정수를 문자열 형식으로 변환합니다.

@@ -9,6 +9,7 @@ public:
 
 	void Initialize() {
 		CreateSwapChain();
+		CreateTextBackBuffer();
 		CreateBackBuffer();
 	}
 
@@ -26,6 +27,7 @@ private:
 	void SetGpuInfo();
 	void CreateSwapChain();
 	void CreateBackBuffer();
+	void CreateTextBackBuffer();
 	void DeleteBackBuffer();
 
 public:
