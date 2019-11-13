@@ -30,9 +30,6 @@ void LIGHT::SetPointLight(D3DXVECTOR3 object)
 	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	SetSpecularPower(70.0f);
 	////---------------------------------------
-	//SetAtt(0, 0.2f, 0);
-	//SetPos(object);
-	//SetRange(100.0f);
 }
 
 void LIGHT::SetAmbientColor(float red, float green, float blue, float alpha)
@@ -67,28 +64,6 @@ void LIGHT::SetSpecularPower(float power)
 {
 	light->specularPower = power;
 }
-//
-//void LIGHT::SetAtt(float x, float y, float z)
-//{
-//	light->att = D3DXVECTOR3(x, y, z);
-//}
-//
-//void LIGHT::SetPos(float x, float y, float z)
-//{
-//	light->pos = D3DXVECTOR3(x, y, z);
-//}
-//
-//void LIGHT::SetPos(D3DXVECTOR3 pos)
-//{
-//	SetPos(pos.x, pos.y, pos.z);
-//}
-//
-//void LIGHT::SetRange(float range)
-//{
-//	light->range = range;
-//}
-
-
 D3DXVECTOR4 LIGHT::GetAmbientColor()
 {
 	return light->ambientColor;
@@ -115,18 +90,3 @@ float LIGHT::GetSpecularPower()
 {
 	return light->specularPower;
 }
-
-//D3DXVECTOR3 LIGHT::GetAtt()
-//{
-//	return light->att;
-//}
-//
-//D3DXVECTOR3 LIGHT::GetPos()
-//{
-//	return light->pos;
-//}
-//
-//float LIGHT::GetRange()
-//{
-//	return light->range;
-//}

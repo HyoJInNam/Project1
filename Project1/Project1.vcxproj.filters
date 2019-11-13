@@ -17,12 +17,6 @@
     <Filter Include="Window">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{9d696727-b459-4c52-b858-1abf28caefbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Text">
-      <UniqueIdentifier>{83038746-df75-4b19-afee-487b20568803}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -30,9 +24,6 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="Render\model.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\colorshader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="Render\textureshader.cpp">
@@ -68,24 +59,6 @@
     <ClCompile Include="Window\window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="System\FpsClass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\TimerClass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\CpuClass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Text\FontClass.cpp">
-      <Filter>Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Text\FontShaderClass.cpp">
-      <Filter>Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Text\TextClass.cpp">
-      <Filter>Text</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\DDSTextureLoader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -96,9 +69,6 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\model.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\colorshader.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\textureshader.h">
@@ -142,24 +112,6 @@
     </ClInclude>
     <ClInclude Include="Window\window.h">
       <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="System\FpsClass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\TimerClass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\CpuClass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Text\FontClass.h">
-      <Filter>Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Text\FontShaderClass.h">
-      <Filter>Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Text\TextClass.h">
-      <Filter>Text</Filter>
     </ClInclude>
     <ClInclude Include="Utility\singleton.h">
       <Filter>Utility</Filter>

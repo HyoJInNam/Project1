@@ -10,13 +10,14 @@ struct TRANSFORM
 
 
 class LOADOBJECTSFILE;
-class COLORSHADER;
 class TEXTURESHADER;
 class LIGHT;
 class LIGHTSHADER;
 
 class MODEL
 {
+	TRANSFORM global;
+	MODEL* parent;
 
 public:
 	MODEL();
@@ -42,7 +43,6 @@ private:
 	ID3D11DeviceContext* deviceContext;
 
 	LOADOBJECTSFILE* file;
-	COLORSHADER * colorShader;
 	TEXTURESHADER* textureShader;
 
 	LIGHT* light;
@@ -51,10 +51,6 @@ private:
 
 
 //==============================
-
-private:
-	TRANSFORM global;
-	MODEL* parent;
 
 public:
 	void SetTransformScale(float, float, float);

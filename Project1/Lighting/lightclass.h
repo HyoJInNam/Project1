@@ -9,7 +9,6 @@ public:
 
 	//======================================================
 
-	void SetLight();
 	void SetDirectionLight();
 	void SetPointLight(D3DXVECTOR3 object);
 
@@ -33,18 +32,6 @@ public:
 	float GetSpecularPower();
 
 	//======================================================
-
-
-	//void SetAtt(float, float, float);
-	//void SetPos(float, float, float);
-	//void SetPos(D3DXVECTOR3);
-	//void SetRange(float);
-
-
-	//D3DXVECTOR3 GetAtt();
-	//D3DXVECTOR3 GetPos();
-	//float GetRange();
-
 
 	LightBufferType GetLight() { return *light;	}
 private:

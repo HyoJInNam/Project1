@@ -1,7 +1,6 @@
 #include "../Utility/renafx.h"
 
 #include "../Render/loadObjFile.h"
-#include "../Render/colorshader.h"
 #include "../Render/textureshader.h"
 #include "../Lighting/lightclass.h"
 #include "../Lighting/lightshader.h"
@@ -11,7 +10,7 @@
 
 
 MODEL::MODEL()
-	: colorShader(nullptr), textureShader(nullptr)
+	: textureShader(nullptr)
 	, light(nullptr), lightShader(nullptr)
 	, global{  D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 			, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
@@ -34,16 +33,6 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE l
 {
 	ISFAIL(Load(modelFilename));
 
-	if (!textureFilename) {
-		colorShader = new COLORSHADER(hwnd, device, deviceContext);
-		ISINSTANCE(colorShader);
-		if (!colorShader->Initialize())
-		{
-			ERR_MESSAGE(L"Could not initialize the color shader object.", L"ERROR");
-			return false;
-		}
-	}
-
 	textureShader = new TEXTURESHADER(hwnd, device, deviceContext);
 	ISINSTANCE(textureShader);
 	if (!textureShader->Initialize(textureFilename))
@@ -65,7 +54,7 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE l
 
 	switch (lightType)
 	{
-	case LIGHT_NOMAL:
+	case LIGHT_NONE:
 	case LIGHT_DIRECTION:
 		light->SetDirectionLight();
 		break;
@@ -83,19 +72,16 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
 	file->RenderBuffers();
 
-	if(colorShader != nullptr)
-		ISFAIL(colorShader->Render(file->GetIndexCount(), renderMatrix));
-	
-	//ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
+	ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
 
-	if (parent) {
-		ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
-			, parent->GetPosition(), textureShader->GetTexture(), light->GetLight()));
-		return true;
-	}
+	//if (parent) {
+	//	ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
+	//		, parent->GetPosition(), textureShader->GetTexture(), light->GetLight()));
+	//	return true;
+	//}
 
-	ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
-		, cameraPos, textureShader->GetTexture(), light->GetLight()));
+	//ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
+	//	, cameraPos, textureShader->GetTexture(), light->GetLight()));
 	return true;
 }
 void MODEL::Shutdown()
@@ -103,7 +89,6 @@ void MODEL::Shutdown()
 	SAFE_DELETE(light);
 	SAFE_DELETE(lightShader);
 	SAFE_DELETE(textureShader);
-	SAFE_DELETE(colorShader);
 	file->ShutdownBuffers();
 	return;
 }

@@ -1,5 +1,10 @@
 #pragma once
 
+enum ShaderType
+{
+	COLOR_SAHDER,
+	TEXTURE_SHADER
+};
 class TEXTURESHADER
 {
 private:
@@ -21,8 +26,6 @@ public:
 
 
 	ID3D11ShaderResourceView* GetTexture() { return texture; }
-
-
 private:
 	bool InitializeShader(WCHAR*, WCHAR*);
 	void ShutdownShader();
@@ -37,12 +40,13 @@ private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 	RNDMATRIXS  render;
+	ShaderType shaderType;
 
 	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader* pixelShader;
 	ID3D11InputLayout* layout;
 	ID3D11Buffer* matrixBuffer;
+
 	ID3D11SamplerState* m_sampleState;
-	
 	ID3D11ShaderResourceView* texture;
 };

@@ -18,13 +18,15 @@ TEXTURESHADER::~TEXTURESHADER() { Shutdown(); }
 
 bool TEXTURESHADER::Initialize(WCHAR* filename)
 {
-	HRESULT result;
+	if (!filename)
+	{
+		shaderType = COLOR_SAHDER;
+		return InitializeShader(const_cast<WCHAR*>(L"./data/color.vs"), const_cast<WCHAR*>(L"./data/color.ps"));
+	}
 
-	result = D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL);
-	ISFAILED(result);
-
-	result = InitializeShader(const_cast<WCHAR*>(L"./data/texture.vs"), const_cast<WCHAR*>(L"./data/texture.ps"));
-	ISFAILED(result);
+	shaderType = TEXTURE_SHADER;
+	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL));
+	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/texture.vs"), const_cast<WCHAR*>(L"./data/texture.ps")));
 
 	return true;
 }
@@ -33,7 +35,7 @@ bool TEXTURESHADER::Initialize(WCHAR* filename)
 void TEXTURESHADER::Shutdown()
 {
 	ShutdownShader();
-	SAFE_RELEASE(texture);
+	if (shaderType != COLOR_SAHDER) SAFE_RELEASE(texture);
 	return;
 }
 
@@ -45,18 +47,27 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	ID3D10Blob* pixelShaderBuffer = nullptr;
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 
+	if (shaderType == COLOR_SAHDER)
+	{
+		result = D3DCompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0",
+			D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+		ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
 
-	// Compile the vertex shader code.
-	result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
-		D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
-	ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
+		result = D3DCompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0"
+			, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+		ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
+	}
+	else
+	{
+		result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
+			D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+		ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
 
 
-	// Compile the pixel shader code.
-	result = D3DCompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0"
-		, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
-	ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
-
+		result = D3DCompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0"
+			, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+		ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
+	}
 
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
@@ -66,24 +77,42 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
 	ISFAILED(result);
 
-	// Create the vertex input layout description.
-	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset = 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
+	if (shaderType == COLOR_SAHDER)
+	{
+		polygonLayout[0].SemanticName = "POSITION";
+		polygonLayout[0].SemanticIndex = 0;
+		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[0].InputSlot = 0;
+		polygonLayout[0].AlignedByteOffset = 0;
+		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[0].InstanceDataStepRate = 0;
 
-	polygonLayout[1].SemanticName = "TEXCOORD";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
+		polygonLayout[1].SemanticName = "COLOR";
+		polygonLayout[1].SemanticIndex = 0;
+		polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		polygonLayout[1].InputSlot = 0;
+		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[1].InstanceDataStepRate = 0;
+	}
+	else
+	{
+		polygonLayout[0].SemanticName = "POSITION";
+		polygonLayout[0].SemanticIndex = 0;
+		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[0].InputSlot = 0;
+		polygonLayout[0].AlignedByteOffset = 0;
+		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[0].InstanceDataStepRate = 0;
 
+		polygonLayout[1].SemanticName = "TEXCOORD";
+		polygonLayout[1].SemanticIndex = 0;
+		polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		polygonLayout[1].InputSlot = 0;
+		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[1].InstanceDataStepRate = 0;
+	}
 	// Get a count of the elements in the layout.
 	unsigned int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
@@ -108,6 +137,8 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 		result = device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 		ISFAILED(result);
 	}
+	
+	if (shaderType == COLOR_SAHDER) return true;
 
 	// Create the texture sampler state.
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -141,7 +172,7 @@ bool TEXTURESHADER::Render(int indexCount, RNDMATRIXS matrixs)
 }
 void TEXTURESHADER::ShutdownShader()
 {
-	SAFE_RELEASE(m_sampleState);
+	if (shaderType != COLOR_SAHDER)SAFE_RELEASE(m_sampleState);
 	SAFE_RELEASE(matrixBuffer);
 	SAFE_RELEASE(layout);
 	SAFE_RELEASE(pixelShader);
@@ -180,10 +211,7 @@ void TEXTURESHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorM
 bool TEXTURESHADER::SetShaderParameters()
 {
 	HRESULT result;
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferType* dataPtr;
-	unsigned int bufferNumber;
-
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	// Transpose the matrices to prepare them for the shader.
 	D3DXMatrixTranspose(&render.world, &render.world);
@@ -195,6 +223,7 @@ bool TEXTURESHADER::SetShaderParameters()
 	ISFAILED(result);
 
 	// Get a pointer to the data in the constant buffer.
+	MatrixBufferType* dataPtr;
 	{
 		dataPtr = (MatrixBufferType*)mappedResource.pData;
 
@@ -204,9 +233,9 @@ bool TEXTURESHADER::SetShaderParameters()
 
 		deviceContext->Unmap(matrixBuffer, 0);
 
-		bufferNumber = 0;
+		unsigned int bufferNumber = 0;
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
-		deviceContext->PSSetShaderResources(0, 1, &texture);
+		if (shaderType != COLOR_SAHDER) deviceContext->PSSetShaderResources(0, 1, &texture);
 	}
 	return true;
 }
@@ -217,7 +246,7 @@ void TEXTURESHADER::RenderShader(int indexCount)
     deviceContext->VSSetShader(vertexShader, NULL, 0);
     deviceContext->PSSetShader(pixelShader, NULL, 0);
 
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	if (shaderType != COLOR_SAHDER) deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 

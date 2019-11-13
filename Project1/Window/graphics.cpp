@@ -10,7 +10,6 @@
 
 
 GRAPHICS::GRAPHICS()
-	: m_Text(nullptr), rotation(0.0f)
 {
 	D3D::GetInstance()->Initialize();
 
@@ -24,21 +23,6 @@ BOOL GRAPHICS::Initialize()
 	ISINSTANCE(mainCamera);
 	mainCamera->SetPosition(0.0f, 0.0f, -10.0f);
 
-	textCamera = new CAMERA;
-	ISINSTANCE(textCamera);
-
-	RNDMATRIXS textCameraRenderMatrix;
-	textCamera->SetPosition(0.0f, 0.0f, -10.0f);
-	textCamera->Render();
-	textCamera->GetViewMatrix(textCameraRenderMatrix.view);
-
-	m_Text = new TextClass;
-	ISINSTANCE(m_Text);
-	if (!m_Text->Initialize(textCameraRenderMatrix.view))
-	{
-		ERR_MESSAGE(L"Could not initialize the text object.", L"Error");
-		return false;
-	}
 
 	//=========================================================================
 
@@ -126,18 +110,13 @@ void GRAPHICS::Shutdown()
 	Mercury->Shutdown();
 	Solar->Shutdown();
 
-	SAFE_DELETE(m_Text);
-	SAFE_DELETE(textCamera);
 	SAFE_DELETE(mainCamera);
 	SAFE_DELETE(transformation);
 }
 
 
-BOOL GRAPHICS::Frame(int fps, int cpu, float frameTime)
+BOOL GRAPHICS::Frame()
 {
-//	ISFAIL(m_Text->SetFps(fps));
-//	ISFAIL(m_Text->SetCpu(cpu));
-
 	//=============================================================
 	   
 	rotation += (float)D3DX_PI * 0.01f;
@@ -192,14 +171,7 @@ BOOL GRAPHICS::Render()
 		moon->Render(matrixs, mainCamera->GetPosition());
 	}
 	//===========================================================
-	{
-		textCamera->Render();
-		RNDMATRIXS textCameraRenderMatrix;
-		textCamera->GetViewMatrix(textCameraRenderMatrix.view);
-		transformation->GetWorldMatrix(textCameraRenderMatrix.world);
-		transformation->GetProjectionMatrix(textCameraRenderMatrix.projection);
-		transformation->GetOrthoMatrix(textCameraRenderMatrix.ortho);
-	}
+	
 	d3d->TurnZBufferOff();
 	d3d->TurnOnAlphaBlending();
 
