@@ -2,13 +2,11 @@
 Texture2D shaderTexture;
 SamplerState SampleType;
 
-cbuffer LightBuffer
+cbuffer PointLightBufferType
 {
-	float4 ambientColor;
-	float4 diffuseColor;
-    float3 lightDirection;
-	float specularPower;
-    float4 specularColor;
+	float3 att;
+	float3 pos;
+	float range;
 };
 
 struct PixelInputType
@@ -47,7 +45,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 		float3 lightToPixelVec = input.position.xyz - input.viewDirection.xyz;
 		float d = length(lightToPixelVec);
 
-		if( d > 100.0f )
+		if( d > range )
 		{
 			finalColor.a = textureColor.a;
 			//finalColor = pow(saturate(dot(reflection, input.viewDirection)), 1.0f);
@@ -61,7 +59,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 		{    
 			finalColor += howMuchLight * textureColor * diffuseColor;
 			finalColor = pow(saturate(dot(reflection, input.viewDirection)), 1.0f);
-			finalColor /= 0 + (0.2f * d) + (0.1 * (d*d));
+			finalColor /= att[0] + (att[1] * d) + (att[2] * (d*d));
         }
 	}  
 	//=============================================================

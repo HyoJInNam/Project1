@@ -5,6 +5,7 @@
 
 #include "../Render/model.h"
 #include "../Lighting/lightclass.h"
+#include "../Lighting/lightshader.h"
 //==============================
 
 #include "graphics.h"
@@ -23,7 +24,23 @@ BOOL GRAPHICS::Initialize()
 	mainCamera = new CameraControl;
 	ISINSTANCE(mainCamera);
 	mainCamera->SetPosition(0.0f, 0.0f, -15.0f);
+	
 
+	light = new LIGHTSHADER;
+	light->SetDirectionLight();
+	if (!light->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
+
+	//pointLight = new LIGHTSHADER;
+	//pointLight->SetPointLight();
+	//if (!pointLight->Initialize())
+	//{
+	//	ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+	//	return false;
+	//}
 
 	//=========================================================================
 
@@ -31,8 +48,7 @@ BOOL GRAPHICS::Initialize()
 	Solar = new MODEL;
 	ISINSTANCE(Solar);
 	if (!Solar->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						 , const_cast<WCHAR*>(L"./data/models/solartexture.jpg")
-						 , LIGHT_DIRECTION))
+						 , const_cast<WCHAR*>(L"./data/models/solartexture.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -41,8 +57,7 @@ BOOL GRAPHICS::Initialize()
 	Mercury = new MODEL;
 	ISINSTANCE(Mercury);
 	if (!Mercury->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						   , const_cast<WCHAR*>(L"./data/models/mercuryTexture.jpg")
-						   , LIGHT_POINTLIGHT))
+						   , const_cast<WCHAR*>(L"./data/models/mercuryTexture.jpg")))
 	{				
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -50,8 +65,7 @@ BOOL GRAPHICS::Initialize()
 	Venus = new MODEL;
 	ISINSTANCE(Venus);
 	if (!Venus->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						 , const_cast<WCHAR*>(L"./data/models/venusTexture.jpg")
-						 , LIGHT_POINTLIGHT))
+						 , const_cast<WCHAR*>(L"./data/models/venusTexture.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -60,8 +74,7 @@ BOOL GRAPHICS::Initialize()
 	Earth = new MODEL;
 	ISINSTANCE(Earth);
 	if (!Earth->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						 , const_cast<WCHAR*>(L"./data/models/earthtexture.jpg")
-						 , LIGHT_POINTLIGHT))
+						 , const_cast<WCHAR*>(L"./data/models/earthtexture.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -70,8 +83,7 @@ BOOL GRAPHICS::Initialize()
 	moon = new MODEL;
 	ISINSTANCE(moon);
 	if (!moon->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						, const_cast<WCHAR*>(L"./data/models/moontexture.png")
-						, LIGHT_POINTLIGHT))
+						, const_cast<WCHAR*>(L"./data/models/moontexture.png")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -86,16 +98,13 @@ BOOL GRAPHICS::Initialize()
 
 		Mercury->SetTransformScale(Solar->GetScale() / 6);
 		Mercury->SetTransformPosition(2.0f, 0, 3.0f);
-		Mercury->GetLight()->SetSpecularPower(4.0f);
 
 		Venus->SetTransformScale(Solar->GetScale() / 5);
 		Venus->SetTransformPosition(-2.7f, 0.2f, 0);
-		Venus->GetLight()->SetSpecularPower(10.0f);
 
 		Earth->SetTransformScale(Solar->GetScale() / 4);
 		Earth->SetTransformRotation(0.3f, 0.0f, 0.0f);
 		Earth->SetTransformPosition(3.8f, 0.1f, 0);
-		Earth->GetLight()->SetSpecularPower(50.0f);
 
 		moon->SetTransformScale(Earth->GetScale() / 3);
 		moon->SetTransformPosition(moon->GetParent()->GetPosition() + D3DXVECTOR3(0.5f, 0.1f, 0));
@@ -111,6 +120,8 @@ void GRAPHICS::Shutdown()
 	Mercury->Shutdown();
 	Solar->Shutdown();
 
+	SAFE_DELETE(pointLight);
+	SAFE_DELETE(light);
 	SAFE_DELETE(mainCamera);
 	SAFE_DELETE(transformation);
 }
@@ -142,6 +153,7 @@ BOOL GRAPHICS::Render()
 	mainCamera->GetViewMatrix(matrixs.view);
 	transformation->GetProjectionMatrix(matrixs.projection);
 
+	light->Render(0, matrixs, mainCamera->GetPosition(), nullptr);
 	{
 		//Time.deltaTime 구현 할것.
 		float speed = 0.05f;

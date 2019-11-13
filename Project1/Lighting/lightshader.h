@@ -1,7 +1,9 @@
 #pragma once
 
+class MODEL;
+class LIGHT;
 
-class LIGHTSHADER
+class LIGHTSHADER: public LIGHT
 {
 private:
 	struct MatrixBufferType
@@ -19,21 +21,24 @@ private:
 	};
 		
 public:
-
-	LIGHTSHADER(HWND, ID3D11Device*, ID3D11DeviceContext*);
-	LIGHTSHADER(const LIGHTSHADER&);
+	LIGHTSHADER();
 	~LIGHTSHADER();
+	void SetLight(LIGHT_TYPE lType) { this->light->lightType = lType; }
 
-	bool Initialize(LIGHT_TYPE lightType);
+	//bool Initialize(LightBufferType* light);
+	bool Initialize();
 	void Shutdown();
-	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType lightType);
+	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture);// , LightBufferType light);
+	bool Render(RNDMATRIXS, D3DXVECTOR3 Position, MODEL* model);// , LightBufferType light);
+	LightBufferType GetLight() { return *light; }
 
 private:
-	bool InitializeShader(WCHAR*, WCHAR*);
+	bool InitializeShaderBuffer(WCHAR*, WCHAR*);
+	bool InitializeShader();
 	void ShutdownShader();
 	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
 
-	bool SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture,LightBufferType lightType );
+	bool SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture);// , LightBufferType light);
 	void RenderShader(int);
 
 private:
@@ -48,8 +53,11 @@ private:
 	ID3D11InputLayout* layout;
 	ID3D11Buffer* matrixBuffer;
 	ID3D11Buffer* cameraBuffer;
+
 	ID3D11Buffer* lightBuffer;
+	ID3D11Buffer* directlightBuffer;
+	ID3D11Buffer* pointlightBuffer;
 
-	LIGHT_TYPE lightType;
-
+protected:
+	//LightBufferType* light;
 };

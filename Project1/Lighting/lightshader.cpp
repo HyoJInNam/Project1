@@ -1,65 +1,52 @@
 ﻿#include "../Utility/renafx.h"
+#include "../Render/model.h"
+#include "lightclass.h"
 #include "lightshader.h"
 
 
-LIGHTSHADER::LIGHTSHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
-	: vertexShader(nullptr), pixelShader(nullptr)
-	, sampleState(nullptr), layout(nullptr), matrixBuffer(nullptr)
-	, cameraBuffer(nullptr), lightBuffer(nullptr)
+LIGHTSHADER::LIGHTSHADER()
+	: LIGHT()
+	, vertexShader(nullptr), pixelShader(nullptr)
+	, sampleState(nullptr), layout(nullptr)
+	, matrixBuffer(nullptr), cameraBuffer(nullptr)
+	, lightBuffer(nullptr), directlightBuffer(nullptr),  pointlightBuffer(nullptr)
 {
-	this->hwnd = hwnd;
-	this->device = device;
-	this->deviceContext = deviceContext;
+	hwnd = WNDDesc::GetInstance()->getHwnd();
+	device = D3D::GetInstance()->GetDevice();
+	deviceContext = D3D::GetInstance()->GetDeviceContext();
 }
-
-
-LIGHTSHADER::LIGHTSHADER(const LIGHTSHADER& other) {}
 LIGHTSHADER::~LIGHTSHADER() {}
 
 
-bool LIGHTSHADER::Initialize(LIGHT_TYPE lightType)
+//bool LIGHTSHADER::Initialize(LightBufferType* light)
+bool LIGHTSHADER::Initialize()
 {
-	this->lightType = lightType;
-	switch (lightType)
+	this->light = light;
+	switch (light->lightType)
 	{
-	case LIGHT_NONE:
-		return InitializeShader(const_cast<WCHAR*>(L"./data/lighting/light.vs"), const_cast<WCHAR*>(L"./data/lighting/light.ps"));
-	case LIGHT_DIRECTION:
-		return InitializeShader(const_cast<WCHAR*>(L"./data/lighting/direction.vs"), const_cast<WCHAR*>(L"./data/lighting/direction.ps"));
 	case LIGHT_POINTLIGHT:
-		return InitializeShader(const_cast<WCHAR*>(L"./data/lighting/point.vs"), const_cast<WCHAR*>(L"./data/lighting/point.ps"));
-
+		InitializeShaderBuffer(const_cast<WCHAR*>(L"./data/lighting/light.vs"), const_cast<WCHAR*>(L"./data/lighting/light.ps"));
+		InitializeShaderBuffer(const_cast<WCHAR*>(L"./data/lighting/point.vs"), const_cast<WCHAR*>(L"./data/lighting/point.ps"));
+		break;
+	case LIGHT_NONE:
+	case LIGHT_DIRECTION:
+		InitializeShaderBuffer(const_cast<WCHAR*>(L"./data/lighting/direction.vs"), const_cast<WCHAR*>(L"./data/lighting/direction.ps"));
+		break;
 	default:
-		return false;
+		break;
 	}
-}
-
-
-void LIGHTSHADER::Shutdown()
-{
-	ShutdownShader();
-	return;
-}
-
-
-bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType lightType)
-{
-	render = matrixs;
-	ISFAIL(SetShaderParameters(cameraPosition, texture, lightType));
-	RenderShader(indexCount);
-
+	InitializeShader();
 	return true;
 }
-
-bool LIGHTSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
+bool LIGHTSHADER::InitializeShaderBuffer(WCHAR* vsFilename, WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage = nullptr;
 	ID3D10Blob* vertexShaderBuffer = nullptr;
 	ID3D10Blob* pixelShaderBuffer = nullptr;
-	
 
-	result = D3DCompileFromFile(vsFilename, NULL, NULL,	"LightVertexShader", "vs_5_0",
+
+	result = D3DCompileFromFile(vsFilename, NULL, NULL, "LightVertexShader", "vs_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
 	ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
 
@@ -67,12 +54,11 @@ bool LIGHTSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
 	ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
 
-    result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
 	ISFAILED(result);
 
-    result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
 	ISFAILED(result);
-
 
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	{
@@ -110,6 +96,11 @@ bool LIGHTSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 	}
 	SAFE_RELEASE(vertexShaderBuffer);
 	SAFE_RELEASE(pixelShaderBuffer);
+	return true;
+}
+bool LIGHTSHADER::InitializeShader()
+{
+	HRESULT result;
 
 	{
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -152,6 +143,9 @@ bool LIGHTSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 		result = device->CreateBuffer(&cameraBufferDesc, NULL, &cameraBuffer);
 		ISFAILED(result);
+	}
+
+	{
 		D3D11_BUFFER_DESC lightBufferDesc;
 		lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		lightBufferDesc.ByteWidth = sizeof(LightBufferType);
@@ -162,11 +156,45 @@ bool LIGHTSHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 		result = device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
 		ISFAILED(result);
+
+		if (light->lightType == LIGHT_DIRECTION)
+		{
+			lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+			lightBufferDesc.ByteWidth = sizeof(DirectionLightBuffer);
+			lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			lightBufferDesc.MiscFlags = 0;
+			lightBufferDesc.StructureByteStride = 0;
+
+			result = device->CreateBuffer(&lightBufferDesc, NULL, &directlightBuffer);
+			ISFAILED(result);
+		}
+		if (light->lightType == LIGHT_POINTLIGHT)
+		{
+			lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+			lightBufferDesc.ByteWidth = sizeof(PointLightBufferType);
+			lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			lightBufferDesc.MiscFlags = 0;
+			lightBufferDesc.StructureByteStride = 0;
+
+			result = device->CreateBuffer(&lightBufferDesc, NULL, &pointlightBuffer);
+			ISFAILED(result);
+		}
 	}
 	return true;
 }
+
+void LIGHTSHADER::Shutdown()
+{
+	ShutdownShader();
+	SAFE_DELETE(light);
+	return;
+}
 void LIGHTSHADER::ShutdownShader()
 {
+	if (light->lightType == LIGHT_POINTLIGHT) SAFE_RELEASE(pointlightBuffer);
+	if (light->lightType == LIGHT_DIRECTION) SAFE_RELEASE(directlightBuffer);
 	SAFE_RELEASE(lightBuffer);
 	SAFE_RELEASE(cameraBuffer);
 	SAFE_RELEASE(matrixBuffer);
@@ -176,8 +204,6 @@ void LIGHTSHADER::ShutdownShader()
 	SAFE_RELEASE(vertexShader);
 	return;
 }
-
-
 void LIGHTSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMessage)
 {
 	char* compileErrors;
@@ -189,7 +215,7 @@ void LIGHTSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMes
 	bufferSize = errorMessage->GetBufferSize();
 	fout.open("shader-error.txt");
 
-	for(i=0; i<bufferSize; i++)
+	for (i = 0; i < bufferSize; i++)
 	{
 		fout << compileErrors[i];
 	}
@@ -203,10 +229,26 @@ void LIGHTSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMes
 	return;
 }
 
-bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture	, LightBufferType lightType)
+bool LIGHTSHADER::Render(RNDMATRIXS matrixs , D3DXVECTOR3 Position, MODEL* model)
+{
+	//if(Position != model->GetPosition()) 
+	render = matrixs;
+	ISFAIL(SetShaderParameters(Position, model->GetTexture()));// , light));
+	RenderShader(model->GetIndexCount());
+	return true;
+}
+bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture)//, LightBufferType light)
+{
+	render = matrixs;
+	ISFAIL(SetShaderParameters(cameraPosition, texture));// , light));
+	RenderShader(indexCount);
+
+	return true;
+}
+bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture)//, LightBufferType light)
 {
 	HRESULT result;
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
@@ -233,36 +275,65 @@ bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderRe
 	result = deviceContext->Map(cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	ISFAILED(result);
 
-	CameraBufferType* dataPtr2 = (CameraBufferType*)mappedResource.pData;
+	if (texture)
 	{
-		dataPtr2->cameraPosition = cameraPosition;
-		dataPtr2->padding = 0.0f;
+		CameraBufferType* dataPtr2 = (CameraBufferType*)mappedResource.pData;
+		{
+			dataPtr2->cameraPosition = cameraPosition;
+			dataPtr2->padding = 0.0f;
 
-		deviceContext->Unmap(cameraBuffer, 0);
+			deviceContext->Unmap(cameraBuffer, 0);
 
-		bufferNumber = 1;
+			bufferNumber = 1;
 
-		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &cameraBuffer);
-		deviceContext->PSSetShaderResources(0, 1, &texture);
-		result = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-		ISFAILED(result);
+			deviceContext->VSSetConstantBuffers(bufferNumber, 1, &cameraBuffer);
+			deviceContext->PSSetShaderResources(0, 1, &texture);
+			result = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			ISFAILED(result);
+		}
 	}
 
-	LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
 	{
+		LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
+		{
 
-		dataPtr3->ambientColor = lightType.ambientColor;
-		dataPtr3->diffuseColor = lightType.diffuseColor;
-		dataPtr3->lightDirection = lightType.lightDirection;
-		dataPtr3->specularColor = lightType.specularColor;
-		dataPtr3->specularPower = lightType.specularPower;
-		//dataPtr3->att = lightType.att;
-		//dataPtr3->pos = lightType.pos;
-		//dataPtr3->range = lightType.range;
-		
-		deviceContext->Unmap(lightBuffer, 0);
-		bufferNumber = 0;
-		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
+			dataPtr3->directLight = light->directLight;
+			dataPtr3->pointLight = light->pointLight;
+
+			deviceContext->Unmap(lightBuffer, 0);
+			bufferNumber = 0;
+			deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
+		}
+	}
+
+	if (light->lightType == LIGHT_DIRECTION)
+	{
+		DirectionLightBuffer* dataPtr4 = (DirectionLightBuffer*)mappedResource.pData;
+		{
+
+			dataPtr4->ambientColor = light->directLight.ambientColor;
+			dataPtr4->diffuseColor = light->directLight.diffuseColor;
+			dataPtr4->lightDirection = light->directLight.lightDirection;
+			dataPtr4->specularColor = light->directLight.specularColor;
+			dataPtr4->specularPower = light->directLight.specularPower;
+
+			deviceContext->Unmap(directlightBuffer, 0);
+			bufferNumber = 0;
+			deviceContext->PSSetConstantBuffers(bufferNumber, 1, &directlightBuffer);
+		}
+	}
+	if (light->lightType == LIGHT_POINTLIGHT)
+	{
+		PointLightBufferType* dataPtr4 = (PointLightBufferType*)mappedResource.pData;
+		{
+			dataPtr4->att = light->pointLight.att;
+			dataPtr4->pos = light->pointLight.pos;
+			dataPtr4->range = light->pointLight.range;
+
+			deviceContext->Unmap(pointlightBuffer, 0);
+			bufferNumber = 0;
+			deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pointlightBuffer);
+		}
 	}
 	return true;
 }

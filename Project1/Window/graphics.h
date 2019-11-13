@@ -1,6 +1,8 @@
 #pragma once
 
 class CameraControl;
+class LIGHT;
+class LIGHTSHADER;
 class MODEL;
 
 
@@ -18,7 +20,8 @@ public:
 private:
 	RENDER_T* transformation;
 	CameraControl * mainCamera;
-
+	LIGHTSHADER* light;
+	LIGHTSHADER* pointLight;
 
 	float rotation;
 	MODEL* Solar;

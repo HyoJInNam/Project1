@@ -2,8 +2,6 @@
 
 #include "../Render/loadObjFile.h"
 #include "../Render/textureshader.h"
-#include "../Lighting/lightclass.h"
-#include "../Lighting/lightshader.h"
 
 #include "model.h"
 
@@ -11,7 +9,6 @@
 
 MODEL::MODEL()
 	: textureShader(nullptr)
-	, light(nullptr), lightShader(nullptr)
 	, global{  D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 			, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 			, D3DXVECTOR3(1.0f, 1.0f, 1.0f)
@@ -29,7 +26,10 @@ MODEL::MODEL(const MODEL& other) {}
 MODEL::~MODEL() {}
 
 
-bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE lightType)
+int  MODEL::GetIndexCount()	{return file->GetIndexCount(); }
+ID3D11ShaderResourceView* MODEL::GetTexture() {	return textureShader->GetTexture(); }
+
+bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 {
 	ISFAIL(Load(modelFilename));
 
@@ -41,29 +41,6 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE l
 	}
 
 
-	lightShader = new LIGHTSHADER(hwnd, device, deviceContext);
-	ISINSTANCE(lightShader);
-	if (!lightShader->Initialize(lightType))
-	{
-		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
-		return false;
-	}
-
-	light = new LIGHT;
-	ISINSTANCE(light);
-
-	switch (lightType)
-	{
-	case LIGHT_NONE:
-	case LIGHT_DIRECTION:
-		light->SetDirectionLight();
-		break;
-	case LIGHT_POINTLIGHT:
-		light->SetPointLight(global.position);
-		break;
-	default:
-		return false;
-	}
 	return true;
 }
 
@@ -71,23 +48,12 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE l
 bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
 	file->RenderBuffers();
-
 	ISFAIL(textureShader->Render(file->GetIndexCount(), renderMatrix));
 
-	//if (parent) {
-	//	ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
-	//		, parent->GetPosition(), textureShader->GetTexture(), light->GetLight()));
-	//	return true;
-	//}
-
-	//ISFAIL(lightShader->Render(file->GetIndexCount(), renderMatrix
-	//	, cameraPos, textureShader->GetTexture(), light->GetLight()));
 	return true;
 }
 void MODEL::Shutdown()
 {
-	SAFE_DELETE(light);
-	SAFE_DELETE(lightShader);
 	SAFE_DELETE(textureShader);
 	file->ShutdownBuffers();
 	return;

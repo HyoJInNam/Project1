@@ -11,8 +11,6 @@ struct TRANSFORM
 
 class LOADOBJECTSFILE;
 class TEXTURESHADER;
-class LIGHT;
-class LIGHTSHADER;
 
 class MODEL
 {
@@ -24,7 +22,7 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE lightType);
+	bool Initialize(char* modelFilename, WCHAR* textureFilename);
 	void Shutdown();
 
 	void SetTransformMatrix(RNDMATRIXS&);
@@ -32,7 +30,9 @@ public:
 
 	void SetParent(MODEL*& parent) { this->parent = parent; }
 	MODEL* GetParent() { return parent; }
-	LIGHT* GetLight() { return light; }
+
+	int GetIndexCount();
+	ID3D11ShaderResourceView* GetTexture();
 
 private:
 	bool Load(char*);
@@ -44,11 +44,6 @@ private:
 
 	LOADOBJECTSFILE* file;
 	TEXTURESHADER* textureShader;
-
-	LIGHT* light;
-	LIGHTSHADER* lightShader;
-	LIGHT_TYPE lightType;
-
 
 //==============================
 

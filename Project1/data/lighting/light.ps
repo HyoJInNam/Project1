@@ -29,7 +29,7 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 LightPixelShader(PixelInputType input) : SV_TARGET
 {
-	//float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
+	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 
     float3 lightDir = -lightDirection;
     float lightIntensity = saturate(dot(input.normal, lightDir));
@@ -46,7 +46,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 		specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower) * lightIntensity;
 	}
 
-    //ambient = ambient * textureColor;
+    ambient = ambient * textureColor;
     float4 finalColor = saturate(ambient + specular);
     return finalColor;
 }

@@ -3,11 +3,13 @@
 Texture2D shaderTexture;
 SamplerState SampleType;
 
-cbuffer LightBuffer
+cbuffer DirectionLightBuffer
 {
 	float4 ambientColor;
 	float4 diffuseColor;
-    float3 lightDirection;
+	float3 lightDirection;
+	float specularPower;
+	float4 specularColor;
 };
 
 
