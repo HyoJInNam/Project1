@@ -30,7 +30,7 @@ MODEL::MODEL(const MODEL& other) {}
 MODEL::~MODEL() {}
 
 
-bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
+bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE lightType)
 {
 	ISFAIL(Load(modelFilename));
 
@@ -54,7 +54,7 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 
 	lightShader = new LIGHTSHADER(hwnd, device, deviceContext);
 	ISINSTANCE(lightShader);
-	if (!lightShader->Initialize())
+	if (!lightShader->Initialize(lightType))
 	{
 		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
 		return false;
@@ -63,12 +63,18 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 	light = new LIGHT;
 	ISINSTANCE(light);
 
-	light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	light->SetDirection(0.0f, 0.0f, 1.0f);
-	light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	light->SetSpecularPower(50.0f);
-
+	switch (lightType)
+	{
+	case LIGHT_NOMAL:
+	case LIGHT_DIRECTION:
+		light->SetDirectionLight();
+		break;
+	case LIGHT_POINTLIGHT:
+		light->SetPointLight(global.position);
+		break;
+	default:
+		return false;
+	}
 	return true;
 }
 

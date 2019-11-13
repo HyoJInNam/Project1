@@ -24,7 +24,7 @@ public:
 	LIGHTSHADER(const LIGHTSHADER&);
 	~LIGHTSHADER();
 
-	bool Initialize( );
+	bool Initialize(LIGHT_TYPE lightType);
 	void Shutdown();
 	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType lightType);
 
@@ -49,4 +49,7 @@ private:
 	ID3D11Buffer* matrixBuffer;
 	ID3D11Buffer* cameraBuffer;
 	ID3D11Buffer* lightBuffer;
+
+	LIGHT_TYPE lightType;
+
 };

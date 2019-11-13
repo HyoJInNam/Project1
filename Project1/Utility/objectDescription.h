@@ -39,6 +39,12 @@ typedef struct
 
 //===================================
 
+enum LIGHT_TYPE {
+	LIGHT_NONE,
+	LIGHT_DIRECTION,
+	LIGHT_POINTLIGHT
+};
+
 struct LightBufferType
 {
 	D3DXVECTOR4 ambientColor;
@@ -46,4 +52,7 @@ struct LightBufferType
 	D3DXVECTOR3 lightDirection;
 	float specularPower;
 	D3DXVECTOR4 specularColor;
+	/*D3DXVECTOR3 att;
+	D3DXVECTOR3 pos;
+	float range;*/
 };

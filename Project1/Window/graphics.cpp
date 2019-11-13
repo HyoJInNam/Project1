@@ -3,6 +3,7 @@
 #include "../Text/TextClass.h"
 #include "../Render/camera.h"
 #include "../Render/model.h"
+#include "../Lighting/lightclass.h"
 //==============================
 
 #include "graphics.h"
@@ -45,7 +46,8 @@ BOOL GRAPHICS::Initialize()
 	Solar = new MODEL;
 	ISINSTANCE(Solar);
 	if (!Solar->Initialize(const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/solartexture.jpg")))
+						 , const_cast<WCHAR*>(L"./data/models/solartexture.jpg")
+						 , LIGHT_DIRECTION))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -54,15 +56,17 @@ BOOL GRAPHICS::Initialize()
 	Mercury = new MODEL;
 	ISINSTANCE(Mercury);
 	if (!Mercury->Initialize(const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/mercuryTexture.jpg")))
-	{
+						   , const_cast<WCHAR*>(L"./data/models/mercuryTexture.jpg")
+						   , LIGHT_POINTLIGHT))
+	{				
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 	Venus = new MODEL;
 	ISINSTANCE(Venus);
 	if (!Venus->Initialize(const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/venusTexture.jpg")))
+						 , const_cast<WCHAR*>(L"./data/models/venusTexture.jpg")
+						 , LIGHT_POINTLIGHT))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -71,7 +75,8 @@ BOOL GRAPHICS::Initialize()
 	Earth = new MODEL;
 	ISINSTANCE(Earth);
 	if (!Earth->Initialize(const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/earthtexture.jpg")))
+						 , const_cast<WCHAR*>(L"./data/models/earthtexture.jpg")
+						 , LIGHT_POINTLIGHT))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -80,7 +85,8 @@ BOOL GRAPHICS::Initialize()
 	moon = new MODEL;
 	ISINSTANCE(moon);
 	if (!moon->Initialize(const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/moontexture.png")))
+						, const_cast<WCHAR*>(L"./data/models/moontexture.png")
+						, LIGHT_POINTLIGHT))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -95,13 +101,16 @@ BOOL GRAPHICS::Initialize()
 
 		Mercury->SetTransformScale(Solar->GetScale() / 6);
 		Mercury->SetTransformPosition(2.0f, 0, 0);
+		Mercury->GetLight()->SetSpecularPower(4.0f);
 
 		Venus->SetTransformScale(Solar->GetScale() / 5);
 		Venus->SetTransformPosition(2.7f, 0.2f, 0);
+		Venus->GetLight()->SetSpecularPower(10.0f);
 
 		Earth->SetTransformScale(Solar->GetScale() / 4);
 		Earth->SetTransformRotation(0.3f, 0.0f, 0.0f);
 		Earth->SetTransformPosition(3.8f, 0.1f, 0);
+		Earth->GetLight()->SetSpecularPower(50.0f);
 
 		moon->SetTransformScale(Earth->GetScale() / 3);
 		moon->SetTransformPosition(moon->GetParent()->GetPosition() + D3DXVECTOR3(0.5f, 0.1f, 0));
@@ -152,48 +161,49 @@ BOOL GRAPHICS::Render()
 	mainCamera->GetViewMatrix(matrixs.view);
 	transformation->GetProjectionMatrix(matrixs.projection);
 
-	//Time.deltaTime 구현 할것.
-	float speed = 0.05f; 
-	float parentOrbitSpeed = 0.005f;
-	float orbitSpeed = 0.05;
+	{
+		//Time.deltaTime 구현 할것.
+		float speed = 0.05f;
+		float parentOrbitSpeed = 0.005f;
+		float orbitSpeed = 0.05f;
 
-	Solar->SetSpin(0, speed, 0);
-	Solar->SetTransformMatrix(matrixs);
-	Solar->Render(matrixs, mainCamera->GetPosition());
+		Solar->SetSpin(0, speed, 0);
+		Solar->SetTransformMatrix(matrixs);
+		Solar->Render(matrixs, mainCamera->GetPosition());
 
-	Mercury->SetSpin(0, speed, 0);
-	Mercury->SetTransformMatrix(matrixs);
-	Mercury->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
-	Mercury->Render(matrixs, mainCamera->GetPosition());
+		Mercury->SetSpin(0, speed, 0);
+		Mercury->SetTransformMatrix(matrixs);
+		Mercury->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		Mercury->Render(matrixs, mainCamera->GetPosition());
 
-	Venus->SetSpin(0, speed, 0);
-	Venus->SetTransformMatrix(matrixs);
-	Venus->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
-	Venus->Render(matrixs, mainCamera->GetPosition());
+		Venus->SetSpin(0, speed, 0);
+		Venus->SetTransformMatrix(matrixs);
+		Venus->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		Venus->Render(matrixs, mainCamera->GetPosition());
 
-	Earth->SetSpin(0, speed, 0);
-	Earth->SetTransformMatrix(matrixs);
-	Earth->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
-	Earth->Render(matrixs, mainCamera->GetPosition());
+		Earth->SetSpin(0, speed, 0);
+		Earth->SetTransformMatrix(matrixs);
+		Earth->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		Earth->Render(matrixs, mainCamera->GetPosition());
 
-	moon->SetSpin(0, speed, 0);
-	moon->SetTransformMatrix(matrixs);
-	moon->SetOrbitRot(orbitSpeed, orbitSpeed, 0);
-	moon->Render(matrixs, mainCamera->GetPosition());
-
+		moon->SetSpin(0, speed, 0);
+		moon->SetTransformMatrix(matrixs);
+		moon->SetOrbitRot(orbitSpeed, orbitSpeed, 0);
+		moon->Render(matrixs, mainCamera->GetPosition());
+	}
 	//===========================================================
-
-	textCamera->Render();
-	RNDMATRIXS textCameraRenderMatrix;
-	textCamera->GetViewMatrix(textCameraRenderMatrix.view);
-	transformation->GetWorldMatrix(textCameraRenderMatrix.world);
-	transformation->GetProjectionMatrix(textCameraRenderMatrix.projection);
-	transformation->GetOrthoMatrix(textCameraRenderMatrix.ortho);
-
+	{
+		textCamera->Render();
+		RNDMATRIXS textCameraRenderMatrix;
+		textCamera->GetViewMatrix(textCameraRenderMatrix.view);
+		transformation->GetWorldMatrix(textCameraRenderMatrix.world);
+		transformation->GetProjectionMatrix(textCameraRenderMatrix.projection);
+		transformation->GetOrthoMatrix(textCameraRenderMatrix.ortho);
+	}
 	d3d->TurnZBufferOff();
 	d3d->TurnOnAlphaBlending();
 
-	ISFAIL(m_Text->Render(textCameraRenderMatrix.world, textCameraRenderMatrix.ortho));
+	//ISFAIL(m_Text->Render(textCameraRenderMatrix.world, textCameraRenderMatrix.ortho));
 
 	d3d->TurnOffAlphaBlending();
 	d3d->TurnZBufferOn();

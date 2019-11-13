@@ -1,11 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: light.ps
-////////////////////////////////////////////////////////////////////////////////
 
-
-/////////////
-// GLOBALS //
-/////////////
 Texture2D shaderTexture;
 SamplerState SampleType;
 
@@ -36,26 +29,24 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 LightPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
+	//float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 
-
-    float4 color = ambientColor;
-
-	float4 specular = float4 (0.0f, 0.0f, 0.0f, 0.0f);
     float3 lightDir = -lightDirection;
-	
     float lightIntensity = saturate(dot(input.normal, lightDir));
+	
+    float4 ambient = ambientColor;
+	float4 specular = float4 (0.0f, 0.0f, 0.0f, 0.0f);
+
 
 	if(lightIntensity > 0.0f)
     {
-        color += (diffuseColor * lightIntensity);
-    	color = saturate(color);
+	    ambient += (diffuseColor * lightIntensity);
+		ambient = saturate(ambient);
 		float3 reflection = normalize(2 * lightIntensity * input.normal - lightDir); 
-		specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower);
+		specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower) * lightIntensity;
 	}
 
-    color = color * textureColor;
-	color = saturate(color + specular);
-
-    return color;
+    //ambient = ambient * textureColor;
+    float4 finalColor = saturate(ambient + specular);
+    return finalColor;
 }

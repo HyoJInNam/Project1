@@ -44,9 +44,12 @@ using namespace std;
 
 
 #include "../Utility/AlignedAllocationPolicy.h"
+
 #include "../Utility/singleton.h"
 #include "../Utility/wndDescription.h"
+#include "../Utility/objectDescription.h"
 #include "../Utility/renderTransformation.h"
+
 #include "../Window/d3dclass.h"
 
 

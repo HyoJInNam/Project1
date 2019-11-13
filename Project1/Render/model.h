@@ -23,7 +23,7 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char*, WCHAR*);
+	bool Initialize(char* modelFilename, WCHAR* textureFilename, LIGHT_TYPE lightType);
 	void Shutdown();
 
 	void SetTransformMatrix(RNDMATRIXS&);
@@ -31,6 +31,7 @@ public:
 
 	void SetParent(MODEL*& parent) { this->parent = parent; }
 	MODEL* GetParent() { return parent; }
+	LIGHT* GetLight() { return light; }
 
 private:
 	bool Load(char*);
@@ -46,6 +47,7 @@ private:
 
 	LIGHT* light;
 	LIGHTSHADER* lightShader;
+	LIGHT_TYPE lightType;
 
 
 //==============================

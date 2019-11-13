@@ -1,11 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: light.vs
-////////////////////////////////////////////////////////////////////////////////
 
-
-/////////////
-// GLOBALS //
-/////////////
 cbuffer MatrixBuffer : register( b0 )
 {
 	matrix worldMatrix;
@@ -19,14 +12,12 @@ cbuffer CameraBuffer
 	float padding;
 };
 
-//////////////
-// TYPEDEFS //
-//////////////
 struct VertexInputType
 {
     float4 position : POSITION;
     float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
+    float4 worldPos : POSITION;
 };
 
 struct PixelInputType
@@ -58,7 +49,6 @@ PixelInputType LightVertexShader(VertexInputType input)
     float4 worldPosition = mul(input.position, worldMatrix);
 
     output.viewDirection = cameraPosition.xyz - worldPosition.xyz;
-	
     output.viewDirection = normalize(output.viewDirection);
 
     return output;
