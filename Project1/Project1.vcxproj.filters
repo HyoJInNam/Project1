@@ -17,6 +17,12 @@
     <Filter Include="Window">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inputController">
+      <UniqueIdentifier>{d512aafe-d3ba-402d-8007-ddb98306bdd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{0a4efc09-fd52-4c01-9425-8a9915588b6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -61,6 +67,18 @@
     </ClCompile>
     <ClCompile Include="Utility\DDSTextureLoader.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="inputController\Mouse.cpp">
+      <Filter>inputController</Filter>
+    </ClCompile>
+    <ClCompile Include="inputController\Keyboard.cpp">
+      <Filter>inputController</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\cameraControler.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Time.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +139,18 @@
     </ClInclude>
     <ClInclude Include="Utility\DDSTextureLoader.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="inputController\Mouse.h">
+      <Filter>inputController</Filter>
+    </ClInclude>
+    <ClInclude Include="inputController\Keyboard.h">
+      <Filter>inputController</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\cameraControler.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Time.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

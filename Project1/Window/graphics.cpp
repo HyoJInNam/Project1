@@ -1,7 +1,8 @@
 #include "../Utility/stdafx.h"
 
-#include "../Text/TextClass.h"
 #include "../Render/camera.h"
+#include "../Render/cameraControler.h"
+
 #include "../Render/model.h"
 #include "../Lighting/lightclass.h"
 //==============================
@@ -19,9 +20,9 @@ GRAPHICS::GRAPHICS()
 GRAPHICS::~GRAPHICS() {}
 BOOL GRAPHICS::Initialize()
 {
-	mainCamera = new CAMERA;
+	mainCamera = new CameraControl;
 	ISINSTANCE(mainCamera);
-	mainCamera->SetPosition(0.0f, 0.0f, -10.0f);
+	mainCamera->SetPosition(0.0f, 0.0f, -15.0f);
 
 
 	//=========================================================================
@@ -84,11 +85,11 @@ BOOL GRAPHICS::Initialize()
 
 
 		Mercury->SetTransformScale(Solar->GetScale() / 6);
-		Mercury->SetTransformPosition(2.0f, 0, 0);
+		Mercury->SetTransformPosition(2.0f, 0, 3.0f);
 		Mercury->GetLight()->SetSpecularPower(4.0f);
 
 		Venus->SetTransformScale(Solar->GetScale() / 5);
-		Venus->SetTransformPosition(2.7f, 0.2f, 0);
+		Venus->SetTransformPosition(-2.7f, 0.2f, 0);
 		Venus->GetLight()->SetSpecularPower(10.0f);
 
 		Earth->SetTransformScale(Solar->GetScale() / 4);
@@ -117,6 +118,7 @@ void GRAPHICS::Shutdown()
 
 BOOL GRAPHICS::Frame()
 {
+	mainCamera->Update();
 	//=============================================================
 	   
 	rotation += (float)D3DX_PI * 0.01f;
@@ -152,17 +154,17 @@ BOOL GRAPHICS::Render()
 
 		Mercury->SetSpin(0, speed, 0);
 		Mercury->SetTransformMatrix(matrixs);
-		Mercury->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		//Mercury->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
 		Mercury->Render(matrixs, mainCamera->GetPosition());
 
 		Venus->SetSpin(0, speed, 0);
 		Venus->SetTransformMatrix(matrixs);
-		Venus->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		//Venus->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
 		Venus->Render(matrixs, mainCamera->GetPosition());
 
 		Earth->SetSpin(0, speed, 0);
 		Earth->SetTransformMatrix(matrixs);
-		Earth->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
+		//Earth->SetOrbitRot(parentOrbitSpeed, parentOrbitSpeed, 0);
 		Earth->Render(matrixs, mainCamera->GetPosition());
 
 		moon->SetSpin(0, speed, 0);

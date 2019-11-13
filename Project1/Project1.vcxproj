@@ -132,13 +132,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inputController\Keyboard.cpp" />
+    <ClCompile Include="inputController\Mouse.cpp" />
     <ClCompile Include="lighting\lightclass.cpp" />
     <ClCompile Include="lighting\lightshader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\camera.cpp" />
+    <ClCompile Include="Render\cameraControler.cpp" />
     <ClCompile Include="Render\loadObjFile.cpp" />
     <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="Render\textureshader.cpp" />
+    <ClCompile Include="System\Time.cpp" />
     <ClCompile Include="Utility\DDSTextureLoader.cpp" />
     <ClCompile Include="Utility\renderTransformation.cpp" />
     <ClCompile Include="Utility\wndDescription.cpp" />
@@ -149,13 +153,17 @@
     <ClCompile Include="Window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inputController\Keyboard.h" />
+    <ClInclude Include="inputController\Mouse.h" />
     <ClInclude Include="lighting\lightclass.h" />
     <ClInclude Include="lighting\lightshader.h" />
     <ClInclude Include="Render\camera.h" />
+    <ClInclude Include="Render\cameraControler.h" />
     <ClInclude Include="Render\loadObjFile.h" />
     <ClInclude Include="Render\model.h" />
     <ClInclude Include="Render\textureshader.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="System\Time.h" />
     <ClInclude Include="Utility\AlignedAllocationPolicy.h" />
     <ClInclude Include="Utility\DDSTextureLoader.h" />
     <ClInclude Include="Utility\objectDescription.h" />

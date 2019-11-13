@@ -51,6 +51,7 @@ using namespace std;
 #include "../Utility/renderTransformation.h"
 
 #include "../Window/d3dclass.h"
+#include "../System/Time.h"
 
 
 //==============================

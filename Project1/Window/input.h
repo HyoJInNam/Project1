@@ -1,4 +1,8 @@
 #pragma once
+
+class Mouse;
+class Keyboard;
+
 class INPUTS : public SINGLETON <INPUTS>
 {
 public:
@@ -9,4 +13,3 @@ public:
 	BOOL Frame();
 	void Shutdown();
 };
-

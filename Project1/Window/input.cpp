@@ -1,16 +1,14 @@
 #include "../Utility/stdafx.h"
+
+#include "../inputController/Mouse.h"
+#include "../inputController/Keyboard.h"
+
 #include "input.h"
 
 
 
-INPUTS::INPUTS()
-{
-}
-
-
-INPUTS::~INPUTS()
-{
-}
+INPUTS::INPUTS() {}
+INPUTS::~INPUTS() {}
 
 BOOL INPUTS::Initialize()
 {
@@ -19,7 +17,9 @@ BOOL INPUTS::Initialize()
 
 BOOL INPUTS::Frame()
 {
-	return 0;
+	Mouse::GetInstance()->Update();
+	Keyboard::GetInstance()->Update();
+	return true;
 }
 
 void INPUTS::Shutdown()

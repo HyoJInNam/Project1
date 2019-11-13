@@ -13,9 +13,9 @@ protected:
 	SINGLETON(const SINGLETON& other) {};
 	~SINGLETON() {};
 
+public:
 	static void destroy() { SAFE_DELETE(instance); };
 
-public:
 	static T* GetInstance()
 	{
 		if (instance==nullptr) {

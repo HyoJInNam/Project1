@@ -1,6 +1,6 @@
 #pragma once
 
-class CAMERA;
+class CameraControl;
 class MODEL;
 
 
@@ -17,7 +17,7 @@ public:
 
 private:
 	RENDER_T* transformation;
-	CAMERA * mainCamera;
+	CameraControl * mainCamera;
 
 
 	float rotation;
