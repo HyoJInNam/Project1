@@ -29,7 +29,6 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 LightPixelShader(PixelInputType input) : SV_TARGET
 {
-	input.normal = normalize(input.normal);
 	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 	
     float3 lightDir = -lightDirection;

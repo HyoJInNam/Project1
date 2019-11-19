@@ -7,7 +7,15 @@ D3D::D3D()
 {
 	SetGpuInfo();
 }
-D3D::~D3D()
+D3D::~D3D() {	Shutdown(); }
+
+void D3D::Initialize()
+{
+	CreateSwapChain();
+	CreateTextBackBuffer();
+	CreateBackBuffer();
+}
+void D3D::Shutdown()
 {
 	DeleteBackBuffer();
 

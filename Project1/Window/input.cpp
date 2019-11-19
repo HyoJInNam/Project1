@@ -1,7 +1,7 @@
 #include "../Utility/stdafx.h"
 
-#include "../inputController/Mouse.h"
-#include "../inputController/Keyboard.h"
+#include "../Render/Camera/inputController/Mouse.h"
+#include "../Render/Camera/inputController/Keyboard.h"
 
 #include "input.h"
 

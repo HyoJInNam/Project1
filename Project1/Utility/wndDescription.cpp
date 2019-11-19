@@ -12,16 +12,6 @@ WNDDesc::WNDDesc()
 
 WNDDesc::~WNDDesc() {}
 
-int WNDDesc::getSceneWidth()
-{
-	return (int)sceneWidth;
-}
-
-int WNDDesc::getSceneHeight()
-{
-	return (int)sceneHeight;
-}
-
 void WNDDesc::getSceneSize(UINT& _width, UINT& _height)
 {
 	_width = sceneWidth;
@@ -35,17 +25,10 @@ void WNDDesc::getSceneDepth(FLOAT& _near, FLOAT& _depth)
 }
 
 
-void WNDDesc::ResizeScene(UINT width, UINT height)
+void WNDDesc::ResizeScene(UINT& width, UINT& height)
 {
 	if (width < 800 || height < 600) return;
 
 	sceneWidth = width;
 	sceneHeight = height;
-
-	//DeleteBackBuffer();
-	//{
-	//	HRESULT hr = swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
-	//	assert(SUCCEEDED(hr));
-	//}
-	//CreateBackBuffer(width, height);
 }

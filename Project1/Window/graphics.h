@@ -1,6 +1,8 @@
 #pragma once
 
+class PANEL;
 class CameraControl;
+
 class LIGHT;
 class LIGHTSHADER;
 class MODEL;
@@ -21,13 +23,10 @@ private:
 	RENDER_T* transformation;
 	CameraControl * mainCamera;
 	LIGHTSHADER* light;
-	LIGHTSHADER* pointLight;
+
+	PANEL* panel;
 
 	float rotation;
-	MODEL* Solar;
-	MODEL* Mercury;
-	MODEL* Venus;
-	MODEL* Earth;
-	MODEL* moon;
-};
+	MODEL* model;
 
+};

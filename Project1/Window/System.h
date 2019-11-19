@@ -3,7 +3,6 @@
 class InputClass;
 class GraphicsClass;
 
-
 class SYSTEM : public SINGLETON <SYSTEM>
 {
 public:

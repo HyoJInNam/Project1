@@ -7,11 +7,8 @@ public:
 	D3D();
 	~D3D();
 
-	void Initialize() {
-		CreateSwapChain();
-		CreateTextBackBuffer();
-		CreateBackBuffer();
-	}
+	void Initialize();
+	void Shutdown();
 
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }

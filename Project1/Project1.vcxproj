@@ -132,16 +132,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="inputController\Keyboard.cpp" />
-    <ClCompile Include="inputController\Mouse.cpp" />
-    <ClCompile Include="lighting\lightclass.cpp" />
-    <ClCompile Include="lighting\lightshader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Render\camera.cpp" />
-    <ClCompile Include="Render\cameraControler.cpp" />
-    <ClCompile Include="Render\loadObjFile.cpp" />
-    <ClCompile Include="Render\model.cpp" />
-    <ClCompile Include="Render\textureshader.cpp" />
+    <ClCompile Include="Render\Camera\camera.cpp" />
+    <ClCompile Include="Render\Camera\cameraControler.cpp" />
+    <ClCompile Include="Render\Camera\cameraPanelControler.cpp" />
+    <ClCompile Include="Render\Camera\inputController\Keyboard.cpp" />
+    <ClCompile Include="Render\Camera\inputController\Mouse.cpp" />
+    <ClCompile Include="Render\Files\LoadFile.cpp" />
+    <ClCompile Include="Render\Files\LoadImgFile.cpp" />
+    <ClCompile Include="Render\Files\loadObjFile.cpp" />
+    <ClCompile Include="Render\Lighting\lightclass.cpp" />
+    <ClCompile Include="Render\Lighting\lightshader.cpp" />
+    <ClCompile Include="Render\Objects\BitmapClass.cpp" />
+    <ClCompile Include="Render\Objects\model.cpp" />
+    <ClCompile Include="Render\Shader\colorshader.cpp" />
+    <ClCompile Include="Render\Shader\textureshader.cpp" />
     <ClCompile Include="System\Time.cpp" />
     <ClCompile Include="Utility\DDSTextureLoader.cpp" />
     <ClCompile Include="Utility\renderTransformation.cpp" />
@@ -149,19 +154,25 @@
     <ClCompile Include="Window\d3dclass.cpp" />
     <ClCompile Include="Window\graphics.cpp" />
     <ClCompile Include="Window\input.cpp" />
+    <ClCompile Include="Window\panel.cpp" />
     <ClCompile Include="Window\System.cpp" />
     <ClCompile Include="Window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inputController\Keyboard.h" />
-    <ClInclude Include="inputController\Mouse.h" />
-    <ClInclude Include="lighting\lightclass.h" />
-    <ClInclude Include="lighting\lightshader.h" />
-    <ClInclude Include="Render\camera.h" />
-    <ClInclude Include="Render\cameraControler.h" />
-    <ClInclude Include="Render\loadObjFile.h" />
-    <ClInclude Include="Render\model.h" />
-    <ClInclude Include="Render\textureshader.h" />
+    <ClInclude Include="Render\Camera\camera.h" />
+    <ClInclude Include="Render\Camera\cameraControler.h" />
+    <ClInclude Include="Render\Camera\cameraPanelControler.h" />
+    <ClInclude Include="Render\Camera\inputController\Keyboard.h" />
+    <ClInclude Include="Render\Camera\inputController\Mouse.h" />
+    <ClInclude Include="Render\Files\LoadFile.h" />
+    <ClInclude Include="Render\Files\LoadImgFile.h" />
+    <ClInclude Include="Render\Files\loadObjFile.h" />
+    <ClInclude Include="Render\Lighting\lightclass.h" />
+    <ClInclude Include="Render\Lighting\lightshader.h" />
+    <ClInclude Include="Render\Objects\BitmapClass.h" />
+    <ClInclude Include="Render\Objects\model.h" />
+    <ClInclude Include="Render\Shader\colorshader.h" />
+    <ClInclude Include="Render\Shader\textureshader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="System\Time.h" />
     <ClInclude Include="Utility\AlignedAllocationPolicy.h" />
@@ -175,6 +186,7 @@
     <ClInclude Include="Window\d3dclass.h" />
     <ClInclude Include="Window\graphics.h" />
     <ClInclude Include="Window\input.h" />
+    <ClInclude Include="Window\Panel.h" />
     <ClInclude Include="Window\System.h" />
     <ClInclude Include="Window\window.h" />
   </ItemGroup>

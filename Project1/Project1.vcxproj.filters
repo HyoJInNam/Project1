@@ -11,45 +11,33 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{da908ee7-3b37-46f8-96ca-d7b35cc08da0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Lighting">
-      <UniqueIdentifier>{63a5a447-6989-4afd-aaae-4438e9044be0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inputController">
-      <UniqueIdentifier>{d512aafe-d3ba-402d-8007-ddb98306bdd7}</UniqueIdentifier>
     </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{0a4efc09-fd52-4c01-9425-8a9915588b6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render\Lighting">
+      <UniqueIdentifier>{63a5a447-6989-4afd-aaae-4438e9044be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Camera">
+      <UniqueIdentifier>{4ac1b31a-0dd4-438c-bf4b-c8377e44436c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Camera\inputController">
+      <UniqueIdentifier>{d512aafe-d3ba-402d-8007-ddb98306bdd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Objects">
+      <UniqueIdentifier>{ba2a11a2-2197-4231-be3a-71d2325ae121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Files">
+      <UniqueIdentifier>{3c59d6c0-e709-4453-9dad-eced72d76d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Shader">
+      <UniqueIdentifier>{1d78a8e1-12f8-4649-9e45-554d32f890ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Render\camera.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\model.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\textureshader.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\renderTransformation.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\wndDescription.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\loadObjFile.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="lighting\lightclass.cpp">
-      <Filter>Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="lighting\lightshader.cpp">
-      <Filter>Lighting</Filter>
-    </ClCompile>
     <ClCompile Include="Window\d3dclass.cpp">
       <Filter>Window</Filter>
     </ClCompile>
@@ -68,53 +56,68 @@
     <ClCompile Include="Utility\DDSTextureLoader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="inputController\Mouse.cpp">
-      <Filter>inputController</Filter>
-    </ClCompile>
-    <ClCompile Include="inputController\Keyboard.cpp">
-      <Filter>inputController</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\cameraControler.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="System\Time.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\panel.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\renderTransformation.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\wndDescription.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Lighting\lightclass.cpp">
+      <Filter>Render\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Lighting\lightshader.cpp">
+      <Filter>Render\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera\inputController\Keyboard.cpp">
+      <Filter>Render\Camera\inputController</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera\inputController\Mouse.cpp">
+      <Filter>Render\Camera\inputController</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera\camera.cpp">
+      <Filter>Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera\cameraControler.cpp">
+      <Filter>Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera\cameraPanelControler.cpp">
+      <Filter>Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Files\loadObjFile.cpp">
+      <Filter>Render\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Objects\BitmapClass.cpp">
+      <Filter>Render\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Objects\model.cpp">
+      <Filter>Render\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shader\colorshader.cpp">
+      <Filter>Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Files\LoadImgFile.cpp">
+      <Filter>Render\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Files\LoadFile.cpp">
+      <Filter>Render\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shader\textureshader.cpp">
+      <Filter>Render\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Render\camera.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\model.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\textureshader.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\objectDescription.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Utility\renafx.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\renderTransformation.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Utility\stdafx.h">
       <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\wndDescription.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\loadObjFile.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="lighting\lightshader.h">
-      <Filter>Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="lighting\lightclass.h">
-      <Filter>Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Window\d3dclass.h">
       <Filter>Window</Filter>
@@ -140,17 +143,62 @@
     <ClInclude Include="Utility\DDSTextureLoader.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="inputController\Mouse.h">
-      <Filter>inputController</Filter>
-    </ClInclude>
-    <ClInclude Include="inputController\Keyboard.h">
-      <Filter>inputController</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\cameraControler.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="System\Time.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Panel.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\objectDescription.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\renderTransformation.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\wndDescription.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Lighting\lightclass.h">
+      <Filter>Render\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Lighting\lightshader.h">
+      <Filter>Render\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera\inputController\Keyboard.h">
+      <Filter>Render\Camera\inputController</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera\inputController\Mouse.h">
+      <Filter>Render\Camera\inputController</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera\camera.h">
+      <Filter>Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera\cameraControler.h">
+      <Filter>Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera\cameraPanelControler.h">
+      <Filter>Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Files\loadObjFile.h">
+      <Filter>Render\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Objects\BitmapClass.h">
+      <Filter>Render\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Objects\model.h">
+      <Filter>Render\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader\colorshader.h">
+      <Filter>Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Files\LoadFile.h">
+      <Filter>Render\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Files\LoadImgFile.h">
+      <Filter>Render\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader\textureshader.h">
+      <Filter>Render\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
