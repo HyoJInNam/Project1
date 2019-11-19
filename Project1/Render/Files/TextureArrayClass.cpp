@@ -10,10 +10,16 @@ TextureArray::~TextureArray() {}
 
 bool TextureArray::InitializeTextureArray(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
 {
-
 	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename1, NULL, NULL, &m_textures[0], NULL));
 	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename2, NULL, NULL, &m_textures[1], NULL));
 
+	return true;
+}
+bool TextureArray::InitializeTextureArray(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3)
+{
+	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename1, NULL, NULL, &m_textures[0], NULL));
+	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename2, NULL, NULL, &m_textures[1], NULL));
+	ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename2, NULL, NULL, &m_textures[2], NULL));
 
 	return true;
 }

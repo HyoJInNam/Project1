@@ -10,8 +10,11 @@ struct TRANSFORM
 
 
 class LOADOBJECTSFILE;
+
 class BUMPMAPPING;
 class BumpMapShaderClass;
+class SpecMapShaderClass;
+
 class COLORSHADER;
 class LIGHT;
 class LIGHTSHADER;
@@ -26,7 +29,9 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char* modelFilename);
+	bool Initialize(char* modelFilename, WCHAR* filename);
+	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2);
+	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3);
 	void Shutdown();
 
 	void SetTransformMatrix(RNDMATRIXS&);
@@ -54,6 +59,7 @@ private:
 
 	BUMPMAPPING* bumpmap;
 	BumpMapShaderClass* m_BumpMapShader;
+	SpecMapShaderClass* m_SpecMapShader = nullptr;
 
 //==============================
 

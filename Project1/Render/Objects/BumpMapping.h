@@ -12,11 +12,13 @@ public:
 	virtual ~BUMPMAPPING() override;
 
 	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2);
+	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3);
 	void Shutdown();
 	void Render();
 
 	//int GetIndexCount();
 	bool LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2);
+	bool LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3);
 	ID3D11ShaderResourceView** GetTextures();
 
 private:

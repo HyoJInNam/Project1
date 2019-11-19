@@ -7,6 +7,8 @@
 
 #include "../Shader/colorshader.h"
 #include "../Shader/BumpMapShaderClass.h"
+#include "../Shader/SpecMapShaderClass.h"
+
 #include "../Lighting/lightclass.h"
 #include "../Lighting/lightshader.h"
 
@@ -37,14 +39,29 @@ MODEL::~MODEL() {}
 int  MODEL::GetIndexCount()	{return file->GetIndexCount(); }
 ID3D11ShaderResourceView* MODEL::GetTexture() {	return file->GetTexture(); }
 
-bool MODEL::Initialize(char* modelFilename)
+bool MODEL::Initialize(char* modelFilename, WCHAR* filename)
+{
+	ISFAIL(Load(modelFilename));
+	file->LoadTexture(filename);
+	// specular map shader 객체를 생성한다.
+
+
+	textureShader = new LIGHTSHADER;
+	textureShader->SetDirectionLight();
+	if (!textureShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
+
+	return true;
+}
+bool MODEL::Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2)
 {
 	//ISFAIL(Load(modelFilename));
 	bumpmap = new BUMPMAPPING(device, deviceContext);
 	ISINSTANCE(bumpmap);
-	if (!bumpmap->Initialize(modelFilename
-		, const_cast<WCHAR*>(L"./data/models/stone01.dds")
-		, const_cast<WCHAR*>(L"./data/models/bump01.dds")))
+	if (!bumpmap->Initialize(modelFilename, filename1, filename2))
 	{
 		ERR_MESSAGE(L"Could not initialize the BumpMap object.", L"ERROR");
 		return false;
@@ -68,6 +85,34 @@ bool MODEL::Initialize(char* modelFilename)
 	}
 	return true;
 }
+bool MODEL::Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3)
+{
+	//ISFAIL(Load(modelFilename));
+	bumpmap = new BUMPMAPPING(device, deviceContext);
+	ISINSTANCE(bumpmap);
+	if (!bumpmap->Initialize(modelFilename, filename1, filename2, filename3))
+	{
+		ERR_MESSAGE(L"Could not initialize the BumpMap object.", L"ERROR");
+		return false;
+	}
+
+	textureShader = new LIGHTSHADER;
+	textureShader->SetDirectionLight();
+	if (!textureShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
+
+	m_SpecMapShader = new SpecMapShaderClass;
+	ISINSTANCE(m_SpecMapShader);
+	if (!m_SpecMapShader->Initialize(device, hwnd))
+	{
+		MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
+		return false;
+	}
+	return true;
+}
 bool MODEL::LoadTexture(WCHAR * filename)
 {
 	return	file->LoadTexture(filename);
@@ -81,9 +126,17 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
 	//file->RenderBuffers();
 	bumpmap->Render();
-	m_BumpMapShader->Render(bumpmap->GetIndexCount(), renderMatrix, bumpmap->GetTextures(), textureShader->GetDirection(), textureShader->GetDiffuseColor());
-
-	/*if (textureShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture()) == false)
+	if (m_BumpMapShader)
+	{
+		m_BumpMapShader->Render(bumpmap->GetIndexCount(), renderMatrix, bumpmap->GetTextures(), textureShader->GetDirection(), textureShader->GetDiffuseColor());
+	}
+	if (m_SpecMapShader)
+	{
+		m_SpecMapShader->Render(deviceContext, bumpmap->GetIndexCount(), renderMatrix,
+			bumpmap->GetTextures(), textureShader->GetDirection(), textureShader->GetDiffuseColor(),
+			cameraPos, textureShader->GetSpecularColor(), textureShader->GetSpecularPower());
+	}
+	if (textureShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture()) == false)
 	{
 		colorShader = new COLORSHADER(hwnd, device, deviceContext);
 		ISINSTANCE(colorShader);
@@ -93,13 +146,17 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 		}
 
 		colorShader->Render(file->GetIndexCount(), renderMatrix);
-	}*/
+	}
 	return true;
 }
 void MODEL::Shutdown()
 {
+	
+		m_SpecMapShader->Shutdown();
+
 	SAFE_DELETE(m_BumpMapShader);
 	bumpmap->Shutdown();
+
 	SAFE_DELETE(textureShader);
 	SAFE_DELETE(colorShader);
 	file->ReleaseTexture();

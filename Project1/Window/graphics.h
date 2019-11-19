@@ -28,5 +28,6 @@ private:
 
 	float rotation;
 	MODEL* model;
+	MODEL* sphere;
 
 };

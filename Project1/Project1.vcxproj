@@ -149,6 +149,7 @@
     <ClCompile Include="Render\Objects\model.cpp" />
     <ClCompile Include="Render\Shader\BumpMapShaderClass.cpp" />
     <ClCompile Include="Render\Shader\colorshader.cpp" />
+    <ClCompile Include="Render\Shader\SpecMapShaderClass.cpp" />
     <ClCompile Include="Render\Shader\textureshader.cpp" />
     <ClCompile Include="System\Time.cpp" />
     <ClCompile Include="Utility\renderTransformation.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Render\Objects\model.h" />
     <ClInclude Include="Render\Shader\BumpMapShaderClass.h" />
     <ClInclude Include="Render\Shader\colorshader.h" />
+    <ClInclude Include="Render\Shader\SpecMapShaderClass.h" />
     <ClInclude Include="Render\Shader\textureshader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="System\Time.h" />

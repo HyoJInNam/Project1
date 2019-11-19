@@ -31,7 +31,20 @@ bool BUMPMAPPING::Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filen
 	ISINSTANCE(textures);
 	return LoadTextures(this->device, filename1, filename2);
 }
+bool BUMPMAPPING::Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3) {
 
+	CString m_temp = modelFilename;
+	CString temp = m_temp.Right(4);
+	if (temp.CompareNoCase(_T(".txt")) == 0) { ISFAIL(LoadModel(modelFilename)); }
+
+	CalculateModelVectors();
+
+	ISFAIL(InitializeBuffers());
+
+	textures = new TextureArray;
+	ISINSTANCE(textures);
+	return LoadTextures(this->device, filename1, filename2, filename3);
+}
 
 void BUMPMAPPING::Shutdown()
 {
@@ -137,7 +150,10 @@ bool BUMPMAPPING::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* fi
 {
 	return textures->InitializeTextureArray(device, filename1, filename2);
 }
-
+bool BUMPMAPPING::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3)
+{
+	return textures->InitializeTextureArray(device, filename1, filename2, filename3);
+}
 
 //void BUMPMAPPING::ReleaseTextures()
 //{

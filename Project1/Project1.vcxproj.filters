@@ -116,6 +116,9 @@
     <ClCompile Include="Render\Objects\BumpMapping.cpp">
       <Filter>Render\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Render\Shader\SpecMapShaderClass.cpp">
+      <Filter>Render\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="Render\Objects\model.h">
       <Filter>Render\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader\SpecMapShaderClass.h">
+      <Filter>Render\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

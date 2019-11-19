@@ -23,7 +23,7 @@ void LIGHT::SetPointLight()
 	SetDirection(0.0f, 0.0f, 1.0f);
 	//---------------------------------------
 	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	SetSpecularPower(100.0f);
+	SetSpecularPower(10.0f);
 	//---------------------------------------
 }
 

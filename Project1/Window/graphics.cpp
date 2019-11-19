@@ -49,23 +49,36 @@ BOOL GRAPHICS::Initialize()
 	}
 
 	//=========================================================================
-
-	model = new MODEL;
-	ISINSTANCE(model);
-
-	//model->LoadTexture(const_cast<WCHAR*>(L"./data/models/stone01.dds"));
-	if (!model->Initialize(const_cast<char*>("./data/models/cube2.txt")))
+	sphere = new MODEL;
+	ISINSTANCE(sphere);
+	if (!sphere->Initialize(const_cast<char*>("./data/models/sphere.txt")
+		, const_cast<WCHAR*>(L"./data/models/stone01.dds")
+		, const_cast<WCHAR*>(L"./data/models/bump01.dds")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
+	model = new MODEL;
+	ISINSTANCE(model);
+
+	if (!model->Initialize(const_cast<char*>("./data/models/sphere.txt")
+		, const_cast<WCHAR*>(L"./data/models/stone02.dds")
+		, const_cast<WCHAR*>(L"./data/models/bump02.dds")))
+	{
+		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
+		return false;
+	}
+
+	sphere->SetTransformPosition(-2.0f, 0, 0);
+	model->SetTransformPosition(2.0f, 0, 0);
 	return 0;
 }
 
 void GRAPHICS::Shutdown()
 {
 	model->Shutdown();
+	sphere->Shutdown();
 
 	SAFE_DELETE(panel);
 	SAFE_DELETE(light);
@@ -102,6 +115,10 @@ BOOL GRAPHICS::Render()
 		model->SetSpin(0, 0.01f, 0);
 		model->SetTransformMatrix(matrixs);
 		model->Render(matrixs, mainCamera->GetPosition());
+
+		sphere->SetSpin(0, 0.01f, 0);
+		sphere->SetTransformMatrix(matrixs);
+		sphere->Render(matrixs, mainCamera->GetPosition());
 
 
 	d3d->EndScene();
