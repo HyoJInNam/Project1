@@ -28,9 +28,9 @@ BOOL PANEL::Initialize()
 
 	bitmap = new BitmapClass;
 	ISINSTANCE(bitmap);
-	if (!bitmap->Initialize(const_cast<WCHAR*>(L"./data/models/seafloor.dds"), 256, 256))
+	if (!bitmap->Initialize(const_cast<WCHAR*>(L"./data/models/gray.jpg")))
 	{
-		ERR_MESSAGE(L"Could not initialize the light bitmap object.", L"ERROR");
+		ERR_MESSAGE(L"Could not initialize the light bitmap model.", L"ERROR");
 		return false;
 	}
 	return true ;
@@ -67,7 +67,9 @@ BOOL PANEL::Render(RNDMATRIXS& matrixs)
 	PanelCamera->GetViewMatrix(PanelMatrixs.view);
 	transformation->GetProjectionMatrix(PanelMatrixs.projection);
 
-	bitmap->Render(PanelMatrixs, 1, 1);
+	//FULL SIZE
+	bitmap->Resize(1370 * 1.7, 750 * 1.7);
+	bitmap->Render(PanelMatrixs);
 
 	d3d->TurnOffAlphaBlending();
 	d3d->TurnZBufferOn();

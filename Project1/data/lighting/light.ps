@@ -43,7 +43,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 	    ambient += (diffuseColor * lightIntensity);
 		ambient = saturate(ambient);
 		float3 reflection = normalize(2 * lightIntensity * input.normal - lightDir); 
-		specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower) * lightIntensity;
+		specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower);// * lightIntensity;
 	}
 
     ambient = ambient * textureColor;

@@ -10,6 +10,8 @@ struct TRANSFORM
 
 
 class LOADOBJECTSFILE;
+class BUMPMAPPING;
+class BumpMapShaderClass;
 class COLORSHADER;
 class LIGHT;
 class LIGHTSHADER;
@@ -24,7 +26,7 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char* modelFilename, WCHAR* textureFilename);
+	bool Initialize(char* modelFilename);
 	void Shutdown();
 
 	void SetTransformMatrix(RNDMATRIXS&);
@@ -33,6 +35,8 @@ public:
 	void SetParent(MODEL*& parent) { this->parent = parent; }
 	MODEL* GetParent() { return parent; }
 
+	bool LoadTexture(WCHAR *);
+	bool LoadTextures(WCHAR *, WCHAR *);
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
 
@@ -47,6 +51,9 @@ private:
 	LOADOBJECTSFILE* file;
 	COLORSHADER* colorShader;
 	LIGHTSHADER* textureShader;
+
+	BUMPMAPPING* bumpmap;
+	BumpMapShaderClass* m_BumpMapShader;
 
 //==============================
 

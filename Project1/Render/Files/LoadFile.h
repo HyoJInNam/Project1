@@ -17,7 +17,6 @@ public:
 		SAFE_RELEASE(indexBuffer);
 		SAFE_RELEASE(vertexBuffer);
 		return;
-		return;
 	}
 
 	bool LoadTexture(WCHAR * filename)

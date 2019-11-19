@@ -9,7 +9,7 @@ class LOADOBJECTSFILE : public LOADFILE
 public:
 	LOADOBJECTSFILE(ID3D11Device*, ID3D11DeviceContext*);
 	LOADOBJECTSFILE(const LOADOBJECTSFILE&);
-	~LOADOBJECTSFILE();
+	virtual ~LOADOBJECTSFILE() override;
 
 	virtual bool InitializeBuffers() override;
 	virtual void RenderBuffers() override;

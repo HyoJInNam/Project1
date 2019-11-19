@@ -20,7 +20,7 @@ bool COLORSHADER::Initialize()
 {
 
 	shaderType = COLOR_SAHDER;
-	InitializeShader(const_cast<WCHAR*>(L"./data/color.vs"), const_cast<WCHAR*>(L"./data/color.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"./data/shader/color.vs"), const_cast<WCHAR*>(L"./data/shader/color.ps"));
 	InitializeShaderBuffer();
 	return true;
 

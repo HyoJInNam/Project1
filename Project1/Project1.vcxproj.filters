@@ -53,9 +53,6 @@
     <ClCompile Include="Window\window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Utility\DDSTextureLoader.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="System\Time.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -110,6 +107,15 @@
     <ClCompile Include="Render\Shader\textureshader.cpp">
       <Filter>Render\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Render\Shader\BumpMapShaderClass.cpp">
+      <Filter>Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Files\TextureArrayClass.cpp">
+      <Filter>Render\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Objects\BumpMapping.cpp">
+      <Filter>Render\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -138,9 +144,6 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Utility\AlignedAllocationPolicy.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\DDSTextureLoader.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="System\Time.h">
@@ -185,9 +188,6 @@
     <ClInclude Include="Render\Objects\BitmapClass.h">
       <Filter>Render\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Objects\model.h">
-      <Filter>Render\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Render\Shader\colorshader.h">
       <Filter>Render\Shader</Filter>
     </ClInclude>
@@ -199,6 +199,18 @@
     </ClInclude>
     <ClInclude Include="Render\Shader\textureshader.h">
       <Filter>Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader\BumpMapShaderClass.h">
+      <Filter>Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Files\TextureArrayClass.h">
+      <Filter>Render\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Objects\BumpMapping.h">
+      <Filter>Render\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Objects\model.h">
+      <Filter>Render\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

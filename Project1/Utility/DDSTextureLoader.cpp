@@ -131,10 +131,10 @@ typedef public std::unique_ptr<void, handle_closer> ScopedHandle;
 inline HANDLE safe_handle( HANDLE h ) { return (h == INVALID_HANDLE_VALUE) ? 0 : h; }
 
 template<UINT TNameLength>
-inline void SetDebugObjectName(_In_ ID3D11DeviceChild* resource, _In_ const char (&name)[TNameLength])
+inline void SetDebugmodelName(_In_ ID3D11DeviceChild* resource, _In_ const char (&name)[TNameLength])
 {
 #if defined(_DEBUG) || defined(PROFILE)
-    resource->SetPrivateData(WKPDID_D3DDebugObjectName, TNameLength - 1, name);
+    resource->SetPrivateData(WKPDID_D3DDebugmodelName, TNameLength - 1, name);
 #else
     UNREFERENCED_PARAMETER(resource);
     UNREFERENCED_PARAMETER(name);
@@ -980,7 +980,7 @@ static HRESULT CreateD3DResources( _In_ ID3D11Device* d3dDevice,
                     }
                     else
                     {
-                        SetDebugObjectName(tex, "DDSTextureLoader");
+                        SetDebugmodelName(tex, "DDSTextureLoader");
                         tex->Release();
                     }
                 }
@@ -1067,7 +1067,7 @@ static HRESULT CreateD3DResources( _In_ ID3D11Device* d3dDevice,
                     }
                     else
                     {
-                        SetDebugObjectName(tex, "DDSTextureLoader");
+                        SetDebugmodelName(tex, "DDSTextureLoader");
                         tex->Release();
                     }
                 }
@@ -1120,7 +1120,7 @@ static HRESULT CreateD3DResources( _In_ ID3D11Device* d3dDevice,
                     }
                     else
                     {
-                        SetDebugObjectName(tex, "DDSTextureLoader");
+                        SetDebugmodelName(tex, "DDSTextureLoader");
                         tex->Release();
                     }
                 }
@@ -1641,12 +1641,12 @@ HRESULT DirectX::CreateDDSTextureFromMemoryEx( ID3D11Device* d3dDevice,
     {
         if (texture != 0 && *texture != 0)
         {
-            SetDebugObjectName(*texture, "DDSTextureLoader");
+            SetDebugmodelName(*texture, "DDSTextureLoader");
         }
 
         if (textureView != 0 && *textureView != 0)
         {
-            SetDebugObjectName(*textureView, "DDSTextureLoader");
+            SetDebugmodelName(*textureView, "DDSTextureLoader");
         }
 
         if ( alphaMode )
@@ -1784,7 +1784,7 @@ HRESULT DirectX::CreateDDSTextureFromFileEx( ID3D11Device* d3dDevice,
 
                 if (texture != 0 && *texture != 0)
                 {
-                    (*texture)->SetPrivateData( WKPDID_D3DDebugObjectName,
+                    (*texture)->SetPrivateData( WKPDID_D3DDebugmodelName,
                                                 static_cast<UINT>( strnlen_s(pstrName, MAX_PATH) ),
                                                 pstrName
                                               );
@@ -1792,7 +1792,7 @@ HRESULT DirectX::CreateDDSTextureFromFileEx( ID3D11Device* d3dDevice,
 
                 if (textureView != 0 && *textureView != 0 )
                 {
-                    (*textureView)->SetPrivateData( WKPDID_D3DDebugObjectName,
+                    (*textureView)->SetPrivateData( WKPDID_D3DDebugmodelName,
                                                     static_cast<UINT>( strnlen_s(pstrName, MAX_PATH) ),
                                                     pstrName
                                                   );

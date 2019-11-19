@@ -3,11 +3,14 @@
 
 #include "../Files/LoadFile.h"
 #include "../Files/loadObjFile.h"
+#include "../Files/TextureArrayClass.h"
 
 #include "../Shader/colorshader.h"
+#include "../Shader/BumpMapShaderClass.h"
 #include "../Lighting/lightclass.h"
 #include "../Lighting/lightshader.h"
 
+#include"BumpMapping.h"
 #include "model.h"
 
 
@@ -34,11 +37,18 @@ MODEL::~MODEL() {}
 int  MODEL::GetIndexCount()	{return file->GetIndexCount(); }
 ID3D11ShaderResourceView* MODEL::GetTexture() {	return file->GetTexture(); }
 
-bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
+bool MODEL::Initialize(char* modelFilename)
 {
-	ISFAIL(Load(modelFilename));
-	
-	file->LoadTexture(textureFilename);
+	//ISFAIL(Load(modelFilename));
+	bumpmap = new BUMPMAPPING(device, deviceContext);
+	ISINSTANCE(bumpmap);
+	if (!bumpmap->Initialize(modelFilename
+		, const_cast<WCHAR*>(L"./data/models/stone01.dds")
+		, const_cast<WCHAR*>(L"./data/models/bump01.dds")))
+	{
+		ERR_MESSAGE(L"Could not initialize the BumpMap object.", L"ERROR");
+		return false;
+	}
 
 	textureShader = new LIGHTSHADER;
 	textureShader->SetDirectionLight();
@@ -47,14 +57,33 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* textureFilename)
 		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
 		return false;
 	}
+
+	m_BumpMapShader = new BumpMapShaderClass;
+	ISINSTANCE(m_BumpMapShader);
+
+	if (!m_BumpMapShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the Bump Map shader object.", L"ERROR");
+		return false;
+	}
 	return true;
 }
-
+bool MODEL::LoadTexture(WCHAR * filename)
+{
+	return	file->LoadTexture(filename);
+}
+bool MODEL::LoadTextures(WCHAR * filename1, WCHAR * filename2)
+{
+	return	bumpmap->LoadTextures(device, filename1, filename2);
+}
 
 bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
-	file->RenderBuffers();
-	if (textureShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture()) == false)
+	//file->RenderBuffers();
+	bumpmap->Render();
+	m_BumpMapShader->Render(bumpmap->GetIndexCount(), renderMatrix, bumpmap->GetTextures(), textureShader->GetDirection(), textureShader->GetDiffuseColor());
+
+	/*if (textureShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture()) == false)
 	{
 		colorShader = new COLORSHADER(hwnd, device, deviceContext);
 		ISINSTANCE(colorShader);
@@ -64,11 +93,13 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 		}
 
 		colorShader->Render(file->GetIndexCount(), renderMatrix);
-	}
+	}*/
 	return true;
 }
 void MODEL::Shutdown()
 {
+	SAFE_DELETE(m_BumpMapShader);
+	bumpmap->Shutdown();
 	SAFE_DELETE(textureShader);
 	SAFE_DELETE(colorShader);
 	file->ReleaseTexture();

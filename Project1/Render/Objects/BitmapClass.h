@@ -18,13 +18,12 @@ public:
 	BitmapClass(const BitmapClass&);
 	~BitmapClass();
 
-	bool Initialize(WCHAR*, int, int);
+	bool Initialize(WCHAR*);
 	void Shutdown();
-	bool Render(RNDMATRIXS& matrixs, int, int);
+	bool Render(RNDMATRIXS& matrixs);
 
-private:
-	bool Update(int, int);
-
+	bool Reposition(float, float);
+	bool Resize(float, float);
 private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
@@ -34,8 +33,10 @@ private:
 	LOADIMGFILE* ImgFile;
 	TEXTURESHADER* texture;
 
-	int m_bitmapWidth;
-	int m_bitmapHeight;
-	int m_previousPosX;
-	int m_previousPosY;
+	float m_bitmapWidth;
+	float m_bitmapHeight;
+	float posX;
+	float posY;
+
+	float left, right, top, bottom;
 };

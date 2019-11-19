@@ -6,10 +6,11 @@
 #include"../Shader/textureshader.h"
 #include "BitmapClass.h"
 
+#define PERSENT 100.0f
 
 BitmapClass::BitmapClass()
 	: m_bitmapWidth(0), m_bitmapHeight(0)
-	, m_previousPosX(0), m_previousPosY(0)
+	, posX(0), posY(0)
 {
 	device = D3D::GetInstance()->GetDevice();
 	deviceContext = D3D::GetInstance()->GetDeviceContext();
@@ -23,16 +24,26 @@ BitmapClass::BitmapClass(const BitmapClass& other) {}
 BitmapClass::~BitmapClass() {}
 
 
-bool BitmapClass::Initialize(WCHAR* textureFilename, int bitmapWidth, int bitmapHeight)
+bool BitmapClass::Initialize(WCHAR* textureFilename)
 {
 	WNDDesc::GetInstance()->getSceneSize(screenWidth, screenHeight);
 
-	// 렌더링할 비트맵의 픽셀의 크기를 저장
-	m_bitmapWidth = bitmapWidth;
-	m_bitmapHeight = bitmapHeight;
+	HRESULT result;
+	D3DX11_IMAGE_INFO imageInfo;
+	D3DX11GetImageInfoFromFile(textureFilename, NULL, &imageInfo, &result);
+	ISFAILED(result);
 
-	m_previousPosX = -1;
-	m_previousPosY = -1;
+	m_bitmapWidth = imageInfo.Width + 1.0f;
+	m_bitmapHeight = imageInfo.Height + 1.0f;
+
+	//원점
+	left = ((float)m_bitmapWidth / -2.0f);
+	right = left + ((float)m_bitmapWidth);
+	bottom = ((float)m_bitmapHeight / -2.0f);
+	top = bottom + ((float)m_bitmapHeight);
+
+	posX = 0;
+	posY = 0;
 
 	if (!ImgFile->InitializeBuffers())
 	{
@@ -59,41 +70,50 @@ void BitmapClass::Shutdown()
 }
 
 
-bool BitmapClass::Render(RNDMATRIXS& matrixs, int positionX, int positionY)
+bool BitmapClass::Render(RNDMATRIXS& matrixs)
 {
-	ImgFile->GetTexture();
-	if(!Update(positionX, positionY))
-	{
-		return false;
-	}
+	////ImgFile->GetTexture();	
+	ImgFile->UpdateBuffers(((left / 100) + posX), ((right / 100) + posX)
+						, ((top / 100) + posY), ((bottom / 100) + posY));
+
 	ImgFile->RenderBuffers();
 	texture->Render(ImgFile->GetIndexCount(), matrixs, ImgFile->GetTexture());
 	return true;
 }
 
 
-bool BitmapClass::Update(int positionX, int positionY)
+bool BitmapClass::Reposition(float positionX, float positionY)
 {
-	float left, right, top, bottom;
-
-
-	// 이 비트맵을 렌더링 할 위치가 변경되지 않은 경우 정점 버퍼를 업데이트 하지 마십시오.
-	if((positionX == m_previousPosX) && (positionY == m_previousPosY))
+	if ((positionX == posX) && (positionY == posY))
 	{
 		return true;
 	}
-	
+
+	posX = positionX;
+	posY = positionY;
+	return true;
+}
 
 
-	m_previousPosX = positionX;
-	m_previousPosY = positionY;
+bool BitmapClass::Resize(float width, float height)
+{
+	if ((width == m_bitmapWidth) && (height == m_bitmapHeight))
+	{
+		return true;
+	}
 
+	if ((!width) && (!height)) return true;
+	if (!width) m_bitmapHeight = height;
+	else if (!height) m_bitmapWidth = width;
+	else {
+		m_bitmapWidth = width;
+		m_bitmapHeight = height;
+	}
 
-	left = (float)(((float)screenWidth / 2) * -1) + (float)positionX;
-	right = left + (float)m_bitmapWidth;
-	top = (float)((float)screenHeight / 2) - (float)positionY;
-	bottom = top - (float)m_bitmapHeight;
+	left   = ((float)m_bitmapWidth / -2.0f);
+	right  = left + ((float)m_bitmapWidth);
+	bottom = ((float)m_bitmapHeight / -2.0f);
+	top    = bottom + ((float)m_bitmapHeight);
 
-	ImgFile->UpdateBuffers(left / 100, right / 100, top / 100, bottom / 100);
 	return true;
 }

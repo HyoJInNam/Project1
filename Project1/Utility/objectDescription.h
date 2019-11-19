@@ -39,6 +39,38 @@ typedef struct
 
 //===================================
 
+struct BUMPMAPVertexType
+{
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 texture;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR3 binormal;
+};
+
+struct BUMPMAPModelType
+{
+	float x, y, z;
+	float tu, tv;
+	float nx, ny, nz;
+	float tx, ty, tz;
+	float bx, by, bz;
+};
+
+struct BUMPMAPTempVertexType
+{
+	float x, y, z;
+	float tu, tv;
+	float nx, ny, nz;
+};
+
+struct BUMPMAPVectorType
+{
+	float x, y, z;
+};
+
+//===================================
+
 struct LightBufferType
 {
 	D3DXVECTOR4 ambientColor;

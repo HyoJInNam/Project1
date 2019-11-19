@@ -25,11 +25,13 @@ BOOL GRAPHICS::Initialize()
 {
 	mainCamera = new CameraControl;
 	ISINSTANCE(mainCamera);
-	mainCamera->SetPosition(0.0f, 0.0f, -15.0f);
+	mainCamera->SetPosition(0.0f, 5.0f, -15.0f);
+	mainCamera->SetRotation(18.0f, 0.0f, 0.0f);
 	
 
 	light = new LIGHTSHADER; 
-	light->SetDirectionLight();
+	//light->SetDirectionLight();
+	light->SetPointLight();
 	if (!light->Initialize())
 	{
 		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
@@ -50,8 +52,9 @@ BOOL GRAPHICS::Initialize()
 
 	model = new MODEL;
 	ISINSTANCE(model);
-	if (!model->Initialize(const_cast<char*>("./data/models/sphere.txt")
-						 , const_cast<WCHAR*>(L"./data/models/solartexture.jpg")))
+
+	//model->LoadTexture(const_cast<WCHAR*>(L"./data/models/stone01.dds"));
+	if (!model->Initialize(const_cast<char*>("./data/models/cube2.txt")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -92,12 +95,14 @@ BOOL GRAPHICS::Render()
 	mainCamera->GetViewMatrix(matrixs.view);
 	transformation->GetProjectionMatrix(matrixs.projection);
 
+	panel->Render(matrixs);
+
 	light->Render(0, matrixs, mainCamera->GetPosition());
 	
+		model->SetSpin(0, 0.01f, 0);
 		model->SetTransformMatrix(matrixs);
 		model->Render(matrixs, mainCamera->GetPosition());
 
-		panel->Render(matrixs);
 
 	d3d->EndScene();
 	return true;

@@ -19,7 +19,7 @@ TEXTURESHADER::~TEXTURESHADER() { Shutdown(); }
 bool TEXTURESHADER::Initialize()
 {
 	//ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL));
-	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/texture.vs"), const_cast<WCHAR*>(L"./data/texture.ps")));
+	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/shader/texture.vs"), const_cast<WCHAR*>(L"./data/shader/texture.ps")));
 	InitializeShaderBuffer();
 	return true;
 }
