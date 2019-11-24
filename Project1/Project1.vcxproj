@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(WindowsSDK_LibraryPath_x86);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\CameraContol;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader />
-      <PrecompiledHeaderFile>stdafx.h; renafx.h;</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d9.lib;d3dx9d.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -133,65 +133,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Render\Camera\camera.cpp" />
-    <ClCompile Include="Render\Camera\cameraControler.cpp" />
-    <ClCompile Include="Render\Camera\cameraPanelControler.cpp" />
-    <ClCompile Include="Render\Camera\inputController\Keyboard.cpp" />
-    <ClCompile Include="Render\Camera\inputController\Mouse.cpp" />
-    <ClCompile Include="Render\Files\LoadFile.cpp" />
-    <ClCompile Include="Render\Files\LoadImgFile.cpp" />
-    <ClCompile Include="Render\Files\loadObjFile.cpp" />
-    <ClCompile Include="Render\Files\TextureArrayClass.cpp" />
-    <ClCompile Include="Render\Lighting\lightclass.cpp" />
-    <ClCompile Include="Render\Lighting\lightshader.cpp" />
-    <ClCompile Include="Render\Objects\BitmapClass.cpp" />
-    <ClCompile Include="Render\Objects\BumpMapping.cpp" />
-    <ClCompile Include="Render\Objects\model.cpp" />
-    <ClCompile Include="Render\Shader\BumpMapShaderClass.cpp" />
-    <ClCompile Include="Render\Shader\colorshader.cpp" />
-    <ClCompile Include="Render\Shader\SpecMapShaderClass.cpp" />
-    <ClCompile Include="Render\Shader\textureshader.cpp" />
-    <ClCompile Include="System\Time.cpp" />
-    <ClCompile Include="Utility\renderTransformation.cpp" />
-    <ClCompile Include="Utility\wndDescription.cpp" />
-    <ClCompile Include="Window\d3dclass.cpp" />
+    <ClCompile Include="Render\model.cpp" />
     <ClCompile Include="Window\graphics.cpp" />
-    <ClCompile Include="Window\input.cpp" />
     <ClCompile Include="Window\panel.cpp" />
     <ClCompile Include="Window\System.cpp" />
     <ClCompile Include="Window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Render\Camera\camera.h" />
-    <ClInclude Include="Render\Camera\cameraControler.h" />
-    <ClInclude Include="Render\Camera\cameraPanelControler.h" />
-    <ClInclude Include="Render\Camera\inputController\Keyboard.h" />
-    <ClInclude Include="Render\Camera\inputController\Mouse.h" />
-    <ClInclude Include="Render\Files\LoadFile.h" />
-    <ClInclude Include="Render\Files\LoadImgFile.h" />
-    <ClInclude Include="Render\Files\loadObjFile.h" />
-    <ClInclude Include="Render\Files\TextureArrayClass.h" />
-    <ClInclude Include="Render\Lighting\lightclass.h" />
-    <ClInclude Include="Render\Lighting\lightshader.h" />
-    <ClInclude Include="Render\Objects\BitmapClass.h" />
-    <ClInclude Include="Render\Objects\BumpMapping.h" />
-    <ClInclude Include="Render\Objects\model.h" />
-    <ClInclude Include="Render\Shader\BumpMapShaderClass.h" />
-    <ClInclude Include="Render\Shader\colorshader.h" />
-    <ClInclude Include="Render\Shader\SpecMapShaderClass.h" />
-    <ClInclude Include="Render\Shader\textureshader.h" />
+    <ClInclude Include="Render\model.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="System\Time.h" />
-    <ClInclude Include="Utility\AlignedAllocationPolicy.h" />
-    <ClInclude Include="Utility\objectDescription.h" />
-    <ClInclude Include="Utility\renafx.h" />
-    <ClInclude Include="Utility\renderTransformation.h" />
-    <ClInclude Include="Utility\singleton.h" />
-    <ClInclude Include="Utility\stdafx.h" />
-    <ClInclude Include="Utility\wndDescription.h" />
-    <ClInclude Include="Window\d3dclass.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Window\graphics.h" />
-    <ClInclude Include="Window\input.h" />
     <ClInclude Include="Window\Panel.h" />
     <ClInclude Include="Window\System.h" />
     <ClInclude Include="Window\window.h" />

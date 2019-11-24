@@ -1,13 +1,6 @@
-#include "../Utility/stdafx.h"
-
-#include "../Render/Camera/camera.h"
-#include "../Render/Camera/cameraControler.h"
-
-#include "../Render/Lighting/lightclass.h"
-#include "../Render/Lighting/lightshader.h"
-
+#include <stdafx.h>
 #include "Panel.h"
-#include "../Render/Objects/model.h"
+#include "../Render/model.h"
 //==============================
 
 #include "graphics.h"
@@ -29,10 +22,13 @@ BOOL GRAPHICS::Initialize()
 	mainCamera->SetRotation(18.0f, 0.0f, 0.0f);
 	
 
-	light = new LIGHTSHADER; 
-	//light->SetDirectionLight();
+
+	light = new LIGHT;
+	ISINSTANCE(light);
 	light->SetPointLight();
-	if (!light->Initialize())
+	   
+	shader = new LIGHTSHADER; 
+	if (!shader->Initialize())
 	{
 		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
 		return false;
@@ -81,7 +77,7 @@ void GRAPHICS::Shutdown()
 	sphere->Shutdown();
 
 	SAFE_DELETE(panel);
-	SAFE_DELETE(light);
+	SAFE_DELETE(shader);
 	SAFE_DELETE(mainCamera);
 	SAFE_DELETE(transformation);
 }
@@ -110,7 +106,7 @@ BOOL GRAPHICS::Render()
 
 	panel->Render(matrixs);
 
-	light->Render(0, matrixs, mainCamera->GetPosition());
+	shader->Render(0, matrixs, mainCamera->GetPosition(), light->GetLight());
 	
 		model->SetSpin(0, 0.01f, 0);
 		model->SetTransformMatrix(matrixs);

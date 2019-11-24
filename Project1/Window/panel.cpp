@@ -1,10 +1,4 @@
-#include "../Utility/stdafx.h"
-
-#include "../Render/Camera/camera.h"
-#include "../Render/Camera/cameraPanelControler.h"
-
-#include "../Render/Objects/BitmapClass.h"
-//================================
+#include <stdafx.h>
 #include "Panel.h"
 
 PANEL::PANEL()

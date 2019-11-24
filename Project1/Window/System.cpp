@@ -1,6 +1,6 @@
-#include "../Utility/stdafx.h"
-#include "../System/Time.h"
-#include "input.h"
+#include <stdafx.h>
+
+
 #include "graphics.h"
 #include "System.h"
 

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{f9c2b75c-34ea-4766-8822-47f9c37191c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Description">
+      <UniqueIdentifier>{e1c530b8-7d5e-4161-b7fb-ffdc39dfc829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header file">
+      <UniqueIdentifier>{e969b6b7-bc0a-459c-acc3-ff6616d32d88}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="renderTransformation.cpp">
+      <Filter>Description</Filter>
+    </ClCompile>
+    <ClCompile Include="wndDescription.cpp">
+      <Filter>Description</Filter>
+    </ClCompile>
+    <ClCompile Include="timeclass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dclass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="renderTransformation.h">
+      <Filter>Description</Filter>
+    </ClInclude>
+    <ClInclude Include="wndDescription.h">
+      <Filter>Description</Filter>
+    </ClInclude>
+    <ClInclude Include="objectDescription.h">
+      <Filter>Description</Filter>
+    </ClInclude>
+    <ClInclude Include="singleton.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="AlignedAllocationPolicy.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="timeclass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dclass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dstdafx.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="header file">
+      <UniqueIdentifier>{b2a7f1f9-c68d-4636-af1b-8e2205bd3d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script file">
+      <UniqueIdentifier>{3e084b10-2f8b-4283-93b8-79689e7fafef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LoadFile.h">
+      <Filter>header file</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadImgFile.h">
+      <Filter>header file</Filter>
+    </ClInclude>
+    <ClInclude Include="loadObjFile.h">
+      <Filter>header file</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureArrayClass.h">
+      <Filter>header file</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="loadObjFile.cpp">
+      <Filter>script file</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadImgFile.cpp">
+      <Filter>script file</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadFile.cpp">
+      <Filter>script file</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureArrayClass.cpp">
+      <Filter>script file</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -22,7 +22,8 @@ public:
 private:
 	RENDER_T* transformation;
 	CameraControl * mainCamera;
-	LIGHTSHADER* light;
+	LIGHT* light;
+	LIGHTSHADER* shader;
 
 	PANEL* panel;
 
