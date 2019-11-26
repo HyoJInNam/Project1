@@ -39,6 +39,9 @@ public:
 
 	void SetParent(MODEL*& parent) { this->parent = parent; }
 	MODEL* GetParent() { return parent; }
+	void SetLIGHT(LIGHT*& light) { this->light = light; }
+	LIGHT* GetLIGHT() { return light; }
+
 
 	bool LoadTexture(WCHAR *);
 	bool LoadTextures(WCHAR *, WCHAR *);
@@ -75,7 +78,7 @@ public:
 	void SetTransformPosition(D3DXVECTOR3);
 	void SetTransformRotation(D3DXVECTOR3);
 
-	D3DXVECTOR3 GetScale() { return global.scale; }
+	D3DXVECTOR3 GetScale()    { return global.scale; }
 	D3DXVECTOR3 GetPosition() { return global.position; }
 	D3DXVECTOR3 GetRotation() { return global.rotation; }
 	D3DXVECTOR3 GetObitRotation() { return global.orbitRot; }
@@ -83,10 +86,6 @@ public:
 	void SetSpin(float, float, float);
 	void SetOrbit(RNDMATRIXS&);
 };
-
-
-
-
 
 
 

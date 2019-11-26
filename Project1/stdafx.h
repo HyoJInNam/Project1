@@ -41,3 +41,7 @@ using namespace std;
 #include <BumpMapping.h>
 #pragma comment (lib, "Objects.lib")
 
+#include <imgui.h>
+#include <imgui_windx.h>
+#pragma comment (lib, "ImGui.lib")
+

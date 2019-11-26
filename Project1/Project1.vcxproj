@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\CameraContol;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1;C:\Users\남효진\Desktop\졸프 3-1\Project1\ImGui;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\CameraContol;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -1,9 +1,0 @@
-﻿  BumpMapShaderClass.cpp
-c:\users\남효진\desktop\졸프 3-1\project1\shader\bumpmapshaderclass.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  colorshader.cpp
-  lightshader.cpp
-  SpecMapShaderClass.cpp
-c:\users\남효진\desktop\졸프 3-1\project1\shader\specmapshaderclass.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  textureshader.cpp
-  코드를 생성하고 있습니다...
-  Shader.vcxproj -> C:\Users\남효진\Desktop\졸프 3-1\Project1\Debug\Shader.lib

@@ -1,5 +1,6 @@
 #pragma once
 
+class WNDDesc;
 
 class D3D: public SINGLETON <D3D>
 {
@@ -19,6 +20,7 @@ public:
 		memory = videoCardMemory;
 		return;
 	}
+	ID3D11RenderTargetView* GetRenderTargetview() { return this->renderTargetView; }
 
 private:
 	void SetGpuInfo();
@@ -39,6 +41,7 @@ public:
 private:
 	unsigned int  numerator, denominator;
 
+	WNDDesc* wndDesc;
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
 	IDXGISwapChain* swapChain;
@@ -54,5 +57,4 @@ private:
 	ID3D11Texture2D* depthStencilBuffer;
 	ID3D11DepthStencilView* depthStencilView;
 	ID3D11RenderTargetView* renderTargetView;
-
 };

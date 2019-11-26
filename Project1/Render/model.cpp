@@ -120,18 +120,25 @@ bool MODEL::LoadTextures(WCHAR * filename1, WCHAR * filename2)
 
 bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 {
-	//file->RenderBuffers();
-	bumpmap->Render();
 	if (m_BumpMapShader)
 	{
+		bumpmap->Render();
 		m_BumpMapShader->Render(bumpmap->GetIndexCount(), renderMatrix, bumpmap->GetTextures(), light->GetDirection(), light->GetDiffuseColor());
+
+		return true;
 	}
+
 	if (m_SpecMapShader)
 	{
+		bumpmap->Render();
 		m_SpecMapShader->Render(deviceContext, bumpmap->GetIndexCount(), renderMatrix,
 			bumpmap->GetTextures(), light->GetDirection(), light->GetDiffuseColor(),
 			cameraPos, light->GetSpecularColor(), light->GetSpecularPower());
+
+		return true;
 	}
+
+	file->RenderBuffers();
 	if (shader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), light->GetLight()) == false)
 	{
 		material = new COLORSHADER(hwnd, device, deviceContext);
@@ -147,11 +154,9 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos)
 }
 void MODEL::Shutdown()
 {
-	
-		m_SpecMapShader->Shutdown();
-
-	SAFE_DELETE(m_BumpMapShader);
-	bumpmap->Shutdown();
+	if (m_SpecMapShader)  m_SpecMapShader->Shutdown();
+	if (m_BumpMapShader) SAFE_DELETE(m_BumpMapShader);
+	if (bumpmap) bumpmap->Shutdown();
 
 	SAFE_DELETE(shader);
 	SAFE_DELETE(shader);

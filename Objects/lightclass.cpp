@@ -28,10 +28,13 @@ void LIGHT::SetPointLight()
 }
 
 void LIGHT::SetAmbientColor(float red, float green, float blue, float alpha) { light->ambientColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetAmbientColor(D3DXVECTOR4 light){ SetAmbientColor(light.x, light.y, light.z, light.w); }
 void LIGHT::SetDiffuseColor(float red, float green, float blue, float alpha) { light->diffuseColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetDiffuseColor(D3DXVECTOR4 light){ SetDiffuseColor(light.x, light.y, light.z, light.w); }
 void LIGHT::SetDirection(float x, float y, float z) { light->lightDirection = D3DXVECTOR3(x, y, z); }
 void LIGHT::SetDirection(D3DXVECTOR3 light) { SetDirection(light.x, light.y, light.z); }
 void LIGHT::SetSpecularColor(float red, float green, float blue, float alpha) { light->specularColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetSpecularColor(D3DXVECTOR4 light){ SetSpecularColor(light.x, light.y, light.z, light.w); }
 void LIGHT::SetSpecularPower(float power) { light->specularPower = power; }
 
 

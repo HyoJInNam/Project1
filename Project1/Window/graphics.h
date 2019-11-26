@@ -19,6 +19,8 @@ public:
 	BOOL Render();
 	void Shutdown();
 
+	void ViewTransform(MODEL* object);
+
 private:
 	RENDER_T* transformation;
 	CameraControl * mainCamera;
@@ -30,5 +32,6 @@ private:
 	float rotation;
 	MODEL* model;
 	MODEL* sphere;
+	MODEL* sphere2;
 
 };

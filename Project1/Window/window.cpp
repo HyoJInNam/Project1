@@ -69,6 +69,7 @@ BOOL WINDOW::Run()
 
 		if (msg.message == WM_QUIT) done = true;
 		if (!SYSTEM::GetInstance()->Frame()) done = true;
+		if (!SYSTEM::GetInstance()->Render()) done = true;
 	}
 
 	return true;
@@ -83,6 +84,8 @@ void WINDOW::Shutdown()
 
 LRESULT CALLBACK WINDOW::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (SYSTEM::GetInstance()->SystemProcHandler(hWnd, message, wParam, lParam))
+		return true;
 
 	switch (message)
 	{

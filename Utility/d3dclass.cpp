@@ -7,6 +7,7 @@
 D3D::D3D()
 	: numerator(0), denominator(1)
 {
+	wndDesc = WNDDesc::GetInstance();
 	SetGpuInfo();
 }
 D3D::~D3D() {	Shutdown(); }
@@ -34,7 +35,6 @@ void D3D::Shutdown()
 void D3D::SetGpuInfo()
 {
 	HRESULT result;
-	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	IDXGIFactory* factory = nullptr;
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
@@ -58,9 +58,9 @@ void D3D::SetGpuInfo()
 
 	for (unsigned int i = 0; i < numModes; i++)
 	{
-		if (displayModeList[i].Width == (unsigned int)wndd.sceneWidth)
+		if (displayModeList[i].Width == (unsigned int)wndDesc->sceneWidth)
 		{
-			if (displayModeList[i].Height == (unsigned int)wndd.sceneHeight)
+			if (displayModeList[i].Height == (unsigned int)wndDesc->sceneHeight)
 			{
 				numerator = displayModeList[i].RefreshRate.Numerator;
 				denominator = displayModeList[i].RefreshRate.Denominator;
@@ -87,7 +87,6 @@ void D3D::SetGpuInfo()
 void D3D::CreateSwapChain()
 {
 	HRESULT result;
-	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 
@@ -95,11 +94,11 @@ void D3D::CreateSwapChain()
 
 
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.BufferDesc.Width = wndd.sceneWidth;
-	swapChainDesc.BufferDesc.Height = wndd.sceneHeight;
+	swapChainDesc.BufferDesc.Width = wndDesc->sceneWidth;
+	swapChainDesc.BufferDesc.Height = wndDesc->sceneHeight;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	if (wndd.vsync)
+	if (wndDesc->vsync)
 	{
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = numerator;
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = denominator;
@@ -111,10 +110,10 @@ void D3D::CreateSwapChain()
 	}
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = wndd.Handle;
+	swapChainDesc.OutputWindow = wndDesc->Handle;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
-	swapChainDesc.Windowed = (wndd.fullscreen) ? false : true;
+	swapChainDesc.Windowed = (wndDesc->fullscreen) ? false : true;
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -165,7 +164,6 @@ void D3D::CreateSwapChain()
 void D3D::CreateTextBackBuffer()
 {
 	HRESULT result;
-	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* TextBackBufferPtr;
@@ -181,8 +179,8 @@ void D3D::CreateTextBackBuffer()
 
 		ZeroMemory(&depthTextBufferDesc, sizeof(depthTextBufferDesc));
 
-		depthTextBufferDesc.Width = wndd.sceneWidth;
-		depthTextBufferDesc.Height = wndd.sceneHeight;
+		depthTextBufferDesc.Width = wndDesc->sceneWidth;
+		depthTextBufferDesc.Height = wndDesc->sceneHeight;
 		depthTextBufferDesc.MipLevels = 1;
 		depthTextBufferDesc.ArraySize = 1;
 		depthTextBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -201,7 +199,6 @@ void D3D::CreateTextBackBuffer()
 void D3D::CreateBackBuffer()
 {
 	HRESULT result;
-	WNDDesc wndd = *WNDDesc::GetInstance();
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* backBufferPtr;
@@ -217,8 +214,8 @@ void D3D::CreateBackBuffer()
 
 		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
-		depthBufferDesc.Width = wndd.sceneWidth;
-		depthBufferDesc.Height = wndd.sceneHeight;
+		depthBufferDesc.Width = wndDesc->sceneWidth;
+		depthBufferDesc.Height = wndDesc->sceneHeight;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
 		depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -375,8 +372,7 @@ void D3D::BeginScene(D3DXCOLOR color)
 
 void D3D::EndScene()
 {
-	WNDDesc wndd = *WNDDesc::GetInstance();
-	swapChain->Present(wndd.vsync == TRUE ? 1 : 0, 0);
+	swapChain->Present(wndDesc->vsync == TRUE ? 1 : 0, 0);
 
 	return;
 }
