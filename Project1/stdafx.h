@@ -29,16 +29,16 @@ using namespace std;
 #include <TextureArrayClass.h>
 #pragma comment (lib, "LoadFile.lib")
 
+#include <shader.h>
 #include <lightshader.h>
 #include <colorshader.h>
 #include <textureshader.h>
-#include <BumpMapShaderClass.h>
-#include <SpecMapShaderClass.h>
+#include <bumpmapshader.h>
+#include <specmapshader.h>
 #pragma comment (lib, "Shader.lib")
 
 #include <lightclass.h>
 #include <BitmapClass.h>
-#include <BumpMapping.h>
 #pragma comment (lib, "Objects.lib")
 
 #include <imgui.h>

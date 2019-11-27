@@ -1,53 +1,38 @@
 #pragma once
 
-class LIGHTSHADER
-{
-private:
-	struct MatrixBufferType
-	{
-		D3DXMATRIX world;
-		D3DXMATRIX view;
-		D3DXMATRIX projection;
-	};
+class SHADER;
 
+class LIGHTSHADER : public SHADER
+{
 	class CameraBufferType
 	{
 	public:
 		D3DXVECTOR3 cameraPosition;
 		float padding;
 	};
-		
-public:
-	LIGHTSHADER();
-	LIGHTSHADER(const LIGHTSHADER&);
-	~LIGHTSHADER();
+	
 
-	bool Initialize();
-	void Shutdown();
-	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, LightBufferType* light);
-	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
-
-private:
-	bool InitializeShader(WCHAR*, WCHAR*);
-	bool InitializeShaderBuffer();
-	void ShutdownShader();
-	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
-
-	bool SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
-	void RenderShader(int);
-
-private:
-	HWND hwnd;
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
-	RNDMATRIXS  render;
-
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-	ID3D11SamplerState* sampleState;
-	ID3D11InputLayout* layout;
 	ID3D11Buffer* matrixBuffer;
 	ID3D11Buffer* cameraBuffer;
 
 	ID3D11Buffer* lightBuffer;
+public:
+	LIGHTSHADER();
+	LIGHTSHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+	LIGHTSHADER(const LIGHTSHADER&);
+	virtual ~LIGHTSHADER() override;
+
+	virtual bool Initialize() override;
+	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, LightBufferType* light);
+	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
+
+
+private:
+	virtual bool InitializeShader(WCHAR*, WCHAR*) override;
+
+	virtual bool InitializeShaderBuffer() override;
+	virtual void ShutdownShader()override;
+
+	bool SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
+
 };

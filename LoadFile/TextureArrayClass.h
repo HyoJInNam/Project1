@@ -7,8 +7,11 @@ public:
 	TextureArray(const TextureArray&);
 	~TextureArray();
 
-	bool InitializeTextureArray(ID3D11Device*, WCHAR*, WCHAR*);
-	bool InitializeTextureArray(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
+	bool InitializeTextureArray(ID3D11Device*device,
+		WCHAR* filename1 = nullptr,
+		WCHAR* filename2 = nullptr,
+		WCHAR* filename3 = nullptr);
+
 	void ShutdownTextureArray();
 
 	ID3D11ShaderResourceView** GetTextureArray();

@@ -62,7 +62,7 @@ BOOL PANEL::Render(RNDMATRIXS& matrixs)
 	transformation->GetProjectionMatrix(PanelMatrixs.projection);
 
 	//FULL SIZE
-	bitmap->Resize(1370 * 1.7, 750 * 1.7);
+	//bitmap->Resize(1370 * 1.7, 750 * 1.7);
 	bitmap->Render(PanelMatrixs);
 
 	d3d->TurnOffAlphaBlending();

@@ -45,11 +45,11 @@ bool BitmapClass::Initialize(WCHAR* textureFilename)
 	{
 		return false;
 	}
-	ImgFile->LoadTexture(textureFilename);
+	ImgFile->LoadTexture(device, textureFilename);
 	
 	texture = new TEXTURESHADER(WNDDesc::GetInstance()->getHwnd(), device, deviceContext);
 	ISINSTANCE(texture)
-	if (!texture->Initialize())
+	if (!texture->Initialize()) 
 	{
 		return false;
 	}
@@ -68,7 +68,6 @@ void BitmapClass::Shutdown()
 
 bool BitmapClass::Render(RNDMATRIXS& matrixs)
 {
-	////ImgFile->GetTexture();	
 	ImgFile->UpdateBuffers(((left / 100) + posX), ((right / 100) + posX)
 						, ((top / 100) + posY), ((bottom / 100) + posY));
 

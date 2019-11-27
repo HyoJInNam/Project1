@@ -70,17 +70,11 @@ bool LOADIMGFILE::InitializeBuffers()
 
 void LOADIMGFILE::RenderBuffers()
 {
-	// 정점 버퍼의 단위와 오프셋을 설정합니다.
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
-	// 렌더링 할 수 있도록 입력 어셈블러에서 정점 버퍼를 활성으로 설정합니다.
 	deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-
-	// 렌더링 할 수 있도록 입력 어셈블러에서 인덱스 버퍼를 활성으로 설정합니다.
 	deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	// 정점 버퍼로 그릴 기본형을 설정합니다. 여기서는 삼각형으로 설정합니다.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -110,11 +104,11 @@ bool LOADIMGFILE::UpdateBuffers(float left, float right, float top, float bottom
 	vertices[5].position = D3DXVECTOR3(right, bottom, 0.0f);  // Bottom right.
 	vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
 
-	VertexType* verticesPtr;
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ISFAILED(deviceContext->Map(vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-	verticesPtr = (VertexType*)mappedResource.pData;
 
+	VertexType* verticesPtr = (VertexType*)mappedResource.pData;
 	memcpy(verticesPtr, (void*)vertices, (sizeof(VertexType) * vertexCount));
 	deviceContext->Unmap(vertexBuffer, 0);
 

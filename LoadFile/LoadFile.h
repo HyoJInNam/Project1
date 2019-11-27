@@ -6,42 +6,59 @@ using namespace std;
 
 class LOADFILE
 {
-public:
-	LOADFILE(ID3D11Device*, ID3D11DeviceContext*);
-	LOADFILE(const LOADFILE*) {};
-	virtual ~LOADFILE() {}
-
-	virtual bool InitializeBuffers() { return true;  };
-	virtual void RenderBuffers() {};
-	void ShutdownBuffers()
-	{
-		SAFE_RELEASE(indexBuffer);
-		SAFE_RELEASE(vertexBuffer);
-		return;
-	}
-
-	bool LoadTexture(WCHAR * filename)
-	{
-		ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL));
-		return true;
-	}
-	void ReleaseTexture()
-	{
-		if (!texture) return;
-		SAFE_RELEASE(texture);
-		return;
-	}
-	
-	ID3D11ShaderResourceView* GetTexture() { return texture; }
-	int GetIndexCount() { return indexCount; }
 
 
 protected:
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
-	ID3D11ShaderResourceView* texture;
 
-	ID3D11Buffer* vertexBuffer, *indexBuffer;
-	int vertexCount, indexCount;
+	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* indexBuffer;
+	int vertexCount;
+	int indexCount;
+
+
+
+protected:
+					LOADFILE(ID3D11Device*, ID3D11DeviceContext*);
+					LOADFILE(const LOADFILE*) {};
+	virtual			~LOADFILE() {}
+
+	virtual bool	InitializeBuffers()	 = 0;
+	virtual void	RenderBuffers()		 = 0;
+
+public:
+			void	ShutdownBuffers();
+			int		GetIndexCount() { return indexCount; }
+
+
+
+
+
+protected:
+	ID3D11ShaderResourceView* m_textures[3] = { nullptr, };
+	
+
+
+protected:
+	bool InitializeTextureArray(ID3D11Device*device,
+		WCHAR* texture_file_name = nullptr,
+		WCHAR* normal_texture_name = nullptr,
+		WCHAR* filename3 = nullptr);
+	
+	void ShutdownTextureArray();
+
+
+
+public:
+	bool LoadTexture(ID3D11Device* device,
+		WCHAR* filename1 = nullptr,
+		WCHAR* normal_texture_name = nullptr,
+		WCHAR* filename3 = nullptr);
+	
+	void							ReleaseTexture()		{ ShutdownTextureArray(); }
+	   
+	ID3D11ShaderResourceView**		GetTextures()			{ return m_textures; }
+	ID3D11ShaderResourceView*	    GetTexture()			{ return m_textures[0]; }
 };
 

@@ -6,13 +6,6 @@ class LOADIMGFILE;
 
 class BitmapClass
 {
-private:
-	struct VertexType
-	{
-		D3DXVECTOR3  position;
-		D3DXVECTOR2  texture;
-	};
-
 public:
 	BitmapClass();
 	BitmapClass(const BitmapClass&);
@@ -24,6 +17,8 @@ public:
 
 	bool Reposition(float, float);
 	bool Resize(float, float);
+
+
 private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;

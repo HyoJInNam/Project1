@@ -1,45 +1,33 @@
-#include "shaderstdafx.h"
+#include "shader.h"
 #include "textureshader.h"
 
 TEXTURESHADER::TEXTURESHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
-	: vertexShader(nullptr), pixelShader(nullptr)
-	, layout(nullptr), matrixBuffer(nullptr)
-	, sampleState(nullptr)
-{
-	this->device = device;
-	this->deviceContext = deviceContext;
-}
+	: SHADER(hwnd, device, deviceContext)
+	, matrixBuffer(nullptr)
+{}
 
 
-TEXTURESHADER::TEXTURESHADER(const TEXTURESHADER& other) {}
+TEXTURESHADER::TEXTURESHADER(const TEXTURESHADER& other) : SHADER(this) {}
 TEXTURESHADER::~TEXTURESHADER() { Shutdown(); }
 
 
 bool TEXTURESHADER::Initialize()
 {
-	//ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &texture, NULL));
 	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/shader/texture.vs"), const_cast<WCHAR*>(L"./data/shader/texture.ps")));
 	InitializeShaderBuffer();
 	return true;
 }
 
 
-void TEXTURESHADER::Shutdown()
-{
-	ShutdownShader();
-	return;
-}
-
 bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename) {
-	HRESULT result;
+
 	ID3D10Blob* errorMessage = nullptr;
 	ID3D10Blob* vertexShaderBuffer = nullptr;
 	ID3D10Blob* pixelShaderBuffer = nullptr;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 
 	
 
-		result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
+	HRESULT result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
 			D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
 		ISFAILEDFILE(result, vsFilename, errorMessage, L"Missing Shader File");
 
@@ -57,7 +45,8 @@ bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename) {
 	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
 	ISFAILED(result);
 
-	
+
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
@@ -146,33 +135,6 @@ void TEXTURESHADER::ShutdownShader()
 }
 
 
-void TEXTURESHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMessage)
-{
-	char* compileErrors;
-	unsigned long bufferSize, i;
-	ofstream fout;
-
-
-	// Get a pointer to the error message text buffer.
-	compileErrors = (char*)(errorMessage->GetBufferPointer());
-	bufferSize = errorMessage->GetBufferSize();
-	fout.open("shader-error.txt");
-
-	for(i=0; i<bufferSize; i++)
-	{
-		fout << compileErrors[i];
-	}
-
-	fout.close();
-
-
-	SAFE_RELEASE(errorMessage);
-	ERR_MESSAGE(L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename);
-
-	return;
-}
-
-
 bool TEXTURESHADER::SetShaderParameters(ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
@@ -204,17 +166,4 @@ bool TEXTURESHADER::SetShaderParameters(ID3D11ShaderResourceView* texture)
 		deviceContext->PSSetShaderResources(0, 1, &texture);
 	}
 	return true;
-}
-void TEXTURESHADER::RenderShader(int indexCount)
-{
-	deviceContext->IASetInputLayout(layout);
-
-    deviceContext->VSSetShader(vertexShader, NULL, 0);
-    deviceContext->PSSetShader(pixelShader, NULL, 0);
-
-	deviceContext->PSSetSamplers(0, 1, &sampleState);
-
-	deviceContext->DrawIndexed(indexCount, 0, 0);
-
-	return;
 }

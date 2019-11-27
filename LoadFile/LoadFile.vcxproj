@@ -22,13 +22,11 @@
     <ClInclude Include="LoadFile.h" />
     <ClInclude Include="LoadImgFile.h" />
     <ClInclude Include="loadObjFile.h" />
-    <ClInclude Include="TextureArrayClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoadFile.cpp" />
     <ClCompile Include="LoadImgFile.cpp" />
     <ClCompile Include="loadObjFile.cpp" />
-    <ClCompile Include="TextureArrayClass.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -1,50 +1,25 @@
 #pragma once
 
-enum ShaderType
-{
-	COLOR_SAHDER,
-	TEXTURE_SHADER
-};
 
+class SHADER;
 
-class COLORSHADER
+class COLORSHADER: public SHADER
 {
-private:
-	struct MatrixBufferType
-	{
-		D3DXMATRIX world;
-		D3DXMATRIX view;
-		D3DXMATRIX projection;
-	};
+	ID3D11Buffer* matrixBuffer;
 
 public:
 	COLORSHADER(HWND, ID3D11Device*, ID3D11DeviceContext*);
 	COLORSHADER(const COLORSHADER&);
-	~COLORSHADER();
+	virtual ~COLORSHADER() override;
 
-	bool Initialize();
-	void Shutdown();
+	virtual bool Initialize() override;
 	bool Render(int, RNDMATRIXS);
 
 private:
-	bool InitializeShader(WCHAR*, WCHAR*);
-	bool InitializeShaderBuffer();
-	void ShutdownShader();
-	void OutputErrorMessage(WCHAR*, ID3D10Blob*);
+	virtual bool InitializeShader(WCHAR*, WCHAR*) override;
 
+	virtual bool InitializeShaderBuffer() override;
+	virtual void ShutdownShader()override;
 	bool SetShaderParameters();
-	void RenderShader(int);
 
-private:
-	HWND hwnd;
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
-	RNDMATRIXS  render;
-
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-	ID3D11InputLayout* layout;
-	ID3D11Buffer* matrixBuffer;
-
-	ShaderType shaderType;
 };

@@ -20,12 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitmapClass.cpp" />
-    <ClCompile Include="BumpMapping.cpp" />
     <ClCompile Include="lightclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitmapClass.h" />
-    <ClInclude Include="BumpMapping.h" />
     <ClInclude Include="lightclass.h" />
     <ClInclude Include="objectstdafx.h" />
   </ItemGroup>

@@ -19,18 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BumpMapShaderClass.cpp" />
+    <ClCompile Include="bumpmapshader.cpp" />
     <ClCompile Include="colorshader.cpp" />
     <ClCompile Include="lightshader.cpp" />
-    <ClCompile Include="SpecMapShaderClass.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="specmapshader.cpp" />
     <ClCompile Include="textureshader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BumpMapShaderClass.h" />
+    <ClInclude Include="bumpmapshader.h" />
     <ClInclude Include="colorshader.h" />
     <ClInclude Include="lightshader.h" />
-    <ClInclude Include="shaderstdafx.h" />
-    <ClInclude Include="SpecMapShaderClass.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="specmapshader.h" />
     <ClInclude Include="textureshader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

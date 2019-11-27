@@ -21,13 +21,16 @@
     <ClCompile Include="colorshader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SpecMapShaderClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="textureshader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BumpMapShaderClass.cpp">
+    <ClCompile Include="shader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="bumpmapshader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="specmapshader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,19 +38,19 @@
     <ClInclude Include="lightshader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BumpMapShaderClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="colorshader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecMapShaderClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="textureshader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="shaderstdafx.h">
+    <ClInclude Include="shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="bumpmapshader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="specmapshader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

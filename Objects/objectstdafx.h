@@ -9,5 +9,5 @@
 #include <loadObjFile.h>
 #include <TextureArrayClass.h>
 
-
+#include <shader.h>
 #include <textureshader.h>

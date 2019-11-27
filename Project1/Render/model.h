@@ -29,9 +29,10 @@ public:
 	MODEL(const MODEL&);
 	~MODEL();
 
-	bool Initialize(char* modelFilename, WCHAR* filename);
-	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2);
-	bool Initialize(char* modelFilename, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3);
+	bool Initialize(char* modelFilename,
+		WCHAR* texture_file_name = nullptr,
+		WCHAR* normal_texture_name = nullptr,
+		WCHAR* filename3 = nullptr);
 	void Shutdown();
 
 	void SetTransformMatrix(RNDMATRIXS&);
@@ -43,13 +44,12 @@ public:
 	LIGHT* GetLIGHT() { return light; }
 
 
-	bool LoadTexture(WCHAR *);
-	bool LoadTextures(WCHAR *, WCHAR *);
+	bool LoadTextures(
+		WCHAR* texture_file_name = nullptr,
+		WCHAR* normal_texture_name = nullptr,
+		WCHAR* filename3 = nullptr);
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
-
-private:
-	bool Load(char*);
 
 private:
 	HWND hwnd;
@@ -62,7 +62,7 @@ private:
 	LIGHT* light;
 	LIGHTSHADER* shader;
 
-	BUMPMAPPING* bumpmap;
+	//BUMPMAPPING* bumpmap;
 	BumpMapShaderClass* m_BumpMapShader;
 	SpecMapShaderClass* m_SpecMapShader = nullptr;
 

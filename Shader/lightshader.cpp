@@ -1,10 +1,9 @@
-﻿#include "shaderstdafx.h"
+﻿#include "shader.h"
 #include "lightshader.h"
 
 
 LIGHTSHADER::LIGHTSHADER()
-	: vertexShader(nullptr), pixelShader(nullptr)
-	, sampleState(nullptr), layout(nullptr)
+	: SHADER(hwnd, device, deviceContext)
 	, matrixBuffer(nullptr), cameraBuffer(nullptr)
 	, lightBuffer(nullptr)
 {
@@ -12,7 +11,13 @@ LIGHTSHADER::LIGHTSHADER()
 	device = D3D::GetInstance()->GetDevice();
 	deviceContext = D3D::GetInstance()->GetDeviceContext();
 }
-LIGHTSHADER::LIGHTSHADER(const LIGHTSHADER &) {}
+
+LIGHTSHADER::LIGHTSHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+	: SHADER(hwnd, device, deviceContext)
+	, matrixBuffer(nullptr), cameraBuffer(nullptr)
+	, lightBuffer(nullptr)
+{}
+LIGHTSHADER::LIGHTSHADER(const LIGHTSHADER &) : SHADER(this) {}
 LIGHTSHADER::~LIGHTSHADER() {}
 
 
@@ -148,11 +153,7 @@ bool LIGHTSHADER::InitializeShaderBuffer()
 	return true;
 }
 
-void LIGHTSHADER::Shutdown()
-{
-	ShutdownShader();
-	return;
-}
+
 void LIGHTSHADER::ShutdownShader()
 {
 	SAFE_RELEASE(lightBuffer);
@@ -164,30 +165,7 @@ void LIGHTSHADER::ShutdownShader()
 	SAFE_RELEASE(vertexShader);
 	return;
 }
-void LIGHTSHADER::OutputErrorMessage(WCHAR* shaderFilename, ID3D10Blob* errorMessage)
-{
-	char* compileErrors;
-	unsigned long bufferSize, i;
-	ofstream fout;
 
-
-	compileErrors = (char*)(errorMessage->GetBufferPointer());
-	bufferSize = errorMessage->GetBufferSize();
-	fout.open("shader-error.txt");
-
-	for (i = 0; i < bufferSize; i++)
-	{
-		fout << compileErrors[i];
-	}
-
-	fout.close();
-
-
-	SAFE_RELEASE(errorMessage);
-	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
-
-	return;
-}
 
 bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraPosition, LightBufferType* light)
 {
@@ -265,17 +243,4 @@ bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderRe
 		}
 	}
 	return true;
-}
-void LIGHTSHADER::RenderShader(int indexCount)
-{
-	deviceContext->IASetInputLayout(layout);
-
-    deviceContext->VSSetShader(vertexShader, NULL, 0);
-    deviceContext->PSSetShader(pixelShader, NULL, 0);
-
-	deviceContext->PSSetSamplers(0, 1, &sampleState);
-
-	deviceContext->DrawIndexed(indexCount, 0, 0);
-
-	return;
 }

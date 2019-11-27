@@ -5,20 +5,13 @@
 
 enum RotationDirection { X, Y, Z };
 
-
-struct TextVertexType
-{
-	D3DXVECTOR3 position;
-	D3DXVECTOR2 texture;
-};
-
-//===========================================
-
 struct VertexType
 {
 	D3DXVECTOR3 position;
 	D3DXVECTOR2 texture;
 	D3DXVECTOR3 normal;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR3 binormal;
 };
 
 struct ModelType
@@ -26,6 +19,8 @@ struct ModelType
 	float x, y, z;
 	float tu, tv;
 	float nx, ny, nz;
+	float tx, ty, tz;
+	float bx, by, bz;
 };
 
 typedef struct
@@ -59,18 +54,6 @@ struct BUMPMAPModelType
 	float nx, ny, nz;
 	float tx, ty, tz;
 	float bx, by, bz;
-};
-
-struct BUMPMAPTempVertexType
-{
-	float x, y, z;
-	float tu, tv;
-	float nx, ny, nz;
-};
-
-struct BUMPMAPVectorType
-{
-	float x, y, z;
 };
 
 //===================================
