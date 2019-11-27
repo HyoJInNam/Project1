@@ -5,48 +5,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Render">
-      <UniqueIdentifier>{dcba2189-72d1-4479-a546-c1aac7bc545c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Window">
+    <Filter Include="system">
       <UniqueIdentifier>{60f6343c-9fc9-496b-ae67-9e889755da45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Window\graphics.cpp">
-      <Filter>Window</Filter>
+    <ClCompile Include="system\graphics.cpp">
+      <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Window\System.cpp">
-      <Filter>Window</Filter>
+    <ClCompile Include="system\input.cpp">
+      <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Window\window.cpp">
-      <Filter>Window</Filter>
+    <ClCompile Include="system\panel.cpp">
+      <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Window\panel.cpp">
-      <Filter>Window</Filter>
+    <ClCompile Include="system\System.cpp">
+      <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Render\model.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="system\window.cpp">
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Window\graphics.h">
-      <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Window\System.h">
-      <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Window\window.h">
-      <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Window\Panel.h">
-      <Filter>Window</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Render\model.h">
-      <Filter>Render</Filter>
+    <ClInclude Include="system\graphics.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\Panel.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\System.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\window.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

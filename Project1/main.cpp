@@ -1,5 +1,5 @@
 #include <stdafx.h>
-#include "Window/window.h"
+#include "system/window.h"
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,

@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1;C:\Users\남효진\Desktop\졸프 3-1\Project1\ImGui;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\CameraContol;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -133,20 +133,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Render\model.cpp" />
-    <ClCompile Include="Window\graphics.cpp" />
-    <ClCompile Include="Window\panel.cpp" />
-    <ClCompile Include="Window\System.cpp" />
-    <ClCompile Include="Window\window.cpp" />
+    <ClCompile Include="system\graphics.cpp" />
+    <ClCompile Include="system\input.cpp" />
+    <ClCompile Include="system\panel.cpp" />
+    <ClCompile Include="system\System.cpp" />
+    <ClCompile Include="system\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Render\model.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Window\graphics.h" />
-    <ClInclude Include="Window\Panel.h" />
-    <ClInclude Include="Window\System.h" />
-    <ClInclude Include="Window\window.h" />
+    <ClInclude Include="system\graphics.h" />
+    <ClInclude Include="system\Panel.h" />
+    <ClInclude Include="system\System.h" />
+    <ClInclude Include="system\window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project1.rc" />

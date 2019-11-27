@@ -48,9 +48,6 @@
     <ClInclude Include="objectDescription.h">
       <Filter>Description</Filter>
     </ClInclude>
-    <ClInclude Include="singleton.h">
-      <Filter>Header file</Filter>
-    </ClInclude>
     <ClInclude Include="AlignedAllocationPolicy.h">
       <Filter>Header file</Filter>
     </ClInclude>
@@ -74,6 +71,9 @@
     </ClInclude>
     <ClInclude Include="input.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="singleton.h">
+      <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

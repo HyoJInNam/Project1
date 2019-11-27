@@ -16,12 +16,12 @@ using namespace std;
 #include <timeclass.h>
 #pragma comment (lib, "Utility.lib")
 
-#include <camera.h>
-#include <cameraControler.h>
-#include <cameraPanelControler.h>
-#pragma comment (lib, "CameraContol.lib")
 
-//-----------------------------------------------
+#include <imgui.h>
+#include <imgui_windx.h>
+#pragma comment (lib, "ImGui.lib")
+
+
 
 #include <LoadFile.h>
 #include <LoadImgFile.h>
@@ -29,19 +29,18 @@ using namespace std;
 #include <TextureArrayClass.h>
 #pragma comment (lib, "LoadFile.lib")
 
-#include <shader.h>
-#include <lightshader.h>
-#include <colorshader.h>
-#include <textureshader.h>
-#include <bumpmapshader.h>
-#include <specmapshader.h>
-#pragma comment (lib, "Shader.lib")
 
-#include <lightclass.h>
-#include <BitmapClass.h>
+#include <transform.h>
+#include <image_bitmap.h>
+#include <model.h>
+#include <light.h>
+#include <camera.h>
+#include <cameraControler.h>
+#include <cameraPanelControler.h>
 #pragma comment (lib, "Objects.lib")
 
-#include <imgui.h>
-#include <imgui_windx.h>
-#pragma comment (lib, "ImGui.lib")
+
+#include <shader.h>
+#include <lightshader.h>
+#pragma comment (lib, "Shader.lib")
 

@@ -19,13 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BitmapClass.cpp" />
-    <ClCompile Include="lightclass.cpp" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="cameraControler.h" />
+    <ClInclude Include="cameraPanelControler.h" />
+    <ClInclude Include="image_bitmap.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="objectstdafx.h" />
+    <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BitmapClass.h" />
-    <ClInclude Include="lightclass.h" />
-    <ClInclude Include="objectstdafx.h" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="cameraControler.cpp" />
+    <ClCompile Include="cameraPanelControler.cpp" />
+    <ClCompile Include="image_bitmap.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -81,7 +90,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\ImGui;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\Project1\lib\</OutDir>
+    <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
