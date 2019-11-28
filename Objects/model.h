@@ -23,19 +23,19 @@ public:
 	~MODEL();
 	virtual bool ViewTransform() override;
 
-	bool Initialize(LIGHT* light,
+	bool Initialize(
 		char* modelFilename,
-		WCHAR* texture_file_name = nullptr,
-		WCHAR* normal_texture_name = nullptr,
-		WCHAR* filename3 = nullptr);
+		WCHAR* texture = nullptr,
+		WCHAR* normalmap = nullptr,
+		WCHAR* specularmap = nullptr);
 	bool Render(RNDMATRIXS&, D3DXVECTOR3, LIGHT* light);
 	void Shutdown();
 	
 
 	bool LoadTextures(
-		WCHAR* texture_file_name = nullptr,
-		WCHAR* normal_texture_name = nullptr,
-		WCHAR* filename3 = nullptr);
+		WCHAR* texture = nullptr,
+		WCHAR* normalmap = nullptr,
+		WCHAR* specularmap = nullptr);
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
 

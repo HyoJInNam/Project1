@@ -23,6 +23,21 @@ struct MatrixBufferType
 	D3DXMATRIX projection;
 };
 
+struct LightBufferType
+{
+	D3DXVECTOR4 ambientColor;
+	D3DXVECTOR4 diffuseColor;
+	D3DXVECTOR3 lightDirection;
+	float specularPower;
+	D3DXVECTOR4 specularColor;
+};
+
+struct CameraBufferType
+{
+	D3DXVECTOR3 cameraPosition;
+	float padding;
+};
+
 
 class SHADER {
 

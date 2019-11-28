@@ -66,14 +66,16 @@ bool MODEL::ViewTransform()
 int  MODEL::GetIndexCount()	{return file->GetIndexCount(); }
 ID3D11ShaderResourceView* MODEL::GetTexture() {	return file->GetTexture(); }
 
-bool MODEL::Initialize(LIGHT* light, char* modelFilename, WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* filename3)
+bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* specularmap)
 {
-	obj_light = light;
 	ISFAIL(file->Initialize(modelFilename));
-	file->LoadTexture(device, texture_file_name, normal_texture_name, filename3);
+	file->LoadTexture(device, texture_file_name, normal_texture_name, specularmap);
 
-	
-	if (filename3)
+	obj_light = new LIGHT("obj shader");
+	ISINSTANCE(obj_light);
+	obj_light->SetDirectionLight();
+
+	if (specularmap)
 	{
 		m_SpecMapShader = new SpecMapShaderClass(hwnd, device, deviceContext);
 		ISINSTANCE(m_SpecMapShader);
@@ -82,6 +84,7 @@ bool MODEL::Initialize(LIGHT* light, char* modelFilename, WCHAR* texture_file_na
 			MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
 			return false;
 		}
+		return true;
 	}
 	else if (normal_texture_name)
 	{
@@ -92,6 +95,7 @@ bool MODEL::Initialize(LIGHT* light, char* modelFilename, WCHAR* texture_file_na
 			ERR_MESSAGE(L"Could not initialize the Bump Map shader object.", L"ERROR");
 			return false;
 		}
+		return true;
 	}
 
 	shader = new LIGHTSHADER(hwnd, device, deviceContext);
@@ -104,29 +108,33 @@ bool MODEL::Initialize(LIGHT* light, char* modelFilename, WCHAR* texture_file_na
 	return true;
 }
 
-bool MODEL::LoadTextures(WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* filename3)
+bool MODEL::LoadTextures(WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* specularmap)
 {
-	return	file->LoadTexture(device, texture_file_name, normal_texture_name, filename3);
+	return	file->LoadTexture(device, texture_file_name, normal_texture_name, specularmap);
 }
 
 bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* light)
 {
 	SetTransformMatrix(&renderMatrix);
-
 	file->Render();
-	if (m_BumpMapShader)
-	{
-		m_BumpMapShader->Render(file->GetIndexCount(), renderMatrix, file->GetTextures(), light->GetDirection(), light->GetDiffuseColor());
-	}
+	obj_light->SetDirection(light->GetDirection());
+
 
 	if (m_SpecMapShader)
 	{
-		m_SpecMapShader->Render(file->GetIndexCount(), renderMatrix,
-			file->GetTextures(), light->GetDirection(), light->GetDiffuseColor(),
-			cameraPos, light->GetSpecularColor(), light->GetSpecularPower());
+		m_SpecMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), obj_light->GetDirection(),
+			obj_light->GetLight());
+		return ViewTransform();
 	}
 
-	if (shader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), light->GetLight()) == false)
+	if (m_BumpMapShader)
+	{
+		m_BumpMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), 
+			obj_light->GetDirection(), obj_light->GetLight());
+		return ViewTransform();
+	}
+
+	if (shader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), obj_light->GetLight()) == false)
 	{
 		material = new COLORSHADER(hwnd, device, deviceContext);
 		ISINSTANCE(material);
@@ -139,13 +147,23 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* light
 	}
 	return ViewTransform();
 }
+
 void MODEL::Shutdown()
 {
-	if (m_SpecMapShader)  m_SpecMapShader->Shutdown();
-	if (m_BumpMapShader) SAFE_DELETE(m_BumpMapShader);
+	if (m_SpecMapShader)
+	{
+		m_SpecMapShader->Shutdown();
+		SAFE_DELETE(m_SpecMapShader);
+	}
+
+	if (m_BumpMapShader)
+	{
+		m_BumpMapShader->Shutdown();
+		SAFE_DELETE(m_BumpMapShader);
+	}
 
 	SAFE_DELETE(shader);
-	SAFE_DELETE(shader);
+	SAFE_DELETE(obj_light);
 	SAFE_DELETE(material);
 
 	file->Shutdown();

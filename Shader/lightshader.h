@@ -4,17 +4,8 @@ class SHADER;
 
 class LIGHTSHADER : public SHADER
 {
-	class CameraBufferType
-	{
-	public:
-		D3DXVECTOR3 cameraPosition;
-		float padding;
-	};
-	
-
 	ID3D11Buffer* matrixBuffer;
 	ID3D11Buffer* cameraBuffer;
-
 	ID3D11Buffer* lightBuffer;
 public:
 	LIGHTSHADER();
@@ -23,8 +14,13 @@ public:
 	virtual ~LIGHTSHADER() override;
 
 	virtual bool Initialize() override;
-	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, LightBufferType* light);
-	bool Render(int, RNDMATRIXS, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
+
+	bool Render(
+		int indexCount,
+		RNDMATRIXS matrixs,
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView* texture = nullptr,
+		LightBufferType* light = nullptr);
 
 
 private:
@@ -33,6 +29,9 @@ private:
 	virtual bool InitializeShaderBuffer() override;
 	virtual void ShutdownShader()override;
 
-	bool SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light);
+	bool SetShaderParameters(
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView* texture,
+		LightBufferType* light);
 
 };

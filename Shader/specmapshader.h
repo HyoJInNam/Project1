@@ -5,22 +5,6 @@ class SHADER;
 
 class SpecMapShaderClass : public SHADER
 {
-
-	struct LightBufferType
-	{
-		D3DXVECTOR4 diffuseColor;
-		D3DXVECTOR4 specularColor;
-		float specularPower;
-		D3DXVECTOR3 lightDirection;
-	};
-
-	struct CameraBufferType
-	{
-		D3DXVECTOR3 cameraPosition;
-		float padding;
-	};
-
-
 	ID3D11Buffer* matrixBuffer = nullptr;
 	ID3D11Buffer* lightBuffer = nullptr;
 	ID3D11Buffer* cameraBuffer = nullptr;
@@ -31,7 +15,13 @@ public:
 	virtual ~SpecMapShaderClass() override;
 
 	virtual bool Initialize() override;
-	bool Render(int, RNDMATRIXS, ID3D11ShaderResourceView**, D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR3, D3DXVECTOR4, float);
+	bool Render(
+		int indexCount,
+		RNDMATRIXS render,
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView** textureArray,
+		D3DXVECTOR3 lightDirection,
+		LightBufferType* light);
 
 private:
 	virtual bool InitializeShader(WCHAR*, WCHAR*) override;
@@ -39,5 +29,9 @@ private:
 	virtual bool InitializeShaderBuffer() override;
 	virtual void ShutdownShader()override;
 
-	bool SetShaderParameters(ID3D11ShaderResourceView**, D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR3, D3DXVECTOR4, float);
+	bool SetShaderParameters(
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView** textureArray,
+		D3DXVECTOR3 lightDirection,
+		LightBufferType* light);
 };

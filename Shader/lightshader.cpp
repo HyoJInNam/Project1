@@ -156,6 +156,7 @@ bool LIGHTSHADER::InitializeShaderBuffer()
 
 void LIGHTSHADER::ShutdownShader()
 {
+	if (!this) return;
 	SAFE_RELEASE(lightBuffer);
 	SAFE_RELEASE(cameraBuffer);
 	SAFE_RELEASE(matrixBuffer);
@@ -163,16 +164,15 @@ void LIGHTSHADER::ShutdownShader()
 	SAFE_RELEASE(sampleState);
 	SAFE_RELEASE(pixelShader);
 	SAFE_RELEASE(vertexShader);
-	return;
 }
 
 
-bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraPosition, LightBufferType* light)
-{
-	return Render(indexCount, matrixs, cameraPosition, nullptr, light);
-}
-
-bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light)
+bool LIGHTSHADER::Render(
+	int indexCount, 
+	RNDMATRIXS matrixs, 
+	D3DXVECTOR3 cameraPosition, 
+	ID3D11ShaderResourceView* texture, 
+	LightBufferType* light)
 {
 	render = matrixs;
 	ISFAIL(SetShaderParameters(cameraPosition, texture, light));
@@ -180,7 +180,11 @@ bool LIGHTSHADER::Render(int indexCount, RNDMATRIXS matrixs, D3DXVECTOR3 cameraP
 
 	return true;
 }
-bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderResourceView* texture, LightBufferType* light)
+
+bool LIGHTSHADER::SetShaderParameters(
+	D3DXVECTOR3 cameraPosition, 
+	ID3D11ShaderResourceView* texture,
+	LightBufferType* light)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -218,7 +222,6 @@ bool LIGHTSHADER::SetShaderParameters(D3DXVECTOR3 cameraPosition, ID3D11ShaderRe
 			dataPtr2->padding = 0.0f;
 
 			deviceContext->Unmap(cameraBuffer, 0);
-
 			bufferNumber = 1;
 
 			deviceContext->VSSetConstantBuffers(bufferNumber, 1, &cameraBuffer);

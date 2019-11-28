@@ -22,11 +22,11 @@ void LOADFILE::ShutdownBuffers()
 
 
 
-bool LOADFILE::InitializeTextureArray(ID3D11Device * device, WCHAR * texture_file_name, WCHAR * normal_texture_name, WCHAR * filename3)
+bool LOADFILE::InitializeTextureArray(ID3D11Device * device, WCHAR * texture, WCHAR * normalmap, WCHAR * specularmap)
 {
-	if (texture_file_name) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, texture_file_name, NULL, NULL, &m_textures[0], NULL));
-	if (normal_texture_name) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, normal_texture_name, NULL, NULL, &m_textures[1], NULL));
-	if (filename3) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, filename3, NULL, NULL, &m_textures[2], NULL));
+	if (texture) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, texture, NULL, NULL, &m_textures[0], NULL));
+	if (normalmap) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, normalmap, NULL, NULL, &m_textures[1], NULL));
+	if (specularmap) ISFAILED(D3DX11CreateShaderResourceViewFromFile(device, specularmap, NULL, NULL, &m_textures[2], NULL));
 
 	return true;
 }
@@ -38,7 +38,7 @@ void LOADFILE::ShutdownTextureArray()
 	if (m_textures[2]) SAFE_RELEASE(m_textures[2]);
 }
 
-bool LOADFILE::LoadTexture(ID3D11Device * device, WCHAR * texture_file_name, WCHAR * normal_texture_name, WCHAR * filename3)
+bool LOADFILE::LoadTexture(ID3D11Device * device, WCHAR * texture, WCHAR * normalmap, WCHAR * specularmap)
 {
-	return InitializeTextureArray(device, texture_file_name, normal_texture_name, filename3);
+	return InitializeTextureArray(device, texture, normalmap, specularmap);
 }

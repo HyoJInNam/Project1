@@ -38,14 +38,19 @@ PixelInputType LightVertexShader(VertexInputType input)
     
     input.position.w = 1.0f;
 
+
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
+
 	output.tex = input.tex;
     
+
     output.normal = mul(input.normal, (float3x3)worldMatrix);
     output.normal = normalize(output.normal);
+
+
 
     float4 worldPosition = mul(input.position, worldMatrix);
     output.viewDirection = cameraPosition.xyz - worldPosition.xyz;

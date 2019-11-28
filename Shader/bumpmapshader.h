@@ -6,18 +6,8 @@ class SHADER;
 
 class BumpMapShaderClass : public SHADER
 {
-
-	struct LightBufferType
-	{
-		D3DXVECTOR4 diffuseColor;
-		D3DXVECTOR3 lightDirection;
-		float padding;
-	};
-
-
-
-
 	ID3D11Buffer* matrixBuffer;
+	ID3D11Buffer* cameraBuffer;
 	ID3D11Buffer* lightBuffer;
 
 
@@ -27,12 +17,22 @@ public:
 	virtual ~BumpMapShaderClass() override;
 
 	virtual bool Initialize() override;
-	bool Render(int, RNDMATRIXS, ID3D11ShaderResourceView**, D3DXVECTOR3, D3DXVECTOR4);
+	bool Render(
+		int indexCount,
+		RNDMATRIXS matrixs,
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView** textureArray,
+		D3DXVECTOR3 lightDirection,
+		LightBufferType* light);
 
 private:
 	virtual bool InitializeShader(WCHAR*, WCHAR*) override;
 	virtual void ShutdownShader()override;
 
 	virtual bool InitializeShaderBuffer() override;
-	bool SetShaderParameters(ID3D11ShaderResourceView**, D3DXVECTOR3, D3DXVECTOR4);
+	bool SetShaderParameters(
+		D3DXVECTOR3 cameraPosition,
+		ID3D11ShaderResourceView** textureArray,
+		D3DXVECTOR3 lightDirection,
+		LightBufferType* light);
 };

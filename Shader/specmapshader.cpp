@@ -14,26 +14,31 @@ SpecMapShaderClass::~SpecMapShaderClass() { }
 
 bool SpecMapShaderClass::Initialize()
 {
-	return InitializeShader(const_cast<WCHAR*>(L"./data/shader/specmap.vs"), const_cast<WCHAR*>(L"./data/shader/specmap.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"./data/shader/specmap.vs"), const_cast<WCHAR*>(L"./data/shader/specmap.ps"));
+	InitializeShaderBuffer();
+	return true;
 }
 
-bool SpecMapShaderClass::Render(int indexCount, RNDMATRIXS render, ID3D11ShaderResourceView** textureArray, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor,
-	D3DXVECTOR3 cameraPosition, D3DXVECTOR4 specularColor, float specularPower)
+bool SpecMapShaderClass::Render(
+	int indexCount,
+	RNDMATRIXS matrixs,
+	D3DXVECTOR3 cameraPosition,
+	ID3D11ShaderResourceView** textureArray,
+	D3DXVECTOR3 lightDirection,
+	LightBufferType* light)
 {
 
-	if (!SetShaderParameters(textureArray, lightDirection, diffuseColor, cameraPosition, specularColor, specularPower))
-	{
-		return false;
-	}
-
-
+	render = matrixs;
+	ISFAIL(SetShaderParameters(cameraPosition, textureArray, lightDirection, light));
 	RenderShader(indexCount);
 
 	return true;
 }
 
 
-bool SpecMapShaderClass::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
+bool SpecMapShaderClass::InitializeShader(
+	WCHAR* vsFilename,
+	WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage = nullptr;
@@ -115,62 +120,68 @@ bool SpecMapShaderClass::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename)
 bool SpecMapShaderClass::InitializeShaderBuffer()
 {
 	HRESULT result;
-	D3D11_BUFFER_DESC matrixBufferDesc;
-	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
 
 
-	result = device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
-	ISFAILED(result);
+		result = device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
+		ISFAILED(result);
+	}
 
-	D3D11_SAMPLER_DESC samplerDesc;
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.BorderColor[0] = 0;
-	samplerDesc.BorderColor[1] = 0;
-	samplerDesc.BorderColor[2] = 0;
-	samplerDesc.BorderColor[3] = 0;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-
-	result = device->CreateSamplerState(&samplerDesc, &sampleState);
-	ISFAILED(result);
+	{
+		D3D11_SAMPLER_DESC samplerDesc;
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		samplerDesc.BorderColor[0] = 0;
+		samplerDesc.BorderColor[1] = 0;
+		samplerDesc.BorderColor[2] = 0;
+		samplerDesc.BorderColor[3] = 0;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 
-	D3D11_BUFFER_DESC lightBufferDesc;
-	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
-	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	lightBufferDesc.MiscFlags = 0;
-	lightBufferDesc.StructureByteStride = 0;
+		result = device->CreateSamplerState(&samplerDesc, &sampleState);
+		ISFAILED(result);
+	}
+
+	{
+		D3D11_BUFFER_DESC lightBufferDesc;
+		lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		lightBufferDesc.ByteWidth = sizeof(LightBufferType);
+		lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		lightBufferDesc.MiscFlags = 0;
+		lightBufferDesc.StructureByteStride = 0;
 
 
-	result = device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
-	ISFAILED(result);
+		result = device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
+		ISFAILED(result);
+	}
+
+	{
+		D3D11_BUFFER_DESC cameraBufferDesc;
+		cameraBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		cameraBufferDesc.ByteWidth = sizeof(CameraBufferType);
+		cameraBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cameraBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cameraBufferDesc.MiscFlags = 0;
+		cameraBufferDesc.StructureByteStride = 0;
 
 
-	D3D11_BUFFER_DESC cameraBufferDesc;
-	cameraBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	cameraBufferDesc.ByteWidth = sizeof(CameraBufferType);
-	cameraBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cameraBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cameraBufferDesc.MiscFlags = 0;
-	cameraBufferDesc.StructureByteStride = 0;
-
-
-	result = device->CreateBuffer(&cameraBufferDesc, NULL, &cameraBuffer);
-	ISFAILED(result);
+		result = device->CreateBuffer(&cameraBufferDesc, NULL, &cameraBuffer);
+		ISFAILED(result);
+	}
 	return true;
 }
 
@@ -187,8 +198,11 @@ void SpecMapShaderClass::ShutdownShader()
 
 
 
-bool SpecMapShaderClass::SetShaderParameters(ID3D11ShaderResourceView** textureArray, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor,
-	D3DXVECTOR3 cameraPosition, D3DXVECTOR4 specularColor, float specularPower)
+bool SpecMapShaderClass::SetShaderParameters(
+	D3DXVECTOR3 cameraPosition,
+	ID3D11ShaderResourceView** textureArray, 
+	D3DXVECTOR3 lightDirection,
+	LightBufferType* light)
 {
 	D3DXMatrixTranspose(&render.world, &render.world);
 	D3DXMatrixTranspose(&render.view, &render.view);
@@ -198,8 +212,8 @@ bool SpecMapShaderClass::SetShaderParameters(ID3D11ShaderResourceView** textureA
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ISFAILED(deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
 
-	MatrixBufferType* dataPtr = (MatrixBufferType*)mappedResource.pData;
 	{
+		MatrixBufferType* dataPtr = (MatrixBufferType*)mappedResource.pData;
 		dataPtr->world = render.world;
 		dataPtr->view = render.view;
 		dataPtr->projection = render.projection;
@@ -209,36 +223,36 @@ bool SpecMapShaderClass::SetShaderParameters(ID3D11ShaderResourceView** textureA
 		unsigned int bufferNumber = 0;
 
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
-
-		deviceContext->PSSetShaderResources(0, 3, textureArray);
-
-		ISFAILED(deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-	}
-
-	LightBufferType* dataPtr2 = (LightBufferType*)mappedResource.pData;
-	{
-		dataPtr2->diffuseColor = diffuseColor;
-		dataPtr2->lightDirection = lightDirection;
-		dataPtr2->specularColor = specularColor;
-		dataPtr2->specularPower = specularPower;
-
-		deviceContext->Unmap(lightBuffer, 0);
-
-		unsigned int bufferNumber = 0;
-
-		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
-
 		ISFAILED(deviceContext->Map(cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+
 	}
 
-	CameraBufferType* dataPtr3 = (CameraBufferType*)mappedResource.pData;
 	{
-		dataPtr3->cameraPosition = cameraPosition;
+		CameraBufferType* dataPtr2 = (CameraBufferType*)mappedResource.pData;
+		dataPtr2->cameraPosition = cameraPosition;
+		dataPtr2->padding = 0.0f;
 
 		deviceContext->Unmap(cameraBuffer, 0);
 		unsigned int bufferNumber = 1;
 
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &cameraBuffer);
+		deviceContext->PSSetShaderResources(0, 3, textureArray);
+		ISFAILED(deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
 	}
+
+	{
+		LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
+		dataPtr3->lightDirection = lightDirection;
+		dataPtr3->ambientColor = light->ambientColor;
+		dataPtr3->diffuseColor = light->diffuseColor;
+		dataPtr3->specularColor = light->specularColor;
+		dataPtr3->specularPower = light->specularPower;
+
+		deviceContext->Unmap(lightBuffer, 0);
+		unsigned int bufferNumber = 0;
+
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
+	}
+
 	return true;
 }

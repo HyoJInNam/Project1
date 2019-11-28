@@ -42,9 +42,9 @@ protected:
 
 protected:
 	bool InitializeTextureArray(ID3D11Device*device,
-		WCHAR* texture_file_name = nullptr,
-		WCHAR* normal_texture_name = nullptr,
-		WCHAR* filename3 = nullptr);
+		WCHAR* texture = nullptr,
+		WCHAR* normalmap = nullptr,
+		WCHAR* specularmap = nullptr);
 	
 	void ShutdownTextureArray();
 
@@ -53,8 +53,8 @@ protected:
 public:
 	bool LoadTexture(ID3D11Device* device,
 		WCHAR* filename1 = nullptr,
-		WCHAR* normal_texture_name = nullptr,
-		WCHAR* filename3 = nullptr);
+		WCHAR* normalmap = nullptr,
+		WCHAR* specularmap = nullptr);
 	
 	void							ReleaseTexture()		{ ShutdownTextureArray(); }
 	   

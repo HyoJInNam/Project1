@@ -48,10 +48,9 @@ BOOL GRAPHICS::Initialize()
 	sphere01 = new MODEL("sphere1");
 	ISINSTANCE(sphere01);
 
-	if (!sphere01->Initialize(light
-		, const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/stone01.dds")
-		, const_cast<WCHAR*>(L"./data/models/bump01.dds")))
+	if (!sphere01->Initialize(
+		const_cast<char*>("./data/models/sphere.txt"),
+		const_cast<WCHAR*>(L"./data/models/stone02.dds")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -60,10 +59,10 @@ BOOL GRAPHICS::Initialize()
 
 	sphere02 = new MODEL("sphere2");
 	ISINSTANCE(sphere02);
-	if (!sphere02->Initialize(light
-		, const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/stone02.dds")
-		, const_cast<WCHAR*>(L"./data/models/bump02.dds")))
+	if (!sphere02->Initialize(
+		const_cast<char*>("./data/models/sphere.txt"),
+		const_cast<WCHAR*>(L"./data/models/stone02.dds"),
+		const_cast<WCHAR*>(L"./data/models/bump02.dds")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -72,9 +71,11 @@ BOOL GRAPHICS::Initialize()
 	sphere03 = new MODEL("sphere3");
 	ISINSTANCE(sphere03);
 
-	if (!sphere03->Initialize(light
-		, const_cast<char*>("./data/models/sphere.txt")
-		, const_cast<WCHAR*>(L"./data/models/earthtexture.jpg")))
+	if (!sphere03->Initialize(
+		const_cast<char*>("./data/models/sphere.txt"),
+		const_cast<WCHAR*>(L"./data/models/stone02.dds"),
+		const_cast<WCHAR*>(L"./data/models/bump02.dds"),
+		const_cast<WCHAR*>(L"./data/models/spec02.dds")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
@@ -89,8 +90,8 @@ BOOL GRAPHICS::Initialize()
 void GRAPHICS::Shutdown()
 {
 	sphere03->Shutdown();
-	sphere01->Shutdown();
 	sphere02->Shutdown();
+	sphere01->Shutdown();
 
 	SAFE_DELETE(panel);
 	SAFE_DELETE(shader);
@@ -124,7 +125,7 @@ BOOL GRAPHICS::Render()
 	
 	panel->Render(matrixs);
 
-	shader->Render(0, matrixs, mainCamera->GetPosition(), light->GetLight());
+	shader->Render(0, matrixs, mainCamera->GetPosition(), nullptr, light->GetLight());
 	WindowHierarchy();
 
 	sphere01->SetSpin(0.0f, 0.01f, 0.0f);
@@ -152,7 +153,7 @@ void GRAPHICS::WindowHierarchy()
 	ImGui::Begin("Hierarchy");
 
 	mainCamera->ShowObjectInspector();
-	panel->ShowWindowHierarchy();
+	//panel->ShowWindowHierarchy();
 	light->ShowObjectInspector();
 	sphere01->ShowObjectInspector();
 	sphere02->ShowObjectInspector();
