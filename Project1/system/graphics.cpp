@@ -1,4 +1,4 @@
-#include <stdafx.h>
+﻿#include <stdafx.h>
 #include "Panel.h"
 //==============================
 
@@ -24,14 +24,20 @@ BOOL GRAPHICS::Initialize()
 
 	light = new LIGHT("direction light");
 	ISINSTANCE(light);
-	light->SetPointLight();
-	   
+	light->SetDirectionLight();
+	light->SetPosition(-1.2f, 0.0f, 0);
+	light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	light->SetLookAt(0.0f, 0.0f, 0.0f);
+	light->GenerateOrthoMatrix(SCREEN_DEPTH, SCREEN_NEAR);
+
 	shader = new LIGHTSHADER; 
 	if (!shader->Initialize())
 	{
 		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
 		return false;
 	}
+
 
 	//=========================================================================
 
@@ -40,6 +46,30 @@ BOOL GRAPHICS::Initialize()
 	if (!panel->Initialize())
 	{
 		ERR_MESSAGE(L"Could not initialize the Panel Object.", L"ERROR");
+		return false;
+	}
+
+	// 지면 모델 객체를 만듭니다.
+	m_GroundModel = new MODEL("back ground");
+	ISINSTANCE(m_GroundModel);
+
+
+	// 지면 모델 객체를 초기화합니다.
+	if (!m_GroundModel->Initialize(
+		const_cast<char*>("./data/models/plane01.txt"),
+		const_cast<WCHAR*>(L"./data/models/metal001.dds")))
+	{
+		ERR_MESSAGE(L"Could not initialize the ground model object.", L"ERROR");
+		return false;
+	}
+
+	m_GroundModel->SetPosition(0.0f, -1.0f, 0.0f);
+
+	m_RenderTexture = new RenderTextureClass;
+	ISINSTANCE(m_RenderTexture);
+	if (!m_RenderTexture->Initialize(D3D::GetInstance()->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR))
+	{
+		ERR_MESSAGE(L"Could not initialize the render to texture object.", L"ERROR");
 		return false;
 	}
 
@@ -93,6 +123,8 @@ void GRAPHICS::Shutdown()
 	sphere02->Shutdown();
 	sphere01->Shutdown();
 
+	m_GroundModel->Shutdown();
+
 	SAFE_DELETE(panel);
 	SAFE_DELETE(shader);
 	SAFE_DELETE(mainCamera);
@@ -111,16 +143,22 @@ BOOL GRAPHICS::Frame()
 BOOL GRAPHICS::Render()
 {
 	D3D* d3d = D3D::GetInstance();
+
+	ISFAIL(RenderSceneToTexture());
 	d3d->BeginScene(D3DXCOLOR(0, 0, 0, 1.0f));
 
 
 	mainCamera->Render();
+	light->GenerateViewMatrix();
 
 	RNDMATRIXS matrixs;
 	transformation->GetWorldMatrix(matrixs.world);
 	mainCamera->GetViewMatrix(matrixs.view);
 	transformation->GetProjectionMatrix(matrixs.projection);
 	mainCamera->ViewTransform();
+
+	light->GetViewMatrix(matrixs.lightView);
+	light->GetOrthoMatrix(matrixs.lightProjection);
 	light->ViewTransform();
 	
 	panel->Render(matrixs);
@@ -128,14 +166,26 @@ BOOL GRAPHICS::Render()
 	shader->Render(0, matrixs, mainCamera->GetPosition(), nullptr, light->GetLight());
 	WindowHierarchy();
 
-	sphere01->SetSpin(0.0f, 0.01f, 0.0f);
-	sphere01->Render(matrixs, mainCamera->GetPosition(), light);
 
-	sphere02->SetSpin(0.0f, 0.01f, 0.0f);
-	sphere02->Render(matrixs, mainCamera->GetPosition(), light);
 
-	sphere03->SetSpin(0.0f, 0.01f, 0.0f);
-	sphere03->Render(matrixs, mainCamera->GetPosition(), light);
+	//sphere01->SetSpin(0.0f, 0.01f, 0.0f);
+	//sphere01->Render(matrixs, mainCamera->GetPosition(), light);
+	sphere01->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+
+
+	//sphere02->SetSpin(0.0f, 0.01f, 0.0f);
+	//sphere02->Render(matrixs, mainCamera->GetPosition(), light);
+	sphere02->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+
+
+	//sphere03->SetSpin(0.0f, 0.01f, 0.0f);
+	//sphere03->Render(matrixs, mainCamera->GetPosition(), light);
+	sphere03->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+
+
+	//m_GroundModel->Render(matrixs, mainCamera->GetPosition(), light);
+	m_GroundModel->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+
 
 	//WINDX_IMGUI::GetInstance()->Render();
 	{
@@ -154,10 +204,38 @@ void GRAPHICS::WindowHierarchy()
 
 	mainCamera->ShowObjectInspector();
 	//panel->ShowWindowHierarchy();
+	m_GroundModel->ShowObjectInspector();
 	light->ShowObjectInspector();
 	sphere01->ShowObjectInspector();
 	sphere02->ShowObjectInspector();
 	sphere03->ShowObjectInspector();
 	
 	ImGui::End();
+}
+
+bool GRAPHICS::RenderSceneToTexture()
+{
+	D3D* d3d = D3D::GetInstance();
+
+	m_RenderTexture->SetRenderTarget(d3d->GetDeviceContext());
+	m_RenderTexture->ClearRenderTarget(d3d->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
+
+	RNDMATRIXS matrixs;
+	transformation->GetWorldMatrix(matrixs.world);
+	light->GenerateViewMatrix();
+	light->GetViewMatrix(matrixs.lightView);
+	light->GetOrthoMatrix(matrixs.lightProjection);
+
+
+	ISFAIL(sphere01->RenderDepth(matrixs));
+	ISFAIL(sphere02->RenderDepth(matrixs));
+	ISFAIL(sphere03->RenderDepth(matrixs));
+	ISFAIL(m_GroundModel->RenderDepth(matrixs));
+
+	
+	d3d->SetBackBufferRenderTarget();
+	transformation->ResetViewport(d3d->GetDeviceContext());
+
+	return true;
 }

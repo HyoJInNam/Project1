@@ -23,6 +23,8 @@
 #include <textureshader.h>
 #include <bumpmapshader.h>
 #include <specmapshader.h>
+#include <depthshaderclass.h>
+#include <ShadowShaderClass.h>
 
 
 #include "transform.h"

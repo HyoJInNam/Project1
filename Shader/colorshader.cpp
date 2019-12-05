@@ -3,7 +3,6 @@
 
 COLORSHADER::COLORSHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr)
 {}
 
 COLORSHADER::COLORSHADER(const COLORSHADER& other): SHADER(this) {}

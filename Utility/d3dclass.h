@@ -21,6 +21,8 @@ public:
 		return;
 	}
 	ID3D11RenderTargetView* GetRenderTargetview() { return this->renderTargetView; }
+	void SetBackBufferRenderTarget();
+
 
 private:
 	void SetGpuInfo();
@@ -38,6 +40,8 @@ public:
 
 	void TurnOnAlphaBlending();
 	void TurnOffAlphaBlending();
+
+
 private:
 	unsigned int  numerator, denominator;
 

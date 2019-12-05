@@ -62,10 +62,6 @@ bool MODEL::ViewTransform()
 	return true;
 }
 
-
-int  MODEL::GetIndexCount()	{return file->GetIndexCount(); }
-ID3D11ShaderResourceView* MODEL::GetTexture() {	return file->GetTexture(); }
-
 bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* specularmap)
 {
 	ISFAIL(file->Initialize(modelFilename));
@@ -84,7 +80,6 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 			MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
 			return false;
 		}
-		return true;
 	}
 	else if (normal_texture_name)
 	{
@@ -95,8 +90,26 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 			ERR_MESSAGE(L"Could not initialize the Bump Map shader object.", L"ERROR");
 			return false;
 		}
-		return true;
 	}
+
+
+	m_DepthShader = new DepthShaderClass(hwnd, device, deviceContext);
+	ISINSTANCE(m_DepthShader);
+	if (!m_DepthShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the depth shader object.", L"ERROR");
+		return false;
+	}
+
+
+	m_ShadowShader = new ShadowShaderClass(hwnd, device, deviceContext);
+	ISINSTANCE(m_ShadowShader);
+	if (!m_ShadowShader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the  shadow shader object.", L"ERROR");
+		return false;
+	}
+
 
 	shader = new LIGHTSHADER(hwnd, device, deviceContext);
 	if (!shader->Initialize())
@@ -106,11 +119,6 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 	}
 	
 	return true;
-}
-
-bool MODEL::LoadTextures(WCHAR* texture_file_name, WCHAR* normal_texture_name, WCHAR* specularmap)
-{
-	return	file->LoadTexture(device, texture_file_name, normal_texture_name, specularmap);
 }
 
 bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* light)
@@ -145,11 +153,42 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* light
 
 		material->Render(file->GetIndexCount(), renderMatrix);
 	}
+
+
 	return ViewTransform();
+}
+
+bool MODEL::RenderShadow(RNDMATRIXS& renderMatrix, ID3D11ShaderResourceView* shaderResourceView, LIGHT * light)
+{
+	D3DXMatrixTranslation(&renderMatrix.world, position.x, position.y, position.z);
+	file->Render();
+	m_ShadowShader->Render(file->GetIndexCount(), renderMatrix, file->GetTexture(), shaderResourceView, light->GetPosition(), obj_light->GetLight());
+
+	return ViewTransform();
+}
+
+bool MODEL::RenderDepth(RNDMATRIXS& renderMatrix)
+{
+	D3DXMatrixTranslation(&renderMatrix.world, position.x, position.y, position.z);
+	file->Render();
+	return m_DepthShader->Render(file->GetIndexCount(), renderMatrix);
+	//return ViewTransform();
 }
 
 void MODEL::Shutdown()
 {
+	if (m_ShadowShader)
+	{
+		m_ShadowShader->Shutdown();
+		SAFE_DELETE(m_ShadowShader);
+	}
+
+	if (m_DepthShader)
+	{
+		m_DepthShader->Shutdown();
+		SAFE_DELETE(m_DepthShader);
+	}
+
 	if (m_SpecMapShader)
 	{
 		m_SpecMapShader->Shutdown();
@@ -169,3 +208,5 @@ void MODEL::Shutdown()
 	file->Shutdown();
 	return;
 }
+
+LightBufferType * MODEL::GetLight() { return this->obj_light->GetLight(); }

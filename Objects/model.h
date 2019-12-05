@@ -6,6 +6,8 @@ class LOADOBJECTSFILE;
 class BUMPMAPPING;
 class BumpMapShaderClass;
 class SpecMapShaderClass;
+class DepthShaderClass;
+class ShadowShaderClass;
 
 class COLORSHADER;
 class LIGHT;
@@ -28,18 +30,24 @@ public:
 		WCHAR* texture = nullptr,
 		WCHAR* normalmap = nullptr,
 		WCHAR* specularmap = nullptr);
+
+
 	bool Render(RNDMATRIXS&, D3DXVECTOR3, LIGHT* light);
+	bool RenderShadow(RNDMATRIXS&, ID3D11ShaderResourceView*, LIGHT* light);
+	bool RenderDepth(RNDMATRIXS&);
 	void Shutdown();
 	
 
 	bool LoadTextures(
 		WCHAR* texture = nullptr,
 		WCHAR* normalmap = nullptr,
-		WCHAR* specularmap = nullptr);
-	int GetIndexCount();
-	ID3D11ShaderResourceView* GetTexture();
-
-
+		WCHAR* specularmap = nullptr)
+	{
+		return	file->LoadTexture(device, texture, normalmap, specularmap);
+	}
+	int GetIndexCount() { return file->GetIndexCount(); }
+	ID3D11ShaderResourceView* GetTexture() { return file->GetTexture(); }
+	LightBufferType* GetLight();
 
 
 private:
@@ -50,5 +58,7 @@ private:
 	LIGHTSHADER* shader;
 
 	BumpMapShaderClass* m_BumpMapShader;
-	SpecMapShaderClass* m_SpecMapShader = nullptr;
+	SpecMapShaderClass* m_SpecMapShader;
+	DepthShaderClass*   m_DepthShader;
+	ShadowShaderClass*  m_ShadowShader;
 };

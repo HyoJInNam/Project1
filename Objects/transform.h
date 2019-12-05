@@ -46,6 +46,9 @@ public:
 	D3DXVECTOR3 GetRotation() { return rotation; }
 	D3DXVECTOR3 GetObitRotation() { return orbitRot; }
 
+	void GetPosition(float& x, float& y, float& z) { x = position.x; y = position.y; z = position.z;}
+	void GetPosition(D3DXVECTOR3 pos) { pos = position; }
+
 	void SetSpin(float, float, float);
 	void SetOrbit(RNDMATRIXS*);
 

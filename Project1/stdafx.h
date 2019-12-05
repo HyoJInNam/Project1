@@ -42,5 +42,8 @@ using namespace std;
 
 #include <shader.h>
 #include <lightshader.h>
+#include <ShadowShaderClass.h>
+#include <rendertextureclass.h>
+#include<depthshaderclass.h>
 #pragma comment (lib, "Shader.lib")
 

@@ -14,6 +14,13 @@ public:
 	LightBufferType* GetLight() { return light; }
 	void SetDirectionLight();
 	void SetPointLight();
+	void SetLookAt(float x, float y, float z)
+	{
+		m_lookAt.x = x;
+		m_lookAt.y = y;
+		m_lookAt.z = z;
+		return;
+	}
 
 	//======================================================
 
@@ -23,6 +30,7 @@ public:
 	void SetDiffuseColor(D3DXVECTOR4);
 	void SetDirection(float, float, float);
 	void SetDirection(D3DXVECTOR3);
+	void SetDirection();
 	void SetSpecularColor(float, float, float, float);
 	void SetSpecularColor(D3DXVECTOR4);
 	void SetSpecularPower(float);
@@ -34,8 +42,17 @@ public:
 	D3DXVECTOR4 GetSpecularColor(); 
 	float GetSpecularPower();
 	//======================================================
+	void GenerateViewMatrix(); 
+	void GetViewMatrix(D3DXMATRIX&); 
+
+	void GenerateOrthoMatrix(float, float);
+	void GetOrthoMatrix(D3DXMATRIX&);
 
 
 protected:
 	LightBufferType* light;
+
+	D3DXVECTOR3 m_lookAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXMATRIX m_viewMatrix;
+	D3DXMATRIX m_orthMatrix;
 };

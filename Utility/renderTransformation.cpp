@@ -25,7 +25,6 @@ void RENDERTRANSFORMATION::Initialize()
 
 void RENDERTRANSFORMATION::CreateViewport()
 {
-	D3D11_VIEWPORT viewport;
 	{
 		viewport.Width = screenWidth;
 		viewport.Height = screenHeight;
@@ -55,4 +54,10 @@ void RENDERTRANSFORMATION::CreateViewport()
 	// Create an orthographic projection matrix for 2D rendering.
 	D3DXMatrixOrthoLH(&matrix.ortho, screenWidth, screenHeight, screenNear, screenDepth);
 
+}
+
+
+void RENDERTRANSFORMATION::ResetViewport(ID3D11DeviceContext* deviceContext)
+{
+	deviceContext->RSSetViewports(1, &viewport);
 }

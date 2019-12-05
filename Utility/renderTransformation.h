@@ -7,6 +7,8 @@ typedef struct RENDER_PIPELINE_MATRIXS
 	D3DXMATRIX world;
 	D3DXMATRIX view;
 	D3DXMATRIX ortho;
+	D3DXMATRIX lightView;
+	D3DXMATRIX lightProjection;
 
 }RNDMATRIXS;
 
@@ -35,6 +37,7 @@ public:
 		orthoMatrix = matrix.ortho;
 		return;
 	}
+	void ResetViewport(ID3D11DeviceContext* deviceContext);
 
 private:
 	void CreateViewport();
@@ -45,6 +48,7 @@ private:
 
 protected:
 	RNDMATRIXS matrix;
+	D3D11_VIEWPORT viewport;
 
 }RENDER_T;
 

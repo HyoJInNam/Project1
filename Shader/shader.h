@@ -21,6 +21,8 @@ struct MatrixBufferType
 	D3DXMATRIX world;
 	D3DXMATRIX view;
 	D3DXMATRIX projection;
+	D3DXMATRIX lightView;
+	D3DXMATRIX lightProjection;
 };
 
 struct LightBufferType
@@ -30,6 +32,12 @@ struct LightBufferType
 	D3DXVECTOR3 lightDirection;
 	float specularPower;
 	D3DXVECTOR4 specularColor;
+};
+
+struct LightBufferType2
+{
+	D3DXVECTOR3 lightPosition;
+	float padding;
 };
 
 struct CameraBufferType
@@ -53,7 +61,12 @@ protected:
 
 	ID3D11InputLayout* layout;
 	ID3D11SamplerState* sampleState;
+	ID3D11SamplerState* sampleStateWrap;
+	ID3D11SamplerState* sampleStateClamp;
 
+	ID3D11Buffer* matrixBuffer;
+	ID3D11Buffer* lightBuffer;
+	ID3D11Buffer* cameraBuffer;
 
 protected:
 	SHADER(HWND, ID3D11Device*, ID3D11DeviceContext*);

@@ -5,9 +5,6 @@ class SHADER;
 
 class SpecMapShaderClass : public SHADER
 {
-	ID3D11Buffer* matrixBuffer = nullptr;
-	ID3D11Buffer* lightBuffer = nullptr;
-	ID3D11Buffer* cameraBuffer = nullptr;
 
 public:
 	SpecMapShaderClass(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);

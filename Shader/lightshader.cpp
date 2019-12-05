@@ -4,8 +4,6 @@
 
 LIGHTSHADER::LIGHTSHADER()
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr), cameraBuffer(nullptr)
-	, lightBuffer(nullptr)
 {
 	hwnd = WNDDesc::GetInstance()->getHwnd();
 	device = D3D::GetInstance()->GetDevice();
@@ -14,8 +12,6 @@ LIGHTSHADER::LIGHTSHADER()
 
 LIGHTSHADER::LIGHTSHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr), cameraBuffer(nullptr)
-	, lightBuffer(nullptr)
 {}
 LIGHTSHADER::LIGHTSHADER(const LIGHTSHADER &) : SHADER(this) {}
 LIGHTSHADER::~LIGHTSHADER() {}

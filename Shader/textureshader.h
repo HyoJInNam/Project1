@@ -5,8 +5,6 @@ class SHADER;
 
 class TEXTURESHADER:public SHADER
 {
-	ID3D11Buffer* matrixBuffer;
-
 public:
 	TEXTURESHADER(HWND, ID3D11Device*, ID3D11DeviceContext*);
 	TEXTURESHADER(const TEXTURESHADER&);

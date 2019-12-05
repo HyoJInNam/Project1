@@ -3,7 +3,6 @@
 
 TEXTURESHADER::TEXTURESHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr)
 {}
 
 
@@ -19,7 +18,9 @@ bool TEXTURESHADER::Initialize()
 }
 
 
-bool TEXTURESHADER::InitializeShader(WCHAR* vsFilename, WCHAR* psFilename) {
+bool TEXTURESHADER::InitializeShader(
+	WCHAR* vsFilename, 
+	WCHAR* psFilename) {
 
 	ID3D10Blob* errorMessage = nullptr;
 	ID3D10Blob* vertexShaderBuffer = nullptr;
@@ -116,7 +117,10 @@ bool TEXTURESHADER::InitializeShaderBuffer()
 	}
 	return true;
 }
-bool TEXTURESHADER::Render(int indexCount, RNDMATRIXS matrixs, ID3D11ShaderResourceView* texture)
+bool TEXTURESHADER::Render(
+	int indexCount, 
+	RNDMATRIXS matrixs, 
+	ID3D11ShaderResourceView* texture)
 {
 	render = matrixs;
 	ISFAIL(SetShaderParameters(texture));

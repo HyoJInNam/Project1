@@ -30,6 +30,8 @@
 #include "d3dstdafx.h"
 
 #include "d3dclass.h"
+#include "rendertextureclass.h"
+
 #include "wndDescription.h"
 #include "objectDescription.h"
 #include "renderTransformation.h"

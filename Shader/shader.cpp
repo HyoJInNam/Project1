@@ -3,9 +3,16 @@
 
 
 
-SHADER::SHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
-	: vertexShader(nullptr), pixelShader(nullptr)
-	, layout(nullptr), sampleState(nullptr)
+SHADER::SHADER(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext): 
+	vertexShader(nullptr),
+	pixelShader(nullptr),
+	layout(nullptr), 
+	sampleState(nullptr), 
+	sampleStateWrap(nullptr), 
+	sampleStateClamp(nullptr),
+	matrixBuffer(nullptr),
+	lightBuffer(nullptr), 
+	cameraBuffer(nullptr)
 {
 	this->hwnd = hwnd;
 	this->device = device;
@@ -46,6 +53,8 @@ void SHADER::RenderShader(int indexCount)
 	deviceContext->PSSetShader(pixelShader, NULL, 0);
 
 	if(sampleState) deviceContext->PSSetSamplers(0, 1, &sampleState);
+	if(sampleStateClamp) deviceContext->PSSetSamplers(0, 1, &sampleStateClamp);
+	if(sampleStateWrap) deviceContext->PSSetSamplers(0, 1, &sampleStateWrap);
 
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 

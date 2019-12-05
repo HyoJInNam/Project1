@@ -4,7 +4,6 @@
 
 BumpMapShaderClass::BumpMapShaderClass(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr),lightBuffer(nullptr)
 {
 	hwnd = WNDDesc::GetInstance()->getHwnd();
 	device = D3D::GetInstance()->GetDevice();

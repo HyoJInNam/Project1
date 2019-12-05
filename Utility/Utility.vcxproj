@@ -23,6 +23,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="rendertextureclass.cpp" />
     <ClCompile Include="renderTransformation.cpp" />
     <ClCompile Include="timeclass.cpp" />
     <ClCompile Include="wndDescription.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="objectDescription.h" />
+    <ClInclude Include="rendertextureclass.h" />
     <ClInclude Include="renderTransformation.h" />
     <ClInclude Include="d3dstdafx.h" />
     <ClInclude Include="singleton.h" />

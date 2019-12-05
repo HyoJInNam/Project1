@@ -21,16 +21,20 @@
   <ItemGroup>
     <ClCompile Include="bumpmapshader.cpp" />
     <ClCompile Include="colorshader.cpp" />
+    <ClCompile Include="depthshaderclass.cpp" />
     <ClCompile Include="lightshader.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="ShadowShaderClass.cpp" />
     <ClCompile Include="specmapshader.cpp" />
     <ClCompile Include="textureshader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bumpmapshader.h" />
     <ClInclude Include="colorshader.h" />
+    <ClInclude Include="depthshaderclass.h" />
     <ClInclude Include="lightshader.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="ShadowShaderClass.h" />
     <ClInclude Include="specmapshader.h" />
     <ClInclude Include="textureshader.h" />
   </ItemGroup>

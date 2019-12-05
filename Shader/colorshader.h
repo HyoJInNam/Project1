@@ -5,7 +5,6 @@ class SHADER;
 
 class COLORSHADER: public SHADER
 {
-	ID3D11Buffer* matrixBuffer;
 
 public:
 	COLORSHADER(HWND, ID3D11Device*, ID3D11DeviceContext*);

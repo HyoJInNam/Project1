@@ -32,6 +32,12 @@ void D3D::Shutdown()
 }
 
 
+void D3D::SetBackBufferRenderTarget()
+{
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+}
+
+
 void D3D::SetGpuInfo()
 {
 	HRESULT result;

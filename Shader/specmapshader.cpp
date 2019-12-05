@@ -4,7 +4,6 @@
 
 SpecMapShaderClass::SpecMapShaderClass(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	: SHADER(hwnd, device, deviceContext)
-	, matrixBuffer(nullptr)	, lightBuffer(nullptr)	, cameraBuffer(nullptr)
 
 {}
 
