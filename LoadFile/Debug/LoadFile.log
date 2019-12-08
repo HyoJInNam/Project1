@@ -1,4 +1,5 @@
-﻿  LoadFile.cpp
+﻿  LoadDomeFile.cpp
+  LoadFile.cpp
   LoadImgFile.cpp
   loadObjFile.cpp
   코드를 생성하고 있습니다...

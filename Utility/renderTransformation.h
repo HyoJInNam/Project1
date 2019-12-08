@@ -22,21 +22,9 @@ public:
 	
 	void Initialize();
 
-	void GetProjectionMatrix(D3DXMATRIX& projectionMatrix)
-	{
-		projectionMatrix = matrix.projection;
-		return;
-	}
-	void GetWorldMatrix(D3DXMATRIX& worldMatrix)
-	{
-		worldMatrix = matrix.world;
-		return;
-	}
-	void GetOrthoMatrix(D3DXMATRIX& orthoMatrix)
-	{
-		orthoMatrix = matrix.ortho;
-		return;
-	}
+	void GetProjectionMatrix(D3DXMATRIX& projectionMatrix) { projectionMatrix = matrix.projection; }
+	void GetWorldMatrix(D3DXMATRIX& worldMatrix) { worldMatrix = matrix.world; }
+	void GetOrthoMatrix(D3DXMATRIX& orthoMatrix) { orthoMatrix = matrix.ortho; }
 	void ResetViewport(ID3D11DeviceContext* deviceContext);
 
 private:

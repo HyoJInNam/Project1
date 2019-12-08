@@ -52,7 +52,6 @@ struct PixelInputType
 PixelInputType ShadowVertexShader(VertexInputType input)
 {
     PixelInputType output;
-	//float4 worldPosition;
     
     
 	// 적절한 행렬 계산을 위해 위치 벡터를 4 단위로 변경합니다.
@@ -73,11 +72,6 @@ PixelInputType ShadowVertexShader(VertexInputType input)
     
     output.normal = mul(input.normal, (float3x3)world);
     output.normal = normalize(output.normal);
-
-    //worldPosition = mul(input.position, world);
-
-    //output.lightPos = lightPosition.xyz - worldPosition.xyz;
-    //output.lightPos = normalize(output.lightPos);
 
 	return output;
 }

@@ -26,6 +26,7 @@
     <ClInclude Include="light.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="objectstdafx.h" />
+    <ClInclude Include="dome.h" />
     <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClCompile Include="image_bitmap.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="dome.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -13,9 +13,8 @@ class PANEL;
 class CameraControl;
 
 class LIGHT;
-class LIGHTSHADER;
+class DOME;
 
-class RenderTextureClass;
 class DepthShaderClass;
 class ShadowShaderClass;
 
@@ -39,14 +38,12 @@ private:
 	RENDER_T* transformation;
 	CameraControl * mainCamera;
 	LIGHT* light;
-	LIGHTSHADER* shader;
+	DOME* skydome;
 	
-	
-	PANEL* panel;
+	//PANEL* panel;
 
 
 	MODEL* m_GroundModel;
-	RenderTextureClass* m_RenderTexture;
 	DepthShaderClass*   m_DepthShader;
 	ShadowShaderClass*  m_ShadowShader;
 	bool RenderSceneToTexture();
@@ -54,8 +51,8 @@ private:
 
 
 	float rotation;
-	MODEL* sphere01;
-	MODEL* sphere02;
-	MODEL* sphere03;
+	MODEL* model01;
+	MODEL* model02;
+	MODEL* model03;
 
 };

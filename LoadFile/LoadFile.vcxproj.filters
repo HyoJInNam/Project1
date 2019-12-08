@@ -22,6 +22,9 @@
     <ClInclude Include="loadObjFile.h">
       <Filter>header file</Filter>
     </ClInclude>
+    <ClInclude Include="LoadDomeFile.h">
+      <Filter>header file</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="loadObjFile.cpp">
@@ -31,6 +34,9 @@
       <Filter>script file</Filter>
     </ClCompile>
     <ClCompile Include="LoadFile.cpp">
+      <Filter>script file</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadDomeFile.cpp">
       <Filter>script file</Filter>
     </ClCompile>
   </ItemGroup>

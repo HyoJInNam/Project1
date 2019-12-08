@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoadDomeFile.h" />
     <ClInclude Include="LoadFile.h" />
     <ClInclude Include="LoadImgFile.h" />
     <ClInclude Include="loadObjFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LoadDomeFile.cpp" />
     <ClCompile Include="LoadFile.cpp" />
     <ClCompile Include="LoadImgFile.cpp" />
     <ClCompile Include="loadObjFile.cpp" />

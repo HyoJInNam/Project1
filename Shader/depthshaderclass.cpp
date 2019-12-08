@@ -15,11 +15,21 @@ DepthShaderClass::~DepthShaderClass() {  }
 
 bool DepthShaderClass::Initialize()
 {
-	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/shader/depth.vs"), const_cast<WCHAR*>(L"./data/shader/depth.ps")));
+	ISFAILED(InitializeShader(
+		const_cast<WCHAR*>(L"./data/system/depth.vs"),
+		const_cast<WCHAR*>(L"./data/system/depth.ps")));
 	InitializeShaderBuffer();
 	return true;
 }
 
+
+
+void DepthShaderClass::ShutdownShader()
+{
+	SAFE_RELEASE(layout);
+	SAFE_RELEASE(pixelShader);
+	SAFE_RELEASE(vertexShader);
+}
 
 bool DepthShaderClass::Render(
 	int indexCount,
@@ -52,11 +62,10 @@ bool DepthShaderClass::InitializeShader(
 	ISFAILEDFILE(result, psFilename, errorMessage, L"Missing Shader File");
 
 
-    // Create the vertex shader from the buffer.
+
     result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &vertexShader);
 	ISFAILED(result);
 
-    // Create the pixel shader from the buffer.
     result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &pixelShader);
 	ISFAILED(result);
 
@@ -102,16 +111,6 @@ bool DepthShaderClass::InitializeShaderBuffer()
 	return true;
 }
 
-
-void DepthShaderClass::ShutdownShader()
-{
-	SAFE_RELEASE(layout);
-	SAFE_RELEASE(pixelShader);
-	SAFE_RELEASE(vertexShader);
-
-	return;
-}
-
 bool DepthShaderClass::SetShaderParameters(RNDMATRIXS matrixs)
 {
 	D3DXMatrixTranspose(&render.world, &render.world);
@@ -121,10 +120,7 @@ bool DepthShaderClass::SetShaderParameters(RNDMATRIXS matrixs)
 	D3DXMatrixTranspose(&render.lightProjection, &render.lightProjection);
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	if(FAILED(deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
-	{
-		return false;
-	}
+	ISFAILED(deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
 
 	// Get a pointer to the data in the constant buffer.
 	MatrixBufferType* dataPtr = (MatrixBufferType*)mappedResource.pData;

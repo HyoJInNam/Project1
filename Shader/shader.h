@@ -46,6 +46,12 @@ struct CameraBufferType
 	float padding;
 };
 
+struct GradientBufferType
+{
+	D3DXVECTOR4 topColor;
+	D3DXVECTOR4 centerColor;
+	D3DXVECTOR4 bottomColor;
+};
 
 class SHADER {
 

@@ -22,111 +22,119 @@ BOOL GRAPHICS::Initialize()
 	
 
 
-	light = new LIGHT("direction light");
+	light = new LIGHT("main light");
 	ISINSTANCE(light);
+	if (!light->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
 	light->SetDirectionLight();
-	light->SetPosition(-1.2f, 0.0f, 0);
+	light->SetPosition(0.1f, 0.8f, 0.8f);
 	light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	light->SetLookAt(0.0f, 0.0f, 0.0f);
 	light->GenerateOrthoMatrix(SCREEN_DEPTH, SCREEN_NEAR);
 
-	shader = new LIGHTSHADER; 
-	if (!shader->Initialize())
-	{
-		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
-		return false;
-	}
+
 
 
 	//=========================================================================
-
+	/*
 	panel = new PANEL;
 	ISINSTANCE(panel);
 	if (!panel->Initialize())
 	{
 		ERR_MESSAGE(L"Could not initialize the Panel Object.", L"ERROR");
 		return false;
+	}*/
+
+	skydome = new DOME("sky dome");
+	ISINSTANCE(skydome);
+
+	if (!skydome->Initialize(
+		const_cast<char*>("./data/system/skydome.txt")))
+	{
+		ERR_MESSAGE(L"Could not initialize the sky dome model object.", L"ERROR");
+		return false;
 	}
 
-	// 지면 모델 객체를 만듭니다.
 	m_GroundModel = new MODEL("back ground");
 	ISINSTANCE(m_GroundModel);
 
-
-	// 지면 모델 객체를 초기화합니다.
 	if (!m_GroundModel->Initialize(
 		const_cast<char*>("./data/models/plane01.txt"),
-		const_cast<WCHAR*>(L"./data/models/metal001.dds")))
+		const_cast<WCHAR*>(L"./data/models/gray.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the ground model object.", L"ERROR");
 		return false;
 	}
 
 	m_GroundModel->SetPosition(0.0f, -1.0f, 0.0f);
+	m_GroundModel->SetScale(10.0f, 10.0f, 10.0f);
 
-	m_RenderTexture = new RenderTextureClass;
-	ISINSTANCE(m_RenderTexture);
-	if (!m_RenderTexture->Initialize(D3D::GetInstance()->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR))
-	{
-		ERR_MESSAGE(L"Could not initialize the render to texture object.", L"ERROR");
-		return false;
-	}
+
 
 	//=========================================================================
 
-	sphere01 = new MODEL("sphere1");
-	ISINSTANCE(sphere01);
+	model01 = new MODEL("left model : toon shader");
+	ISINSTANCE(model01);
+	model01->IsInk = true;
 
-	if (!sphere01->Initialize(
-		const_cast<char*>("./data/models/sphere.txt"),
-		const_cast<WCHAR*>(L"./data/models/stone02.dds")))
+	if (!model01->Initialize(
+		const_cast<char*>("./data/models/model/model2.txt"),
+		const_cast<WCHAR*>(L"./data/models/model/body.png")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
 
-	sphere02 = new MODEL("sphere2");
-	ISINSTANCE(sphere02);
-	if (!sphere02->Initialize(
-		const_cast<char*>("./data/models/sphere.txt"),
-		const_cast<WCHAR*>(L"./data/models/stone02.dds"),
-		const_cast<WCHAR*>(L"./data/models/bump02.dds")))
+	model02 = new MODEL("center model : ink shader");
+	ISINSTANCE(model02);
+	if (!model02->Initialize(
+		const_cast<char*>("./data/models/model/model2.txt"),
+		const_cast<WCHAR*>(L"./data/models/model/body.png"), 
+		const_cast<WCHAR*>(L"./data/models/model/bodynomal.png"),
+		const_cast<WCHAR*>(L"./data/models/model/body_ao_bake.png")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
-	sphere03 = new MODEL("sphere3");
-	ISINSTANCE(sphere03);
-
-	if (!sphere03->Initialize(
-		const_cast<char*>("./data/models/sphere.txt"),
-		const_cast<WCHAR*>(L"./data/models/stone02.dds"),
-		const_cast<WCHAR*>(L"./data/models/bump02.dds"),
-		const_cast<WCHAR*>(L"./data/models/spec02.dds")))
+	model03 = new MODEL("right model : bump shader");
+	ISINSTANCE(model03);
+	if (!model03->Initialize(
+		const_cast<char*>("./data/models/model/model2.txt"),
+		const_cast<WCHAR*>(L"./data/models/model/body.png"),
+		const_cast<WCHAR*>(L"./data/models/model/bodynomal.png")))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
-	sphere01->SetPosition(-4.0f, 0, 0);
-	sphere02->SetPosition(0.0f, 0, 0);
-	sphere03->SetPosition(4.0f, 0, 0);
+	model01->SetScale(0.001f, 0.001f, 0.001f);
+	model02->SetScale(0.001f, 0.001f, 0.001f);
+	model03->SetScale(0.001f, 0.001f, 0.001f);
+
+	model01->SetPosition(-5.0f, 0, 0);
+	model02->SetPosition(0.0f, 0, 0);
+	model03->SetPosition(5.0f, 0, 0);
 	return 0;
 }
 
 void GRAPHICS::Shutdown()
 {
-	sphere03->Shutdown();
-	sphere02->Shutdown();
-	sphere01->Shutdown();
+	model03->Shutdown();
+	model02->Shutdown();
+	model01->Shutdown();
 
 	m_GroundModel->Shutdown();
 
-	SAFE_DELETE(panel);
-	SAFE_DELETE(shader);
+	//SAFE_DELETE(panel);
+	light->Shutdown();
+	SAFE_DELETE(light);
+	SAFE_DELETE(skydome);
 	SAFE_DELETE(mainCamera);
 	SAFE_DELETE(transformation);
 }
@@ -135,7 +143,7 @@ void GRAPHICS::Shutdown()
 BOOL GRAPHICS::Frame()
 {
 	mainCamera->Update();
-	panel->Frame();
+	//panel->Frame();
 
 	return true;
 }
@@ -144,10 +152,9 @@ BOOL GRAPHICS::Render()
 {
 	D3D* d3d = D3D::GetInstance();
 
-	ISFAIL(RenderSceneToTexture());
+	//ISFAIL(RenderSceneToTexture());
 	d3d->BeginScene(D3DXCOLOR(0, 0, 0, 1.0f));
-
-
+	
 	mainCamera->Render();
 	light->GenerateViewMatrix();
 
@@ -160,31 +167,30 @@ BOOL GRAPHICS::Render()
 	light->GetViewMatrix(matrixs.lightView);
 	light->GetOrthoMatrix(matrixs.lightProjection);
 	light->ViewTransform();
-	
-	panel->Render(matrixs);
 
-	shader->Render(0, matrixs, mainCamera->GetPosition(), nullptr, light->GetLight());
+	//panel->Render(matrixs);
+	D3DXMatrixTranslation(&matrixs.world, mainCamera->GetPosition().x, mainCamera->GetPosition().y, mainCamera->GetPosition().z);
+	skydome->Render(d3d, matrixs);
+	transformation->GetWorldMatrix(matrixs.world);
+
+	light->Render(0, matrixs, mainCamera->GetPosition(), nullptr);
 	WindowHierarchy();
 
-
-
 	//sphere01->SetSpin(0.0f, 0.01f, 0.0f);
-	//sphere01->Render(matrixs, mainCamera->GetPosition(), light);
-	sphere01->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
-
-
 	//sphere02->SetSpin(0.0f, 0.01f, 0.0f);
-	//sphere02->Render(matrixs, mainCamera->GetPosition(), light);
-	sphere02->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
-
-
 	//sphere03->SetSpin(0.0f, 0.01f, 0.0f);
-	//sphere03->Render(matrixs, mainCamera->GetPosition(), light);
-	sphere03->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+
+	model01->Render(matrixs, mainCamera->GetPosition(), light);
+	model02->Render(matrixs, mainCamera->GetPosition(), light);
+	model03->Render(matrixs, mainCamera->GetPosition(), light);
+
+	//sphere01->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
+	//sphere02->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
+	//sphere03->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
 
 
 	//m_GroundModel->Render(matrixs, mainCamera->GetPosition(), light);
-	m_GroundModel->RenderShadow(matrixs, m_RenderTexture->GetShaderResourceView(), light);
+	//m_GroundModel->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
 
 
 	//WINDX_IMGUI::GetInstance()->Render();
@@ -203,12 +209,13 @@ void GRAPHICS::WindowHierarchy()
 	ImGui::Begin("Hierarchy");
 
 	mainCamera->ShowObjectInspector();
+	light->ShowObjectInspector();
+	//skydome->ShowObjectInspector();
 	//panel->ShowWindowHierarchy();
 	m_GroundModel->ShowObjectInspector();
-	light->ShowObjectInspector();
-	sphere01->ShowObjectInspector();
-	sphere02->ShowObjectInspector();
-	sphere03->ShowObjectInspector();
+	model01->ShowObjectInspector();
+	model02->ShowObjectInspector();
+	model03->ShowObjectInspector();
 	
 	ImGui::End();
 }
@@ -217,9 +224,9 @@ bool GRAPHICS::RenderSceneToTexture()
 {
 	D3D* d3d = D3D::GetInstance();
 
-	m_RenderTexture->SetRenderTarget(d3d->GetDeviceContext());
-	m_RenderTexture->ClearRenderTarget(d3d->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-
+	d3d->SetRenderTarget();
+	transformation->ResetViewport(d3d->GetDeviceContext());
+	d3d->ClearRenderTarget(0.0f, 0.0f, 0.0f, 1.0f);
 
 	RNDMATRIXS matrixs;
 	transformation->GetWorldMatrix(matrixs.world);
@@ -228,9 +235,9 @@ bool GRAPHICS::RenderSceneToTexture()
 	light->GetOrthoMatrix(matrixs.lightProjection);
 
 
-	ISFAIL(sphere01->RenderDepth(matrixs));
-	ISFAIL(sphere02->RenderDepth(matrixs));
-	ISFAIL(sphere03->RenderDepth(matrixs));
+	ISFAIL(model01->RenderDepth(matrixs));
+	ISFAIL(model02->RenderDepth(matrixs));
+	ISFAIL(model03->RenderDepth(matrixs));
 	ISFAIL(m_GroundModel->RenderDepth(matrixs));
 
 	

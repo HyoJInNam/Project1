@@ -41,6 +41,9 @@
     <ClInclude Include="model.h">
       <Filter>objects</Filter>
     </ClInclude>
+    <ClInclude Include="dome.h">
+      <Filter>objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -59,6 +62,9 @@
       <Filter>cameraControler</Filter>
     </ClCompile>
     <ClCompile Include="model.cpp">
+      <Filter>objects</Filter>
+    </ClCompile>
+    <ClCompile Include="dome.cpp">
       <Filter>objects</Filter>
     </ClCompile>
   </ItemGroup>

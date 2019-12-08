@@ -11,6 +11,7 @@ public:
 	virtual ~LIGHTSHADER() override;
 
 	virtual bool Initialize() override;
+	bool ToonInitialize();
 
 	bool Render(
 		int indexCount,

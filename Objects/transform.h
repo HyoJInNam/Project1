@@ -8,6 +8,10 @@ template<typename T>
 class Transform
 {
 protected:
+	HWND hwnd;
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
+
 	const char* name;
 	bool show_inspector;
 
@@ -79,6 +83,9 @@ Transform<T>::Transform(const char* name)
 	, scale(1.0f, 1.0f, 1.0f)
 	, orbitRot(0.0f, 0.0f, 0.0f)
 {
+	hwnd = WNDDesc::GetInstance()->getHwnd();
+	device = D3D::GetInstance()->GetDevice();
+	deviceContext = D3D::GetInstance()->GetDeviceContext();
 }
 
 

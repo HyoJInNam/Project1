@@ -16,6 +16,7 @@ void D3D::Initialize()
 {
 	CreateSwapChain();
 	CreateTextBackBuffer();
+	CreateTextureBackBuffer();
 	CreateBackBuffer();
 }
 void D3D::Shutdown()
@@ -31,6 +32,23 @@ void D3D::Shutdown()
 	SAFE_RELEASE(swapChain);
 }
 
+
+void D3D::SetRenderTarget()
+{
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+}
+
+void D3D::ClearRenderTarget(float red, float green, float blue, float alpha)
+{
+	float color[4];
+	color[0] = red;
+	color[1] = green;
+	color[2] = blue;
+	color[3] = alpha;
+
+	deviceContext->ClearRenderTargetView(renderTargetView, color);
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
 
 void D3D::SetBackBufferRenderTarget()
 {
@@ -173,16 +191,17 @@ void D3D::CreateTextBackBuffer()
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* TextBackBufferPtr;
+	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&TextBackBufferPtr);
+	assert(SUCCEEDED(result));
+
+	result = device->CreateRenderTargetView(TextBackBufferPtr, NULL, &renderTargetView);
+	assert(SUCCEEDED(result));
+
+	SAFE_RELEASE(TextBackBufferPtr);
+
+
 	D3D11_TEXTURE2D_DESC depthTextBufferDesc;
 	{
-		result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&TextBackBufferPtr);
-		assert(SUCCEEDED(result));
-
-		result = device->CreateRenderTargetView(TextBackBufferPtr, NULL, &renderTargetView);
-		assert(SUCCEEDED(result));
-
-		SAFE_RELEASE(TextBackBufferPtr);
-
 		ZeroMemory(&depthTextBufferDesc, sizeof(depthTextBufferDesc));
 
 		depthTextBufferDesc.Width = wndDesc->sceneWidth;
@@ -196,11 +215,56 @@ void D3D::CreateTextBackBuffer()
 		depthTextBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		depthTextBufferDesc.CPUAccessFlags = 0;
 		depthTextBufferDesc.MiscFlags = 0;
-
-		// Create the texture for the depth buffer using the filled out description.
-		result = device->CreateTexture2D(&depthTextBufferDesc, NULL, &depthStencilBuffer);
-		assert(SUCCEEDED(result));
 	}
+	// Create the texture for the depth buffer using the filled out description.
+	result = device->CreateTexture2D(&depthTextBufferDesc, NULL, &depthStencilBuffer);
+	assert(SUCCEEDED(result));
+}
+void D3D::CreateTextureBackBuffer()
+{
+	HRESULT result;
+
+
+	D3D11_TEXTURE2D_DESC textureDesc;
+	{
+		ZeroMemory(&textureDesc, sizeof(textureDesc));
+
+		textureDesc.Width = wndDesc->sceneWidth;
+		textureDesc.Height = wndDesc->sceneHeight;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.Usage = D3D11_USAGE_DEFAULT;
+		textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc.CPUAccessFlags = 0;
+		textureDesc.MiscFlags = 0;
+	}
+
+	ID3D11Texture2D* m_renderTargetTexture;
+	result = device->CreateTexture2D(&textureDesc, NULL, &m_renderTargetTexture);
+	assert(SUCCEEDED(result));
+
+	// Setup the description of the render target view.
+	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+	renderTargetViewDesc.Format = textureDesc.Format;
+	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	renderTargetViewDesc.Texture2D.MipSlice = 0;
+
+	// Create the render target view.
+	result = device->CreateRenderTargetView(m_renderTargetTexture, &renderTargetViewDesc, &renderTargetView);
+	assert(SUCCEEDED(result));
+
+	// Setup the description of the shader resource view.
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	shaderResourceViewDesc.Format = textureDesc.Format;
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	shaderResourceViewDesc.Texture2D.MipLevels = 1;
+
+	// Create the shader resource view.
+	result = device->CreateShaderResourceView(m_renderTargetTexture, &shaderResourceViewDesc, &shaderResourceView);
+	assert(SUCCEEDED(result));
 }
 void D3D::CreateBackBuffer()
 {
@@ -208,7 +272,6 @@ void D3D::CreateBackBuffer()
 
 	// Get the pointer to the back buffer.
 	ID3D11Texture2D* backBufferPtr;
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	{
 		result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
 		assert(SUCCEEDED(result));
@@ -217,138 +280,150 @@ void D3D::CreateBackBuffer()
 		assert(SUCCEEDED(result));
 
 		SAFE_RELEASE(backBufferPtr);
-
-		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
-
-		depthBufferDesc.Width = wndDesc->sceneWidth;
-		depthBufferDesc.Height = wndDesc->sceneHeight;
-		depthBufferDesc.MipLevels = 1;
-		depthBufferDesc.ArraySize = 1;
-		depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		depthBufferDesc.SampleDesc.Count = 1;
-		depthBufferDesc.SampleDesc.Quality = 0;
-		depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		depthBufferDesc.CPUAccessFlags = 0;
-		depthBufferDesc.MiscFlags = 0;
-
-		// Create the texture for the depth buffer using the filled out description.
-		result = device->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
-		assert(SUCCEEDED(result));
 	}
 
-	
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	{
-		ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+		{
+			ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
-		// Set up the description of the stencil state.
-		depthStencilDesc.DepthEnable = true;
-		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-
-		depthStencilDesc.StencilEnable = true;
-		depthStencilDesc.StencilReadMask = 0xFF;
-		depthStencilDesc.StencilWriteMask = 0xFF;
-
-		// Stencil operations if pixel is front-facing.
-		depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-		// Stencil operations if pixel is back-facing.
-		depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-		// Create the depth stencil state.
-		result = device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+			depthBufferDesc.Width = wndDesc->sceneWidth;
+			depthBufferDesc.Height = wndDesc->sceneHeight;
+			depthBufferDesc.MipLevels = 1;
+			depthBufferDesc.ArraySize = 1;
+			depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthBufferDesc.SampleDesc.Count = 1;
+			depthBufferDesc.SampleDesc.Quality = 0;
+			depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+			depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthBufferDesc.CPUAccessFlags = 0;
+			depthBufferDesc.MiscFlags = 0;
+		}
+		result = device->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
 		assert(SUCCEEDED(result));
 
 		// Set the depth stencil state.
 		deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 
-		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
-		depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		depthStencilViewDesc.Texture2D.MipSlice = 0;
+		D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+		{
+			ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
+			depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			depthStencilViewDesc.Texture2D.MipSlice = 0;
+		}
 		result = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
 		assert(SUCCEEDED(result));
 
 		// Bind the render target view and depth stencil buffer to the output render pipeline.
 		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-	}
 
 
-	D3D11_RASTERIZER_DESC rasterDesc;
-	ID3D11RasterizerState* m_rasterState;
-	{
-		rasterDesc.AntialiasedLineEnable = false;
-		rasterDesc.CullMode = D3D11_CULL_BACK;
-		rasterDesc.DepthBias = 0;
-		rasterDesc.DepthBiasClamp = 0.0f;
-		rasterDesc.DepthClipEnable = true;
-		rasterDesc.FillMode = D3D11_FILL_SOLID;
-		rasterDesc.FrontCounterClockwise = false;
-		rasterDesc.MultisampleEnable = false;
-		rasterDesc.ScissorEnable = false;
-		rasterDesc.SlopeScaledDepthBias = 0.0f;
+	
+		D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+		{
+			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
-		result = device->CreateRasterizerState(&rasterDesc, &m_rasterState);
+			// Set up the description of the stencil state.
+			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+			depthStencilDesc.StencilEnable = true;
+			depthStencilDesc.StencilReadMask = 0xFF;
+			depthStencilDesc.StencilWriteMask = 0xFF;
+
+			// Stencil operations if pixel is front-facing.
+			depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+			depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			// Stencil operations if pixel is back-facing.
+			depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+			depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		}
+		result = device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
 		assert(SUCCEEDED(result));
 
-		// Now set the rasterizer state.
-		deviceContext->RSSetState(m_rasterState);
-	}
 
-	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
-	{
-		ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+		{
+			ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
 
-		depthDisabledStencilDesc.DepthEnable = false;
-		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-		depthDisabledStencilDesc.StencilEnable = true;
-		depthDisabledStencilDesc.StencilReadMask = 0xFF;
-		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
-		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
+			depthDisabledStencilDesc.DepthEnable = false;
+			depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			depthDisabledStencilDesc.StencilEnable = true;
+			depthDisabledStencilDesc.StencilReadMask = 0xFF;
+			depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+			depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+			depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+			depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+			depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		}
 		result = device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
 		assert(SUCCEEDED(result));
 	}
 
 
+	D3D11_RASTERIZER_DESC rasterDesc;
+	{
+		{
+			rasterDesc.AntialiasedLineEnable = false;
+			rasterDesc.CullMode = D3D11_CULL_BACK;
+			rasterDesc.DepthBias = 0;
+			rasterDesc.DepthBiasClamp = 0.0f;
+			rasterDesc.DepthClipEnable = true;
+			rasterDesc.FillMode = D3D11_FILL_SOLID;
+			rasterDesc.FrontCounterClockwise = false;
+			rasterDesc.MultisampleEnable = false;
+			rasterDesc.ScissorEnable = false;
+			rasterDesc.SlopeScaledDepthBias = 0.0f;
+		}
+		result = device->CreateRasterizerState(&rasterDesc, &rasterState);
+		assert(SUCCEEDED(result));
+		// Now set the rasterizer state.
+		deviceContext->RSSetState(rasterState);
+
+
+		rasterDesc.CullMode = D3D11_CULL_NONE;
+		result = device->CreateRasterizerState(&rasterDesc, &rasterStateNoCulling);
+		assert(SUCCEEDED(result));
+	}
+
+	   
+
 	D3D11_BLEND_DESC blendStateDescription;
 	{
-		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+		{
+			ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
 
-		blendStateDescription.AlphaToCoverageEnable = FALSE;
-		blendStateDescription.IndependentBlendEnable = FALSE;
-		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
+			blendStateDescription.AlphaToCoverageEnable = FALSE;
+			blendStateDescription.IndependentBlendEnable = FALSE;
+			blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+			blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+			blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+			blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+			blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+			blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			blendStateDescription.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
 		result = device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
 		assert(SUCCEEDED(result));
 
-		blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+		{
+			blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+		}
 
 		result = device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
 		assert(SUCCEEDED(result));
@@ -361,7 +436,10 @@ void D3D::DeleteBackBuffer()
 	SAFE_RELEASE(m_depthDisabledStencilState);
 	SAFE_RELEASE(m_depthStencilState);
 
+	SAFE_RELEASE(rasterStateNoCulling);
+	SAFE_RELEASE(rasterState);
 	SAFE_RELEASE(depthStencilBuffer);
+	SAFE_RELEASE(depthStencilView);
 	SAFE_RELEASE(renderTargetView);
 
 	return;
@@ -375,7 +453,6 @@ void D3D::BeginScene(D3DXCOLOR color)
 
 	return;
 }
-
 void D3D::EndScene()
 {
 	swapChain->Present(wndDesc->vsync == TRUE ? 1 : 0, 0);
@@ -387,7 +464,6 @@ void D3D::TurnZBufferOn()
 {
 	deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 }
-
 void D3D::TurnZBufferOff()
 {
 	deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
@@ -398,10 +474,18 @@ void D3D::TurnOnAlphaBlending()
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
 }
-
 void D3D::TurnOffAlphaBlending()
 {
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
+}
+
+void D3D::TurnOnCulling()
+{
+	deviceContext->RSSetState(rasterState);
+}
+void D3D::TurnOffCulling()
+{
+	deviceContext->RSSetState(rasterStateNoCulling);
 }
 

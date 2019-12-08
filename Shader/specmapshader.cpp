@@ -18,17 +18,30 @@ bool SpecMapShaderClass::Initialize()
 	return true;
 }
 
+bool SpecMapShaderClass::InkInitialize()
+{
+	InitializeShader(const_cast<WCHAR*>(L"./data/shader/ink.vs"), const_cast<WCHAR*>(L"./data/shader/ink.ps"));
+	InitializeShaderBuffer();
+	return true;
+}
+
+bool SpecMapShaderClass::Ink2Initialize()
+{
+	InitializeShader(const_cast<WCHAR*>(L"./data/shader/ink2.vs"), const_cast<WCHAR*>(L"./data/shader/ink2.ps"));
+	InitializeShaderBuffer();
+	return true;
+}
+
 bool SpecMapShaderClass::Render(
 	int indexCount,
 	RNDMATRIXS matrixs,
 	D3DXVECTOR3 cameraPosition,
 	ID3D11ShaderResourceView** textureArray,
-	D3DXVECTOR3 lightDirection,
 	LightBufferType* light)
 {
 
 	render = matrixs;
-	ISFAIL(SetShaderParameters(cameraPosition, textureArray, lightDirection, light));
+	ISFAIL(SetShaderParameters(cameraPosition, textureArray, light));
 	RenderShader(indexCount);
 
 	return true;
@@ -200,7 +213,6 @@ void SpecMapShaderClass::ShutdownShader()
 bool SpecMapShaderClass::SetShaderParameters(
 	D3DXVECTOR3 cameraPosition,
 	ID3D11ShaderResourceView** textureArray, 
-	D3DXVECTOR3 lightDirection,
 	LightBufferType* light)
 {
 	D3DXMatrixTranspose(&render.world, &render.world);
@@ -241,7 +253,7 @@ bool SpecMapShaderClass::SetShaderParameters(
 
 	{
 		LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
-		dataPtr3->lightDirection = lightDirection;
+		dataPtr3->lightDirection = light->lightDirection;
 		dataPtr3->ambientColor = light->ambientColor;
 		dataPtr3->diffuseColor = light->diffuseColor;
 		dataPtr3->specularColor = light->specularColor;

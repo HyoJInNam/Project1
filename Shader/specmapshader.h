@@ -12,12 +12,13 @@ public:
 	virtual ~SpecMapShaderClass() override;
 
 	virtual bool Initialize() override;
+	bool InkInitialize();
+	bool Ink2Initialize();
 	bool Render(
 		int indexCount,
 		RNDMATRIXS render,
 		D3DXVECTOR3 cameraPosition,
 		ID3D11ShaderResourceView** textureArray,
-		D3DXVECTOR3 lightDirection,
 		LightBufferType* light);
 
 private:
@@ -29,6 +30,5 @@ private:
 	bool SetShaderParameters(
 		D3DXVECTOR3 cameraPosition,
 		ID3D11ShaderResourceView** textureArray,
-		D3DXVECTOR3 lightDirection,
 		LightBufferType* light);
 };

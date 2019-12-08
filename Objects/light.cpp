@@ -11,6 +11,28 @@ LIGHT::LIGHT(const char* name)
 LIGHT::LIGHT(const LIGHT & other): Transform(other) {}
 LIGHT::~LIGHT() {}
 
+bool LIGHT::Initialize()
+{	
+	//SetDirection();
+	shader = new LIGHTSHADER(hwnd, device, deviceContext);
+	if (!shader->Initialize())
+	{
+		ERR_MESSAGE(L"Could not initialize the light shader object.", L"ERROR");
+		return false;
+	}
+	return true;
+}
+bool LIGHT::Render(
+	int indexCount, 
+	RNDMATRIXS& renderMatrix, 
+	D3DXVECTOR3 cameraPos, 
+	ID3D11ShaderResourceView* texture)
+{
+	return shader->Render(indexCount, renderMatrix, cameraPos, texture, this->light);
+}
+void LIGHT::Shutdown(){	SAFE_DELETE(shader);}
+
+
 bool LIGHT::ViewTransform()
 {
 	if (show_inspector)
@@ -29,73 +51,12 @@ bool LIGHT::ViewTransform()
 
 			ImGui::Text("light");
 			D3DXVECTOR3& direction = light->lightDirection;
-			this->SetDirection();
 			ImGui::DragFloat3("direction", (float*)&direction, 0.1f, 0, 0);
-
-			//D3DXVECTOR4 ambient = obj_light->GetAmbientColor();
-			//ImGui::DragFloat4("ambient", (float*)&ambient, 0.1f, 0, 0);
-			//obj_light->SetAmbientColor(ambient);
-
-			//D3DXVECTOR4 diffuse = obj_light->GetDiffuseColor();
-			//ImGui::DragFloat4("diffuse", (float*)&diffuse, 0.1f, 0, 0);
-			//obj_light->SetDiffuseColor(diffuse);
-
-			//D3DXVECTOR4 specular = obj_light->GetSpecularColor();
-			//ImGui::DragFloat4("specular", (float*)&specular, 0.1f, 0, 0);
-			//obj_light->SetSpecularColor(specular);
-
-			//float specularPower = obj_light->GetSpecularPower();
-			//ImGui::DragFloat("specular power", (float*)&specularPower, 0.1f, 0, 0);
-			//obj_light->SetSpecularPower(specularPower);
-			//SetLIGHT(obj_light);
 		}
 		ImGui::End();
 	}
 	return true;
 }
-
-void LIGHT::SetDirectionLight()
-{
-	SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	SetDirection(0.0f, 0.0f, 1.0f);
-	//---------------------------------------
-	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	SetSpecularPower(10.0f);
-}
-
-void LIGHT::SetPointLight()
-{
-	SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	SetDirection(0.0f, 0.0f, 1.0f);
-	//---------------------------------------
-	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	SetSpecularPower(10.0f);
-	//---------------------------------------
-}
-
-void LIGHT::SetAmbientColor(float red, float green, float blue, float alpha) { light->ambientColor = D3DXVECTOR4(red, green, blue, alpha); }
-void LIGHT::SetAmbientColor(D3DXVECTOR4 light){ SetAmbientColor(light.x, light.y, light.z, light.w); }
-void LIGHT::SetDiffuseColor(float red, float green, float blue, float alpha) { light->diffuseColor = D3DXVECTOR4(red, green, blue, alpha); }
-void LIGHT::SetDiffuseColor(D3DXVECTOR4 light){ SetDiffuseColor(light.x, light.y, light.z, light.w); }
-void LIGHT::SetDirection(float x, float y, float z) { light->lightDirection = D3DXVECTOR3(x, y, z); }
-void LIGHT::SetDirection(D3DXVECTOR3 light) { SetDirection(light.x, light.y, light.z); }
-void LIGHT::SetDirection() {
-	light->lightDirection.x = this->position.x * (-1.0f);
-	light->lightDirection.y = this->position.y * (-1.0f);
-	light->lightDirection.z = this->position.z * (1.0f);
-}
-void LIGHT::SetSpecularColor(float red, float green, float blue, float alpha) { light->specularColor = D3DXVECTOR4(red, green, blue, alpha); }
-void LIGHT::SetSpecularColor(D3DXVECTOR4 light){ SetSpecularColor(light.x, light.y, light.z, light.w); }
-void LIGHT::SetSpecularPower(float power) { light->specularPower = power; }
-
-
-D3DXVECTOR4 LIGHT::GetAmbientColor() { return light->ambientColor; }
-D3DXVECTOR4 LIGHT::GetDiffuseColor() { return light->diffuseColor; }
-D3DXVECTOR3 LIGHT::GetDirection() { return light->lightDirection; }
-D3DXVECTOR4 LIGHT::GetSpecularColor() { return light->specularColor; }
-float LIGHT::GetSpecularPower() { return light->specularPower; }
 
 void LIGHT::GenerateViewMatrix()
 {
@@ -104,7 +65,6 @@ void LIGHT::GenerateViewMatrix()
 
 	D3DXMatrixLookAtLH(&m_viewMatrix, &position, &m_lookAt, &up);
 }
-
 void LIGHT::GenerateOrthoMatrix(float screenDepth, float screenNear)
 {
 	// 정사각형 광원에 대한 시야 및 화면 비율을 설정합니다.
@@ -120,8 +80,54 @@ void LIGHT::GetViewMatrix(D3DXMATRIX &viewMatrix)
 {
 	viewMatrix = m_viewMatrix;
 }
-
 void LIGHT::GetOrthoMatrix(D3DXMATRIX & orthMatrix)
 {
 	orthMatrix = m_orthMatrix;
+}
+
+
+void LIGHT::SetDirectionLight()
+{
+	SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	SetDirection(0.0f, 0.0f, 1.0f);
+	//---------------------------------------
+	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
+	SetSpecularPower(10.0f);
+}
+void LIGHT::SetPointLight()
+{
+	SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	SetDirection(0.0f, 0.0f, 1.0f);
+	//---------------------------------------
+	SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
+	SetSpecularPower(10.0f);
+	//---------------------------------------
+}
+
+
+
+void LIGHT::SetAmbientColor(float red, float green, float blue, float alpha) { light->ambientColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetAmbientColor(D3DXVECTOR4 light){ SetAmbientColor(light.x, light.y, light.z, light.w); }
+void LIGHT::SetDiffuseColor(float red, float green, float blue, float alpha) { light->diffuseColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetDiffuseColor(D3DXVECTOR4 light){ SetDiffuseColor(light.x, light.y, light.z, light.w); }
+void LIGHT::SetDirection(float x, float y, float z) { light->lightDirection = D3DXVECTOR3(x, y, z); }
+void LIGHT::SetDirection(D3DXVECTOR3 light) { SetDirection(light.x, light.y, light.z); }
+void LIGHT::SetSpecularColor(float red, float green, float blue, float alpha) { light->specularColor = D3DXVECTOR4(red, green, blue, alpha); }
+void LIGHT::SetSpecularColor(D3DXVECTOR4 light){ SetSpecularColor(light.x, light.y, light.z, light.w); }
+void LIGHT::SetSpecularPower(float power) { light->specularPower = power; }
+
+
+D3DXVECTOR4 LIGHT::GetAmbientColor() { return light->ambientColor; }
+D3DXVECTOR4 LIGHT::GetDiffuseColor() { return light->diffuseColor; }
+D3DXVECTOR4 LIGHT::GetSpecularColor() { return light->specularColor; }
+float LIGHT::GetSpecularPower() { return light->specularPower; }
+
+D3DXVECTOR3 LIGHT::GetDirection()
+{
+	light->lightDirection.x = this->position.x * (-1.0f);
+	light->lightDirection.y = this->position.y * (-1.0f);
+	light->lightDirection.z = this->position.z * (1.0f);
+	return light->lightDirection;
 }

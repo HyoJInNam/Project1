@@ -9,15 +9,12 @@ class SpecMapShaderClass;
 class DepthShaderClass;
 class ShadowShaderClass;
 
+class LIGHTSHADER;
 class COLORSHADER;
 class LIGHT;
-class LIGHTSHADER;
 
 class MODEL: public Transform <MODEL>
 {
-	HWND hwnd;
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
 
 public:
 	MODEL(const char* name);
@@ -49,14 +46,13 @@ public:
 	ID3D11ShaderResourceView* GetTexture() { return file->GetTexture(); }
 	LightBufferType* GetLight();
 
-
+	bool IsInk = false;
 private:
 	LOADOBJECTSFILE* file;
 	COLORSHADER* material;
 
-	LIGHT* obj_light;
-	LIGHTSHADER* shader;
-
+	LIGHT* light;
+	LIGHTSHADER* toonShader;
 	BumpMapShaderClass* m_BumpMapShader;
 	SpecMapShaderClass* m_SpecMapShader;
 	DepthShaderClass*   m_DepthShader;

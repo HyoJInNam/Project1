@@ -26,6 +26,7 @@ using namespace std;
 #include <LoadFile.h>
 #include <LoadImgFile.h>
 #include <loadObjFile.h>
+#include <LoadDomeFile.h>
 #include <TextureArrayClass.h>
 #pragma comment (lib, "LoadFile.lib")
 
@@ -33,6 +34,7 @@ using namespace std;
 #include <transform.h>
 #include <image_bitmap.h>
 #include <model.h>
+#include <dome.h>
 #include <light.h>
 #include <camera.h>
 #include <cameraControler.h>
@@ -44,6 +46,6 @@ using namespace std;
 #include <lightshader.h>
 #include <ShadowShaderClass.h>
 #include <rendertextureclass.h>
-#include<depthshaderclass.h>
+#include <depthshaderclass.h>
 #pragma comment (lib, "Shader.lib")
 

@@ -29,11 +29,10 @@ bool BumpMapShaderClass::Render(
 	RNDMATRIXS matrixs,
 	D3DXVECTOR3 cameraPosition,
 	ID3D11ShaderResourceView** textureArray,
-	D3DXVECTOR3 lightDirection,
 	LightBufferType* light)
 {
 	render = matrixs;
-	ISFAIL(SetShaderParameters(cameraPosition, textureArray, lightDirection, light));
+	ISFAIL(SetShaderParameters(cameraPosition, textureArray, light));
 	RenderShader(indexCount);
 
 	return true;
@@ -207,7 +206,6 @@ bool BumpMapShaderClass::InitializeShaderBuffer()
 bool BumpMapShaderClass::SetShaderParameters(
 	D3DXVECTOR3 cameraPosition,
 	ID3D11ShaderResourceView** textureArray, 
-	D3DXVECTOR3 lightDirection,
 	LightBufferType* light)
 {
 
@@ -254,7 +252,7 @@ bool BumpMapShaderClass::SetShaderParameters(
 
 	{
 		LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
-		dataPtr3->lightDirection = lightDirection;
+		dataPtr3->lightDirection = light->lightDirection;
 		dataPtr3->ambientColor = light->ambientColor;
 		dataPtr3->diffuseColor = light->diffuseColor;
 
