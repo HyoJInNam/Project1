@@ -63,8 +63,8 @@ BOOL GRAPHICS::Initialize()
 	ISINSTANCE(m_GroundModel);
 
 	if (!m_GroundModel->Initialize(
-		const_cast<char*>("./data/models/plane01.txt"),
-		const_cast<WCHAR*>(L"./data/models/gray.jpg")))
+		const_cast<char*>("./data/models/basic/plane01.txt"),
+		const_cast<WCHAR*>(L"./data/models/basic/gray.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the ground model object.", L"ERROR");
 		return false;
@@ -77,58 +77,35 @@ BOOL GRAPHICS::Initialize()
 
 	//=========================================================================
 
-	model01 = new MODEL("left model : toon shader");
+	float modelSize = 0.05f;
+	char* modelName = const_cast<char*>("./data/models/robot/robot.txt");
+	WCHAR* modelColor = const_cast<WCHAR*>(L"./data/models/robot/robot_c.png");
+	WCHAR* modelNormal = const_cast<WCHAR*>(L"./data/models/robot/robot_n.png");
+	WCHAR* modelSpec = const_cast<WCHAR*>(L"./data/models/robot/robot_s.png");
+	//float modelSize = 1.0f;
+	//char* modelName = const_cast<char*>("./data/models/basic/teapot.obj");
+	//WCHAR* modelColor = const_cast<WCHAR*>(L"./data/models/maps_c/pink.png");
+	//WCHAR* modelNormal = const_cast<WCHAR*>(L"./data/models/maps_n/n07.jpg");
+	//WCHAR* modelNormal2 = const_cast<WCHAR*>(L"./data/models/maps_n/n06.jpg");
+	//WCHAR* modelSpec = const_cast<WCHAR*>(L"./data/models/maps_s/spec02.png");
+
+	model01 = new MODEL("teapot");
 	ISINSTANCE(model01);
-	model01->IsInk = true;
-
-	if (!model01->Initialize(
-		const_cast<char*>("./data/models/model/model2.txt"),
-		const_cast<WCHAR*>(L"./data/models/model/body.png")))
+	if (!model01->Initialize(modelName, modelColor, modelNormal, modelSpec))
 	{
 		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
 		return false;
 	}
 
 
-	model02 = new MODEL("center model : ink shader");
-	ISINSTANCE(model02);
-	if (!model02->Initialize(
-		const_cast<char*>("./data/models/model/model2.txt"),
-		const_cast<WCHAR*>(L"./data/models/model/body.png"), 
-		const_cast<WCHAR*>(L"./data/models/model/bodynomal.png"),
-		const_cast<WCHAR*>(L"./data/models/model/body_ao_bake.png")))
-	{
-		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
-		return false;
-	}
-
-	model03 = new MODEL("right model : bump shader");
-	ISINSTANCE(model03);
-	if (!model03->Initialize(
-		const_cast<char*>("./data/models/model/model2.txt"),
-		const_cast<WCHAR*>(L"./data/models/model/body.png"),
-		const_cast<WCHAR*>(L"./data/models/model/bodynomal.png")))
-	{
-		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
-		return false;
-	}
-
-	model01->SetScale(0.001f, 0.001f, 0.001f);
-	model02->SetScale(0.001f, 0.001f, 0.001f);
-	model03->SetScale(0.001f, 0.001f, 0.001f);
-
-	model01->SetPosition(-5.0f, 0, 0);
-	model02->SetPosition(0.0f, 0, 0);
-	model03->SetPosition(5.0f, 0, 0);
+	model01->SetScale(modelSize, modelSize, modelSize);
+	model01->SetPosition(0.0f, -2.0f, -3.0f);
 	return 0;
 }
 
 void GRAPHICS::Shutdown()
 {
-	model03->Shutdown();
-	model02->Shutdown();
 	model01->Shutdown();
-
 	m_GroundModel->Shutdown();
 
 	//SAFE_DELETE(panel);
@@ -176,17 +153,9 @@ BOOL GRAPHICS::Render()
 	light->Render(0, matrixs, mainCamera->GetPosition(), nullptr);
 	WindowHierarchy();
 
-	//sphere01->SetSpin(0.0f, 0.01f, 0.0f);
-	//sphere02->SetSpin(0.0f, 0.01f, 0.0f);
-	//sphere03->SetSpin(0.0f, 0.01f, 0.0f);
-
+	model01->SetSpin(0.0f, 0.01f, 0.0f);
 	model01->Render(matrixs, mainCamera->GetPosition(), light);
-	model02->Render(matrixs, mainCamera->GetPosition(), light);
-	model03->Render(matrixs, mainCamera->GetPosition(), light);
-
-	//sphere01->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
-	//sphere02->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
-	//sphere03->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
+	//model01->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
 
 
 	//m_GroundModel->Render(matrixs, mainCamera->GetPosition(), light);
@@ -210,13 +179,9 @@ void GRAPHICS::WindowHierarchy()
 
 	mainCamera->ShowObjectInspector();
 	light->ShowObjectInspector();
-	//skydome->ShowObjectInspector();
-	//panel->ShowWindowHierarchy();
-	m_GroundModel->ShowObjectInspector();
+	//m_GroundModel->ShowObjectInspector();
 	model01->ShowObjectInspector();
-	model02->ShowObjectInspector();
-	model03->ShowObjectInspector();
-	
+
 	ImGui::End();
 }
 
@@ -236,8 +201,6 @@ bool GRAPHICS::RenderSceneToTexture()
 
 
 	ISFAIL(model01->RenderDepth(matrixs));
-	ISFAIL(model02->RenderDepth(matrixs));
-	ISFAIL(model03->RenderDepth(matrixs));
 	ISFAIL(m_GroundModel->RenderDepth(matrixs));
 
 	

@@ -13,6 +13,13 @@ class LIGHTSHADER;
 class COLORSHADER;
 class LIGHT;
 
+enum renderMode {
+	Ink,
+	SpecBump,
+	ToonBump,
+	Bump,
+	Toon,
+};
 class MODEL: public Transform <MODEL>
 {
 
@@ -45,16 +52,18 @@ public:
 	int GetIndexCount() { return file->GetIndexCount(); }
 	ID3D11ShaderResourceView* GetTexture() { return file->GetTexture(); }
 	LightBufferType* GetLight();
-
-	bool IsInk = false;
+	renderMode rmode;
 private:
 	LOADOBJECTSFILE* file;
 	COLORSHADER* material;
 
 	LIGHT* light;
-	LIGHTSHADER* toonShader;
+	LIGHTSHADER* ToonColorShader;
 	BumpMapShaderClass* m_BumpMapShader;
+	BumpMapShaderClass* m_ToonShader;
 	SpecMapShaderClass* m_SpecMapShader;
+	SpecMapShaderClass* m_InkShader;
+
 	DepthShaderClass*   m_DepthShader;
 	ShadowShaderClass*  m_ShadowShader;
 };

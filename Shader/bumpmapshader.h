@@ -13,6 +13,7 @@ public:
 	virtual ~BumpMapShaderClass() override;
 
 	virtual bool Initialize() override;
+	bool ToonInitialize();
 	bool Render(
 		int indexCount,
 		RNDMATRIXS matrixs,

@@ -14,7 +14,7 @@ protected:
 
 	const char* name;
 	bool show_inspector;
-
+	 
 public:
 	const char* GetObjectName() { return name; }
 	void SetGuiWindow(bool show_window) { this->show_inspector = show_window; }

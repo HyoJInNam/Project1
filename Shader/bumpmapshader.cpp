@@ -22,7 +22,12 @@ bool BumpMapShaderClass::Initialize()
 	return true;
 }
 
-
+bool BumpMapShaderClass::ToonInitialize()
+{
+	InitializeShader(const_cast<WCHAR*>(L"./data/shader/toon2.vs"), const_cast<WCHAR*>(L"./data/shader/toon2.ps"));
+	InitializeShaderBuffer();
+	return true;
+}
 
 bool BumpMapShaderClass::Render(
 	int indexCount, 

@@ -43,7 +43,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
 
 	
     finalColor = float4(ambient.xyz * diffuse, 1);
-	finalColor = saturate(finalColor* textureColor);
+	finalColor = saturate(finalColor * textureColor);
    
     return finalColor;
 }

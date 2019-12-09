@@ -30,25 +30,21 @@ bool MODEL::ViewTransform()
 			SetRotation(rot);
 
 			D3DXVECTOR3 scl = GetScale();
-			ImGui::DragFloat3("scale", (float*)&scl, 0.1f, 0, 0);
+			ImGui::InputFloat3("scale", (float*)&scl);
 			SetScale(scl);
 
 			ImGui::Text("light");
-			D3DXVECTOR4 ambient = light->GetAmbientColor();
-			ImGui::DragFloat4("ambient", (float*)&ambient, 0.1f, 0, 0);
-			light->SetAmbientColor(ambient);
-
-			D3DXVECTOR4 diffuse = light->GetDiffuseColor();
-			ImGui::DragFloat4("diffuse", (float*)&diffuse, 0.1f, 0, 0);
-			light->SetDiffuseColor(diffuse);
-
-			D3DXVECTOR4 specular = light->GetSpecularColor();
-			ImGui::DragFloat4("specular", (float*)&specular, 0.1f, 0, 0);
-			light->SetSpecularColor(specular);
-
 			float specularPower = light->GetSpecularPower();
 			ImGui::DragFloat("specular power", (float*)&specularPower, 0.1f, 0, 0);
 			light->SetSpecularPower(specularPower);
+
+			ImGui::Text("Render Mode");
+			if (ImGui::RadioButton("toon", rmode == Toon)) rmode = Toon;
+			if (ImGui::RadioButton("bump", rmode == Bump)) rmode = Bump;
+			if (ImGui::RadioButton("bump + toon", rmode == ToonBump)) rmode = ToonBump;
+			if (ImGui::RadioButton("bump + specular", rmode == SpecBump)) rmode = SpecBump;
+			if (ImGui::RadioButton("ink", rmode == Ink)) rmode = Ink;
+
 		}
 		ImGui::End();
 	}
@@ -71,19 +67,19 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 
 	if (specularmap)
 	{
-		m_SpecMapShader = new SpecMapShaderClass(hwnd, device, deviceContext);
-		ISINSTANCE(m_SpecMapShader);
-		if (IsInk == true)
 		{
-			if (!m_SpecMapShader->InkInitialize())
+			m_SpecMapShader = new SpecMapShaderClass(hwnd, device, deviceContext);
+			ISINSTANCE(m_SpecMapShader);
+			if (!m_SpecMapShader->Initialize())
 			{
 				MessageBox(hwnd, L"Could not initialize the ink shader object.", L"Error", MB_OK);
 				return false;
 			}
 		}
-		else
 		{
-			if (!m_SpecMapShader->Initialize())
+			m_InkShader = new SpecMapShaderClass(hwnd, device, deviceContext);
+			ISINSTANCE(m_InkShader);
+			if (!m_InkShader->InkInitialize())
 			{
 				MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
 				return false;
@@ -91,22 +87,33 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 		}
 
 	}
-	else if (normal_texture_name)
+	if (normal_texture_name)
 	{
-		m_BumpMapShader = new BumpMapShaderClass(hwnd, device, deviceContext);
-		ISINSTANCE(m_BumpMapShader);
-		if (!m_BumpMapShader->Initialize())
 		{
-			ERR_MESSAGE(L"Could not initialize the Bump Map shader object.", L"ERROR");
-			return false;
+			m_BumpMapShader = new BumpMapShaderClass(hwnd, device, deviceContext);
+			ISINSTANCE(m_BumpMapShader);
+			if (!m_BumpMapShader->Initialize())
+			{
+				ERR_MESSAGE(L"Could not initialize the Bump Map shader object.", L"ERROR");
+				return false;
+			}
+		}
+		{
+			m_ToonShader = new BumpMapShaderClass(hwnd, device, deviceContext);
+			ISINSTANCE(m_ToonShader);
+			if (!m_ToonShader->ToonInitialize())
+			{
+				ERR_MESSAGE(L"Could not initialize the toon shader object.", L"ERROR");
+				return false;
+			}
 		}
 	}
-	else {
-		if (IsInk == true)
+	//else
+	{//if (IsInk == true)
 		{
-			toonShader = new LIGHTSHADER(hwnd, device, deviceContext);
-			ISINSTANCE(toonShader);
-			if (!toonShader->ToonInitialize())
+			ToonColorShader = new LIGHTSHADER(hwnd, device, deviceContext);
+			ISINSTANCE(ToonColorShader);
+			if (!ToonColorShader->ToonInitialize())
 			{
 				ERR_MESSAGE(L"Could not initialize the toon shader object.", L"ERROR");
 				return false;
@@ -114,23 +121,22 @@ bool MODEL::Initialize(char* modelFilename, WCHAR* texture_file_name, WCHAR* nor
 		}
 	}
 
+	//m_DepthShader = new DepthShaderClass(hwnd, device, deviceContext);
+	//ISINSTANCE(m_DepthShader);
+	//if (!m_DepthShader->Initialize())
+	//{
+	//	ERR_MESSAGE(L"Could not initialize the depth shader object.", L"ERROR");
+	//	return false;
+	//}
 
-	m_DepthShader = new DepthShaderClass(hwnd, device, deviceContext);
-	ISINSTANCE(m_DepthShader);
-	if (!m_DepthShader->Initialize())
-	{
-		ERR_MESSAGE(L"Could not initialize the depth shader object.", L"ERROR");
-		return false;
-	}
 
-
-	m_ShadowShader = new ShadowShaderClass(hwnd, device, deviceContext);
-	ISINSTANCE(m_ShadowShader);
-	if (!m_ShadowShader->Initialize())
-	{
-		ERR_MESSAGE(L"Could not initialize the  shadow shader object.", L"ERROR");
-		return false;
-	}
+	//m_ShadowShader = new ShadowShaderClass(hwnd, device, deviceContext);
+	//ISINSTANCE(m_ShadowShader);
+	//if (!m_ShadowShader->Initialize())
+	//{
+	//	ERR_MESSAGE(L"Could not initialize the  shadow shader object.", L"ERROR");
+	//	return false;
+	//}
 
 	
 	
@@ -144,22 +150,12 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* mainL
 	light->SetDirection(mainLight->GetDirection());
 
 
-	if (m_SpecMapShader)
-	{
-		m_SpecMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
-		//return ViewTransform();
-	}
-	else if (m_BumpMapShader)
-	{
-		m_BumpMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
-		//return ViewTransform();
-	}
-	else if (toonShader) {
-		toonShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), light->GetLight());
-		//return ViewTransform();
-	}
-
-	light->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture());
+	if (rmode == Ink) m_InkShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
+	else if (rmode == SpecBump) m_SpecMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
+	else if (rmode == ToonBump) m_ToonShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
+	else if (rmode == Bump) m_BumpMapShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTextures(), light->GetLight());
+	else if (rmode == Toon)ToonColorShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), light->GetLight());
+	else light->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture());
 	
 	return ViewTransform();
 }
@@ -196,10 +192,22 @@ void MODEL::Shutdown()
 		SAFE_DELETE(m_DepthShader);
 	}
 
+	if (m_InkShader)
+	{
+		m_InkShader->Shutdown();
+		SAFE_DELETE(m_InkShader);
+	}
+	
 	if (m_SpecMapShader)
 	{
 		m_SpecMapShader->Shutdown();
 		SAFE_DELETE(m_SpecMapShader);
+	}
+
+	if (m_ToonShader)
+	{
+		m_ToonShader->Shutdown();
+		SAFE_DELETE(m_ToonShader);
 	}
 
 	if (m_BumpMapShader)
@@ -208,10 +216,10 @@ void MODEL::Shutdown()
 		SAFE_DELETE(m_BumpMapShader);
 	}
 	
-	if (toonShader)
+	if (ToonColorShader)
 	{
-		toonShader->Shutdown();
-		SAFE_DELETE(toonShader);
+		ToonColorShader->Shutdown();
+		SAFE_DELETE(ToonColorShader);
 	}
 
 	SAFE_DELETE(material);
