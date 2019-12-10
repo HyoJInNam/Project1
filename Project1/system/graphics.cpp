@@ -153,7 +153,7 @@ BOOL GRAPHICS::Render()
 	light->Render(0, matrixs, mainCamera->GetPosition(), nullptr);
 	WindowHierarchy();
 
-	model01->SetSpin(0.0f, 0.01f, 0.0f);
+	if(model01->isSpin == true) model01->SetSpin(0.0f, 0.01f, 0.0f);
 	model01->Render(matrixs, mainCamera->GetPosition(), light);
 	//model01->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
 

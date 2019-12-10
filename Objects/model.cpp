@@ -33,10 +33,15 @@ bool MODEL::ViewTransform()
 			ImGui::InputFloat3("scale", (float*)&scl);
 			SetScale(scl);
 
+			ImGui::Text(" ");
+			ImGui::Checkbox("Is Spin", &isSpin);
+			ImGui::Text(" ");
+
 			ImGui::Text("light");
 			float specularPower = light->GetSpecularPower();
 			ImGui::DragFloat("specular power", (float*)&specularPower, 0.1f, 0, 0);
 			light->SetSpecularPower(specularPower);
+
 
 			ImGui::Text("Render Mode");
 			if (ImGui::RadioButton("toon", rmode == Toon)) rmode = Toon;

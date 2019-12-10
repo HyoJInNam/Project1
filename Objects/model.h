@@ -52,7 +52,9 @@ public:
 	int GetIndexCount() { return file->GetIndexCount(); }
 	ID3D11ShaderResourceView* GetTexture() { return file->GetTexture(); }
 	LightBufferType* GetLight();
+
 	renderMode rmode;
+	bool isSpin = false;
 private:
 	LOADOBJECTSFILE* file;
 	COLORSHADER* material;
