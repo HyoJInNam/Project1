@@ -15,8 +15,8 @@ DOMESHADER::~DOMESHADER() {}
 bool DOMESHADER::Initialize()
 {
 	ISFAILED(InitializeShader(
-		const_cast<WCHAR*>(L"./data/system/skydome_vs.hlsl"),
-		const_cast<WCHAR*>(L"./data/system/skydome_ps.hlsl")));
+		const_cast<WCHAR*>(L"../data/system/skydome_vs.hlsl"),
+		const_cast<WCHAR*>(L"../data/system/skydome_ps.hlsl")));
 	InitializeShaderBuffer();
 	return true;
 }

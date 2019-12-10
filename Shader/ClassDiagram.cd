@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BumpMapShaderClass" Collapsed="true">
+    <Position X="8.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAABAAAwAAAAAEAABAAAAAAAAAABAAIAAAAAA=</HashCode>
+      <FileName>bumpmapshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="COLORSHADER" Collapsed="true">
+    <Position X="2.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAABAAAQAAAAAECAAAAAAAAAAAABAAAAAAEAA=</HashCode>
+      <FileName>colorshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DepthShaderClass" Collapsed="true">
+    <Position X="15.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAABAAAQAAAIAEAAAAAAAAAgAAABAAAAAAAAA=</HashCode>
+      <FileName>depthshaderclass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DOMESHADER" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAABAAAQAAAAAEAAAABAAAQQAAABAAAAAAAAA=</HashCode>
+      <FileName>domeshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LIGHTSHADER" Collapsed="true">
+    <Position X="6" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAABAAAQAAAAAEAIAAAAAAAAAAABAAIAAAAAA=</HashCode>
+      <FileName>lightshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SHADER">
+    <Position X="5.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIAEACQDCBAAAQAAEAAEAQAAEEAAAQAAAACADQgYIAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShadowShaderClass" Collapsed="true">
+    <Position X="17.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAACBAAAQAAAAAEAAAAAAAgAAAAABEAAAAAAAA=</HashCode>
+      <FileName>ShadowShaderClass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpecMapShaderClass" Collapsed="true">
+    <Position X="10.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAgGAAAAABAAAQAAAAAEAAEAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>specmapshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TEXTURESHADER" Collapsed="true">
+    <Position X="4.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgECAAAABAAAQAAAAAEAAAAACAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>textureshader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="MatrixBufferType">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAEAAAAABAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightBufferType">
+    <Position X="11.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAQAIAAAAAARAAAAAAAAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightBufferType2">
+    <Position X="11.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAACAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CameraBufferType">
+    <Position X="9.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GradientBufferType">
+    <Position X="13.25" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAQAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ShaderType">
+    <Position X="7.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAEAAAACEAAEAAAAAAAA=</HashCode>
+      <FileName>shader.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

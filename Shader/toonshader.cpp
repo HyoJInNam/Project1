@@ -20,8 +20,8 @@ TOONSHADER::~TOONSHADER() {}
 bool TOONSHADER::Initialize()
 {
 	InitializeShader(
-		const_cast<WCHAR*>(L"./data/shader/toon.vs"),
-		const_cast<WCHAR*>(L"./data/shader/toon.ps"));
+		const_cast<WCHAR*>(L"../data/shader/toon.vs"),
+		const_cast<WCHAR*>(L"../data/shader/toon.ps"));
 
 	//InitializeShader(const_cast<WCHAR*>(L"./data/lighting/direction.vs"), const_cast<WCHAR*>(L"./data/lighting/direction.ps"));
 

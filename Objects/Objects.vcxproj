@@ -38,6 +38,9 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="dome.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{2E72648F-AEE3-451E-8C3D-F44229749FF2}</ProjectGuid>
@@ -92,8 +95,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\ImGui;C:\Users\남효진\Desktop\졸프 3-1\Project1\Shader;C:\Users\남효진\Desktop\졸프 3-1\Project1\Objects;C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\Project1\lib\</OutDir>
+    <IncludePath>$(SolutionDir)\ImGui;$(SolutionDir)\Shader;$(SolutionDir)\Objects;$(SolutionDir)\LoadFile;$(SolutionDir)\Utility;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
     <LibraryPath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Project1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

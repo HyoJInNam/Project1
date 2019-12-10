@@ -52,5 +52,7 @@ private:
 
 	float rotation;
 	MODEL* model01;
+	MODEL* model02;
+	MODEL* model03;
 
 };

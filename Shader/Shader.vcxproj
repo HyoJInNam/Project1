@@ -42,6 +42,9 @@
     <ClInclude Include="textureshader.h" />
     <ClInclude Include="toonshader.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{9633FF0E-6126-433C-ADBB-985EB0770B63}</ProjectGuid>
@@ -96,8 +99,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\Project1\lib\</OutDir>
+    <IncludePath>$(SolutionDir)\Utility;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

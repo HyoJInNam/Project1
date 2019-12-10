@@ -30,6 +30,9 @@
     <ClCompile Include="LoadImgFile.cpp" />
     <ClCompile Include="loadObjFile.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D0A50A8B-79C3-4639-BFE1-1C5297FD1C65}</ProjectGuid>
@@ -84,8 +87,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\LoadFile;C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\Project1\lib\</OutDir>
+    <IncludePath>$(SolutionDir)\LoadFile;$(SolutionDir)\Utility;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

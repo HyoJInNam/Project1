@@ -53,7 +53,7 @@ BOOL GRAPHICS::Initialize()
 	ISINSTANCE(skydome);
 
 	if (!skydome->Initialize(
-		const_cast<char*>("./data/system/skydome.txt")))
+		const_cast<char*>("../data/system/skydome.txt")))
 	{
 		ERR_MESSAGE(L"Could not initialize the sky dome model object.", L"ERROR");
 		return false;
@@ -63,8 +63,8 @@ BOOL GRAPHICS::Initialize()
 	ISINSTANCE(m_GroundModel);
 
 	if (!m_GroundModel->Initialize(
-		const_cast<char*>("./data/models/basic/plane01.txt"),
-		const_cast<WCHAR*>(L"./data/models/basic/gray.jpg")))
+		const_cast<char*>("../data/models/basic/plane01.txt"),
+		const_cast<WCHAR*>(L"../data/models/basic/gray.jpg")))
 	{
 		ERR_MESSAGE(L"Could not initialize the ground model object.", L"ERROR");
 		return false;
@@ -77,19 +77,13 @@ BOOL GRAPHICS::Initialize()
 
 	//=========================================================================
 
-	float modelSize = 0.05f;
-	char* modelName = const_cast<char*>("./data/models/robot/robot.txt");
-	WCHAR* modelColor = const_cast<WCHAR*>(L"./data/models/robot/robot_c.png");
-	WCHAR* modelNormal = const_cast<WCHAR*>(L"./data/models/robot/robot_n.png");
-	WCHAR* modelSpec = const_cast<WCHAR*>(L"./data/models/robot/robot_s.png");
-	//float modelSize = 1.0f;
-	//char* modelName = const_cast<char*>("./data/models/basic/teapot.obj");
-	//WCHAR* modelColor = const_cast<WCHAR*>(L"./data/models/maps_c/pink.png");
-	//WCHAR* modelNormal = const_cast<WCHAR*>(L"./data/models/maps_n/n07.jpg");
-	//WCHAR* modelNormal2 = const_cast<WCHAR*>(L"./data/models/maps_n/n06.jpg");
-	//WCHAR* modelSpec = const_cast<WCHAR*>(L"./data/models/maps_s/spec02.png");
+	float modelSize = 0.1f;
+	char* modelName = const_cast<char*>("../data/models/robot/robot.txt");
+	WCHAR* modelColor = const_cast<WCHAR*>(L"../data/models/robot/robot_c.png");
+	WCHAR* modelNormal = const_cast<WCHAR*>(L"../data/models/robot/robot_n.png");
+	WCHAR* modelSpec = const_cast<WCHAR*>(L"../data/models/robot/robot_s.png");
 
-	model01 = new MODEL("teapot");
+	model01 = new MODEL("robot");
 	ISINSTANCE(model01);
 	if (!model01->Initialize(modelName, modelColor, modelNormal, modelSpec))
 	{
@@ -99,12 +93,54 @@ BOOL GRAPHICS::Initialize()
 
 
 	model01->SetScale(modelSize, modelSize, modelSize);
-	model01->SetPosition(0.0f, -2.0f, -3.0f);
+	model01->SetPosition(3.0f, -3.0f, -3.0f);
+
+
+	modelSize = 7.0f;
+	modelName = const_cast<char*>("../data/models/basic/teapot.txt");
+	modelColor = const_cast<WCHAR*>(L"../data/models/maps_c/pink.png");
+	modelNormal = const_cast<WCHAR*>(L"../data/models/maps_n/n03.dds");
+	modelSpec = const_cast<WCHAR*>(L"../data/models/maps_s/spec02.dds");
+
+	model02 = new MODEL("teapot");
+	ISINSTANCE(model02);
+	if (!model02->Initialize(modelName, modelColor, modelNormal, modelSpec))
+	{
+		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
+		return false;
+	}
+
+
+	model02->SetScale(modelSize, modelSize, modelSize);
+	model02->SetPosition(3.0f, -2.0f, -3.0f);
+
+
+
+
+	modelSize = 2.0f;
+	modelName = const_cast<char*>("../data/models/basic/sphere.txt");
+	modelColor = const_cast<WCHAR*>(L"../data/models/maps_c/stone02.dds");
+	modelNormal = const_cast<WCHAR*>(L"../data/models/maps_n/n03.dds");
+	modelSpec = const_cast<WCHAR*>(L"../data/models/maps_s/spec02.dds");
+
+	model03 = new MODEL("sphere");
+	ISINSTANCE(model03);
+	if (!model03->Initialize(modelName, modelColor, modelNormal, modelSpec))
+	{
+		ERR_MESSAGE(L"Could not initialize the model object.", L"ERROR");
+		return false;
+	}
+
+
+	model03->SetScale(modelSize, modelSize, modelSize);
+	model03->SetPosition(3.0f, 0.0f, -3.0f);
 	return 0;
 }
 
 void GRAPHICS::Shutdown()
 {
+	model03->Shutdown();
+	model02->Shutdown();
 	model01->Shutdown();
 	m_GroundModel->Shutdown();
 
@@ -153,8 +189,33 @@ BOOL GRAPHICS::Render()
 	light->Render(0, matrixs, mainCamera->GetPosition(), nullptr);
 	WindowHierarchy();
 
-	if(model01->isSpin == true) model01->SetSpin(0.0f, 0.01f, 0.0f);
-	model01->Render(matrixs, mainCamera->GetPosition(), light);
+	if (model01->GetActiveState())
+	{
+		if (model01->isSpin == true) model01->SetSpin(0.0f, 0.01f, 0.0f);
+		model01->Render(matrixs, mainCamera->GetPosition(), light);
+	}
+	if (model01->GetGuiWindow()) {
+		if (!model01->GetActiveState())model01->SetActiveState(true);
+		model01->ViewTransform();
+	}
+	if (model02->GetActiveState())
+	{
+		if (model02->isSpin == true) model01->SetSpin(0.0f, 0.01f, 0.0f);
+		model02->Render(matrixs, mainCamera->GetPosition(), light);
+	}
+	if (model02->GetGuiWindow()) {
+		if (!model02->GetActiveState())model02->SetActiveState(true);
+		model02->ViewTransform();
+	}
+	if (model03->GetActiveState())
+	{
+		if (model03->isSpin == true) model01->SetSpin(0.0f, 0.01f, 0.0f);
+		model03->Render(matrixs, mainCamera->GetPosition(), light);
+	}
+	if (model03->GetGuiWindow()) {
+		if (!model03->GetActiveState())model03->SetActiveState(true);
+		model03->ViewTransform();
+	}
 	//model01->RenderShadow(matrixs, d3d->GetShaderResourceView(), light);
 
 
@@ -177,10 +238,14 @@ void GRAPHICS::WindowHierarchy()
 {
 	ImGui::Begin("Hierarchy");
 
+	mainCamera->SetActiveState(true);
 	mainCamera->ShowObjectInspector();
+	light->SetActiveState(true);
 	light->ShowObjectInspector();
 	//m_GroundModel->ShowObjectInspector();
 	model01->ShowObjectInspector();
+	model02->ShowObjectInspector();
+	model03->ShowObjectInspector();
 
 	ImGui::End();
 }

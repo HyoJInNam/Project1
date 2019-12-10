@@ -88,8 +88,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\남효진\Desktop\졸프 3-1\Project1\Utility;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\Project1\lib\</OutDir>
+    <IncludePath>$(SolutionDir)\Utility;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

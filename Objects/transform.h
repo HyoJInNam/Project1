@@ -13,14 +13,18 @@ protected:
 	ID3D11DeviceContext* deviceContext;
 
 	const char* name;
+	bool isActive;
 	bool show_inspector;
 	 
 public:
 	const char* GetObjectName() { return name; }
-	void SetGuiWindow(bool show_window) { this->show_inspector = show_window; }
+	bool GetActiveState() { return isActive; }
 	bool GetGuiWindow() { return show_inspector; }
 
-	void ShowObjectInspector();
+	bool SetActiveState(bool state) { return this->isActive = state; }
+	void SetGuiWindow(bool show_window) { this->show_inspector = show_window; }
+
+	bool ShowObjectInspector();
 	virtual bool ViewTransform();
 
 
@@ -77,7 +81,7 @@ public:
 
 template<typename T>
 Transform<T>::Transform(const char* name)
-	: name(name), show_inspector(false)
+	: name(name), isActive(true), show_inspector(false)
 	, position(0.0f, 0.0f, 0.0f)
 	, rotation(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
@@ -90,9 +94,14 @@ Transform<T>::Transform(const char* name)
 
 
 template<typename T>
-void Transform<T>::ShowObjectInspector()
+bool Transform<T>::ShowObjectInspector()
 {
-	ImGui::Checkbox(name, &show_inspector);
+	if (ImGui::BeginMenu(name, true)) {
+		ImGui::MenuItem("isActive", " ", &isActive);
+		ImGui::MenuItem("inspector", " ", &show_inspector);
+		ImGui::EndMenu();
+	}
+	return isActive;
 }
 
 template<typename T>
@@ -102,6 +111,13 @@ bool Transform<T>::ViewTransform()
 	{
 		ImGui::Begin(GetObjectName(), &show_inspector);
 		{
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::MenuItem("Close Console")) {
+					show_inspector = false;
+				}
+				ImGui::EndPopup();
+			}
 			ImGui::Text("transform");
 			D3DXVECTOR3 pos = GetPosition();
 			ImGui::DragFloat3("position", (float*)&pos, 0.1f, 0, 0);

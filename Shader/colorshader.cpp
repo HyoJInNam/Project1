@@ -12,7 +12,7 @@ COLORSHADER::~COLORSHADER() {  }
 bool COLORSHADER::Initialize()
 {
 	shaderType = SAHDER_COLOR;
-	InitializeShader(const_cast<WCHAR*>(L"./data/shader/color.vs"), const_cast<WCHAR*>(L"./data/shader/color.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"../data/shader/color.vs"), const_cast<WCHAR*>(L"../data/shader/color.ps"));
 	InitializeShaderBuffer();
 	return true;
 }

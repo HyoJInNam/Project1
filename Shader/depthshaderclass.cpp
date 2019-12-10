@@ -16,8 +16,8 @@ DepthShaderClass::~DepthShaderClass() {  }
 bool DepthShaderClass::Initialize()
 {
 	ISFAILED(InitializeShader(
-		const_cast<WCHAR*>(L"./data/system/depth.vs"),
-		const_cast<WCHAR*>(L"./data/system/depth.ps")));
+		const_cast<WCHAR*>(L"../data/system/depth.vs"),
+		const_cast<WCHAR*>(L"../data/system/depth.ps")));
 	InitializeShaderBuffer();
 	return true;
 }

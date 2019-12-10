@@ -1,6 +1,8 @@
-﻿  bumpmapshader.cpp
-  lightshader.cpp
+﻿  ShadowShaderClass.cpp
+  colorshader.cpp
+  depthshaderclass.cpp
   specmapshader.cpp
+  textureshader.cpp
   toonshader.cpp
   코드를 생성하고 있습니다...
-  Shader.vcxproj -> C:\Users\남효진\Desktop\졸프 3-1\Project1\\Project1\lib\Shader.lib
+  Shader.vcxproj -> C:\Users\남효진\Desktop\졸프 3-1\Project1\\lib\Shader.lib

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CAMERA">
+    <Position X="4.25" Y="4.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQAAggAACCAAYAAAAAAAgAAACABAggAAJCAAgAAgAY=</HashCode>
+      <FileName>camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BitmapClass">
+    <Position X="12.25" Y="4.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAABRARIAAAAAARgAEAAIAgAAABAgQAEAkAA=</HashCode>
+      <FileName>image_bitmap.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LIGHT">
+    <Position X="7" Y="4.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAApkACAAAIASwAggAAAQDAhCKACABAQBCggEAAAAA=</HashCode>
+      <FileName>light.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MODEL">
+    <Position X="14.75" Y="4.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IEAEIAACAACBAQQQAAAAAQAAAAICCAAABBCgAABZAAA=</HashCode>
+      <FileName>model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DOME">
+    <Position X="9.5" Y="4.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAUAQBEAAAQAAQAAAAMCADBAgAAAQAAA=</HashCode>
+      <FileName>dome.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Transform&lt;T&gt;">
+    <Position X="9.25" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAACACCICADIAACAIAQCAAAEAwwAYMggAgwAAIA=</HashCode>
+      <FileName>transform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraControl" Collapsed="true">
+    <Position X="1" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AMQAAAAAEAAAAAAAAAAAAAAAkAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>cameraControler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraPanelControler" Collapsed="true">
+    <Position X="1" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAEAAAAAAAAAAAAAEAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>cameraPanelControler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="renderMode">
+    <Position X="18.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgIgAAAAAAAAAAAAAAAAAEAAAAAAAAAAACA=</HashCode>
+      <FileName>model.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

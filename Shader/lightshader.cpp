@@ -20,8 +20,8 @@ LIGHTSHADER::~LIGHTSHADER() {}
 bool LIGHTSHADER::Initialize()
 {
 	InitializeShader(
-		const_cast<WCHAR*>(L"./data/system/light.vs"),
-		const_cast<WCHAR*>(L"./data/system/light.ps"));
+		const_cast<WCHAR*>(L"../data/system/light.vs"),
+		const_cast<WCHAR*>(L"../data/system/light.ps"));
 
 	//InitializeShader(const_cast<WCHAR*>(L"./data/lighting/direction.vs"), const_cast<WCHAR*>(L"./data/lighting/direction.ps"));
 
@@ -31,8 +31,8 @@ bool LIGHTSHADER::Initialize()
 bool LIGHTSHADER::ToonInitialize()
 {
 	InitializeShader(
-		const_cast<WCHAR*>(L"./data/shader/toon.vs"),
-		const_cast<WCHAR*>(L"./data/shader/toon.ps"));
+		const_cast<WCHAR*>(L"../data/shader/toon.vs"),
+		const_cast<WCHAR*>(L"../data/shader/toon.ps"));
 
 	//InitializeShader(const_cast<WCHAR*>(L"./data/lighting/direction.vs"), const_cast<WCHAR*>(L"./data/lighting/direction.ps"));
 

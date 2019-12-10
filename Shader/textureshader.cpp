@@ -12,7 +12,7 @@ TEXTURESHADER::~TEXTURESHADER() { Shutdown(); }
 
 bool TEXTURESHADER::Initialize()
 {
-	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"./data/shader/texture.vs"), const_cast<WCHAR*>(L"./data/shader/texture.ps")));
+	ISFAILED(InitializeShader(const_cast<WCHAR*>(L"../data/shader/texture.vs"), const_cast<WCHAR*>(L"../data/shader/texture.ps")));
 	InitializeShaderBuffer();
 	return true;
 }

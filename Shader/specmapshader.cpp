@@ -13,21 +13,21 @@ SpecMapShaderClass::~SpecMapShaderClass() { }
 
 bool SpecMapShaderClass::Initialize()
 {
-	InitializeShader(const_cast<WCHAR*>(L"./data/shader/specmap.vs"), const_cast<WCHAR*>(L"./data/shader/specmap.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"../data/shader/specmap.vs"), const_cast<WCHAR*>(L"../data/shader/specmap.ps"));
 	InitializeShaderBuffer();
 	return true;
 }
 
 bool SpecMapShaderClass::InkInitialize()
 {
-	InitializeShader(const_cast<WCHAR*>(L"./data/shader/ink.vs"), const_cast<WCHAR*>(L"./data/shader/ink.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"../data/shader/ink.vs"), const_cast<WCHAR*>(L"../data/shader/ink.ps"));
 	InitializeShaderBuffer();
 	return true;
 }
 
 bool SpecMapShaderClass::Ink2Initialize()
 {
-	InitializeShader(const_cast<WCHAR*>(L"./data/shader/ink2.vs"), const_cast<WCHAR*>(L"./data/shader/ink2.ps"));
+	InitializeShader(const_cast<WCHAR*>(L"../data/shader/ink2.vs"), const_cast<WCHAR*>(L"../data/shader/ink2.ps"));
 	InitializeShaderBuffer();
 	return true;
 }

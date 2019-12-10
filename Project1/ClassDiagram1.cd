@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GRAPHICS">
+    <Position X="4.5" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAEAIAAAAACBIQAAAACAAQQAAAIAEAAEABAABBAAAAE=</HashCode>
+      <FileName>system\graphics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SYSTEM">
+    <Position X="2.5" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgQAAAAAAAQAAAAACAAAACBAAAAAAAAE=</HashCode>
+      <FileName>system\System.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WINDOW">
+    <Position X="0.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAWAAAABAAAQAAAAAAAAAAAI=</HashCode>
+      <FileName>system\window.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

@@ -1,2 +1,9 @@
-﻿  model.cpp
-  Objects.vcxproj -> C:\Users\남효진\Desktop\졸프 3-1\Project1\\Project1\lib\Objects.lib
+﻿  camera.cpp
+  cameraControler.cpp
+  cameraPanelControler.cpp
+  dome.cpp
+  image_bitmap.cpp
+  light.cpp
+  model.cpp
+  코드를 생성하고 있습니다...
+  Objects.vcxproj -> C:\Users\남효진\Desktop\졸프 3-1\Project1\\lib\Objects.lib

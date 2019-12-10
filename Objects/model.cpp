@@ -8,6 +8,8 @@
 MODEL::MODEL(const char* name) : Transform(name)
 {
 	file = new LOADOBJECTSFILE(device, deviceContext);
+	isActive = false;
+	rmode = Toon;
 }
 
 
@@ -20,13 +22,21 @@ bool MODEL::ViewTransform()
 	{
 		ImGui::Begin(GetObjectName(), &show_inspector);
 		{
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::MenuItem("Close Console")) {
+					show_inspector = false;
+				}
+				ImGui::EndPopup();
+			}
+
 			ImGui::Text("transform");
 			D3DXVECTOR3 pos = GetPosition();
 			ImGui::DragFloat3("position", (float*)&pos, 0.1f, 0, 0);
 			SetPosition(pos);
 
 			D3DXVECTOR3 rot = GetRotation();
-			ImGui::DragFloat3("rotation", (float*)&rot, 0.1f, 0, 0);
+			ImGui::InputFloat3("rotation", (float*)&rot);
 			SetRotation(rot);
 
 			D3DXVECTOR3 scl = GetScale();
@@ -37,18 +47,13 @@ bool MODEL::ViewTransform()
 			ImGui::Checkbox("Is Spin", &isSpin);
 			ImGui::Text(" ");
 
-			ImGui::Text("light");
-			float specularPower = light->GetSpecularPower();
-			ImGui::DragFloat("specular power", (float*)&specularPower, 0.1f, 0, 0);
-			light->SetSpecularPower(specularPower);
-
 
 			ImGui::Text("Render Mode");
 			if (ImGui::RadioButton("toon", rmode == Toon)) rmode = Toon;
 			if (ImGui::RadioButton("bump", rmode == Bump)) rmode = Bump;
 			if (ImGui::RadioButton("bump + toon", rmode == ToonBump)) rmode = ToonBump;
-			if (ImGui::RadioButton("bump + specular", rmode == SpecBump)) rmode = SpecBump;
 			if (ImGui::RadioButton("ink", rmode == Ink)) rmode = Ink;
+			if (ImGui::RadioButton("bump + ink", rmode == SpecBump)) rmode = SpecBump;
 
 		}
 		ImGui::End();
@@ -162,7 +167,7 @@ bool MODEL::Render(RNDMATRIXS& renderMatrix, D3DXVECTOR3 cameraPos, LIGHT* mainL
 	else if (rmode == Toon)ToonColorShader->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture(), light->GetLight());
 	else light->Render(file->GetIndexCount(), renderMatrix, cameraPos, file->GetTexture());
 	
-	return ViewTransform();
+	return true; // ViewTransform();
 }
 
 bool MODEL::RenderShadow(RNDMATRIXS& renderMatrix, ID3D11ShaderResourceView* texture, LIGHT * _light)
